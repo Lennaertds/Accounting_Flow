@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 .venv/
 venv/
 ENV/
@@ -10,6 +11,7 @@ dist/
 
 # --- Database & Data (CRUCIAAL) ---
 # We willen geen echte facturen of database-bestanden op GitHub
+docker/postgres_data/
 data/
 *.sql
 *.sqlite
