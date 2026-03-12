@@ -1,0 +1,40 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+build/
+dist/
+
+# --- Database & Data (CRUCIAAL) ---
+# We willen geen echte facturen of database-bestanden op GitHub
+data/
+*.sql
+*.sqlite
+*.db
+etl/tmp/
+etl/logs/
+
+# --- Environment & Secrets ---
+.env
+.flaskenv
+secrets.json
+
+# --- OS Specifiek (Arch/Linux) ---
+.DS_Store
+.thumbs.db
+.nfs*
+*.swp
+
+# --- AI / Ollama ---
+# Modellen zijn te groot voor git
+models/*.bin
+models/*.gguf
+
+# --- Frontend ---
+src/frontend/node_modules/
+src/frontend/dist/
+src/frontend/.next/
+.eslintcache
