@@ -1,14 +1,23 @@
 # OLAP Sterschema (Dimensional Model)
 ### 🔍 PlantUML (Sterschema Visualisatie)
-![Sterschema Fact Constellation](https://kroki.io/plantuml/svg/eNqNVstu2zoQ3fsriGyaFDYQu3EXRVHUsWxcNbGta6sBujIYibZ5I5EGRRUV2v57hw9JtB7pXTjRzCGpMzNnhvqcSSxkniaDE40JiqiIEjLIXig7Y4FTlFBGZHEmiAt54g7AeEwyckbvbx2nwOxFOceT28GAMEllga48mnpYkiuEMxTTdB-DgX4OEHqLlP-BFOgDokyijx-Dh0-fABiN4M8yTxKFA6h2gMfDdiU8rziTp8r6RrCojH9ziIjU9pJmEU4ulhhXQATlMTi_YxGdsLge394A6GcGmCc8Iwp-5jwhmA1-X8QU0rSOSYJhY1L-12JSOIBqB3j-4XlNa0VZrgM25o5EnMWVOUuD1CE7uWkQesKy4vMdS0sHvH1sAJpDFQHbSUHZ0bi2NuckoilOrqfDiUpKiH_c8x-WSyMRUPUMR5JyFoJS6pwo2dicwGMfi8Z2J8Lp7Q269tdPG3--GKL5duH54X69CcEIZt9Wi3U4RPez9cN-F65CRfILJJPhZAf_otZBM1i52QRD9LTYmge1d4g8Hxw7td3sC2iSaKlUiVa7gzG8dAK_d_C7g9-0mf4AVMeIqMI_G9tmwKJ9SbCw7wH69avvgWuNUzeGyXR6Ywq0Fpeh6e1FClRCItLsQs8anQsSU_lIUyqdwo4nprI-pMHZ8-6uGdgjiY9EzKKI56xWWKK9NjqzpC84g1qpGS0bVyPEki4I8MhF0YjyktQM6lxIGlV8sHVYRiXex6nELatGOgX_j0Syi94lC49HuUp8Pdt4SaCE-ghsBD1SILGkCeku9U5ygY8kwHrQVQzHumrl8e2WUWfPt_s5ZweY6Ew3wiHhuNm2sxxEUadPWWXu1HMfbxAT1Ce-L9qFW_GYHmg3ZnprV2SSpC2-CyZFoeYiXEbp2Q58PSAdykuYEUvIGIsoTpyhkekYDmDspfL2XC1LaHUbR3tGX4KNYbUsgY4errB2B1RQlxQrsDGeK3-XfOoTmwVauspOVZ965Jl0dbtBzUTogNdEmhUdGFDtxbyctBOuOfnZVl1jEcjcvUsRegN0R2iFZXSCuwc98iONsPKpBtQzWGPVSETXj5S9IIZhOGtkH0z3wRjxQ2lO9sGducC1o_E-7Xu9K5TE7nMopIQvgAMXKYiN1PJ61tD_0VeXGhy4WxHugtcKbBj2lmIWyRwnr1RRUGziv4QgD2_QliRYUpINqg-1X79GI_7T7a8P6MppP52Iq0H1EfTX9fq76S_ng5zcc9WMa60buJdsN2rvqG6wujC6YfUF1Y2oGd9zpB6ibaw7WiOnPqIO2snUxVuvteBnwmL4tP8DICKxLA==)
+![Sterschema Fact Constellation](https://kroki.io/plantuml/svg/eNqlV9tuGzcQfddXEH6JU0itpcR9KIIgsi6o6ljaSrKBPhk0dyyz5pICl2tESfrvHV604t4coH1QsjNnyT0zPDNDf8oN1abIRO-Jp0AY10xAL3_mck81zYjgEsxhD2SvxMEaESZVCjnsya8XkVNT-Wydw9FFrwfScHMgZ1OerfSOSv6VGq7kGaE5SXl2r_SOfOsR8hNB-BoO5DfCpSEfPiTXHz-ifzDAfxBaTBG5vV1M0VzSDNB6oZo9UX0-urx8i947apY6cl9eWO_igcrI-e79294_FVZTaqBkk6IR6Fh_F595IYTFEbQr0DOl4U18vlHSPJXWX0B1afxZYKrhZM95zqiovOJdCWiu0oj40EeTe2AiVA4WflBKAJW1mLY8O8Vk0AgxWf9rMVkcQbsCPb-r4kTrhsvCBezNDTAl02BWP47nUH77hZrwafR2fRmhCeoIsY3RXO68ax3yC4xnVJxf9kc2AVv65Up9af3uFnWXU2bVtUW5nuK32g3x42MXi9ryqpDI-WJ5t1pMZn0yWc-mi-39crVFAwz72dL6A1Mlqdjgf6yxdDxeXq9WSZ_czdb-4Qo9fTJdoGNjl_t1CReCxgoe2dXJsE-SEf7e4e89_pzYE9hjOW4MNUVe_95MPoMgL0ppXPBLMqorPkENStBlgvbeDjkKaFeaAvxfy9HzdqtPynbILKNcNLdZYK5q9WvLYFLkRmWuko4lYN2bYr8XvOKuxv4Z0h3oMWOqkCeZCucNCfCvdMXv0aBXXwveVctCiGqCKt4pfaglokpqjNI5GM5KPjQ4AqMj3sXpiAdWtYxr9Tcw00av1ggVKzKIspKqI4Ej1N2f-Y4jiTkX0K6GjVGa7iChrjOWDIeuqI_bN-vO7j1Z30-UfMTZJF1tPQpFTeiFVkydZz0uUn6KhlrrmFD73BXMbV6Vt7XXuH-Dma_azSE3kDXAmTT6YPspTtdsHwaFa6wRyTn2mzkmTjJORdSAcsf6EY17Y70dI2mOTSQwb4zPClbv-_MSqDXEEmjpAiXWLJASalNqCdZGQOlvU9dpx_pRzWPhZ7aMp_AAJhoVw5GfFR6daLAH34SXYPwbLRhS7cSmBTQPwnFa5Gs7FhlWQVppTG-Q7oDcUMOecL6Rz2rHGbU-W5-u6zusVB1xmzlfbSfnaymHmqiuCjwig3eFR6UzlBecBPXgoP-rqDYNRHC7DuIXXjtWz77zAMbMFFS8cnaaU5-bKoQ5ekPWIPACCnnvePn8_n0wUN-iYuuVF8EGhFueRWXq0nfWKy9ZP3zf3ct-sD_KK97XtsR2isex3Y6GkdYOlvOlHba3to60qK41vr02sdY8ew22JyLCWmKI0NYgYrzBKICfQKb4586_VDUFDA==)
 
 ### PlantUML Broncode
 ```
 @startuml
 hide circle
-skinparam linetype ortho
+skinparam linetype polyline
 skinparam nodesep 60
 skinparam ranksep 120
+
+entity "DimOrganization" as dim_org {
+  * OrgKey : int <<PK>>
+  --
+  OrgID : UUID
+  Name : varchar(255)
+  VatNr : varchar(50)
+  Iban : varchar(34)
+}
 
 entity "DimDate" as dim_date {
   * DateKey : int <<PK>>
@@ -30,7 +39,6 @@ entity "DimTime" as dim_time {
   Hour : int
   Minute : int
   Second : int
-  AmPm : varchar(2)
 }
 
 entity "DimVat" as dim_vat {
@@ -44,9 +52,10 @@ entity "DimVat" as dim_vat {
 entity "DimTransactionType" as dim_type {
   * TypeKey : int <<PK>>
   --
-  TransactionType : varchar(50) (INVOICE, CREDIT_NOTE, PAYMENT, BANK_STMT)
+  TransactionType : varchar(50) (INVOICE, CREDIT_NOTE, etc.)
   JournalSource : varchar(50) (AANKOOP, VERKOOP, BANK, DIVERS)
   SourcePillar : varchar(20) (P1, P2, P3, P4, P5)
+  PeppolStatus : varchar(50) (Enkel voor P4/P2)
 }
 
 entity "DimPartner" as dim_partner {
@@ -55,9 +64,11 @@ entity "DimPartner" as dim_partner {
   PartnerID : UUID
   Name : varchar(255)
   VatNr : varchar(50)
-  PaymentTerms : varchar(100)
-  CreditLimit : decimal(12,2)
+  PeppolID : varchar(100)
+  Email : varchar(255)
   IBAN : varchar(34)
+  IsCustomer : boolean
+  IsSupplier : boolean
 }
 
 entity "DimLedgerAccount" as dim_ledger {
@@ -82,20 +93,22 @@ entity "DimDocument" as dim_doc {
   StoragePath : varchar(512)
   DocumentType : varchar(50)
   OCR_Confidence : float
+  IsPeppol : boolean
 }
 
 entity "DimAudit" as dim_audit {
   * AuditKey : int <<PK>>
   --
-  CreatedBy : varchar(100)
-  ModifiedBy : varchar(100)
+  UserID : UUID
+  UserRole : varchar(50)
   SourceSystem : varchar(50)
   EntryTimestamp : datetime
 }
 
 entity "FactFinancialTransactions" as fact_trans {
   * DateKey : int <<FK, PK>>
-  * TimeKey : int <<FK, PK>>
+  * OrgKey : int <<FK, PK>>
+  * TimeKey : int <<FK>>
   * TypeKey : int <<FK>>
   * PartnerKey : int <<FK>>
   * LedgerKey : int <<FK>>
@@ -111,13 +124,14 @@ entity "FactFinancialTransactions" as fact_trans {
   DueDateKey : int <<FK>>
   IsReconciled : boolean
   ' --- Matching Logica ---
-  PillarMatchID : UUID (Link naar Match_P5_P1 of Match_P2_P4)
+  PillarMatchID : UUID 
   IsMatched : boolean
   MatchConfidence : float
 }
 
 entity "FactBudgetPerformance" as fact_budget {
   * DateKey : int <<FK, PK>>
+  * OrgKey : int <<FK, PK>>
   * LedgerKey : int <<FK, PK>>
   * AnalyticKey : int <<FK, PK>>
   * AuditKey : int <<FK>>
@@ -128,6 +142,7 @@ entity "FactBudgetPerformance" as fact_budget {
 }
 
 ' Relaties
+dim_org ||--o{ fact_trans
 dim_date ||--o{ fact_trans : "Transaction Date"
 dim_time ||--o{ fact_trans : "Transaction Time"
 dim_date ||--o{ fact_trans : "Due Date"
@@ -139,6 +154,7 @@ dim_vat ||--o{ fact_trans
 dim_doc ||--o{ fact_trans
 dim_audit ||--o{ fact_trans
 
+dim_org ||--o{ fact_budget
 dim_date ||--o{ fact_budget
 dim_ledger ||--o{ fact_budget
 dim_analytic ||--o{ fact_budget

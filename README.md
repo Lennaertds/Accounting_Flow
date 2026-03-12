@@ -3,7 +3,7 @@ An AI-driven, Peppol-native accounting hub for Belgian SMEs. Bridging the gap be
 
 ## OLTP ERD Schema (Relational model)
 ### 🔍 PlantUML (Sterschema Visualisatie)
-![Sterschema Fact Constellation](https://kroki.io/plantuml/svg/eNq1WG1v2zYQ_u5fQbTAmhT2GjsNuvXDUNlWUi2OLdhO0KIoBEaibSYUKVBU0qzJf9-RkmxKkd252xLUkXkn8l6ee-7YD6nCUmUxa71CnU4HjZzPk8s5mvhz78IZeTNn7rla0EpvKU-wxDFilBP1kBAkpFoJS5Dg8BYvyUw9MIIkCRXmS0YshXSFI3FP-RItMEttCRcRSUmCuidH1qrE_Nas9o4qx0SR3uO3Vqs4Eb0Y0pjwlAqeooPZCksSoSFW-PAFerk4JieLE_S9heCHcEXVA3rhg9OcyPQFwilsaL4UKvrnNaIReo8uL70h-uKff10LIBAbHY5jAlozJcEca_0Oq4DLJklCkkSwwGxeE5IYU_Z8maZBmKVKxERv2BeCEcxtaZolCaON0msIX4DDUGRcBRS-Vbd_alVCcoXVQGfBhARcqIQjBMn67R0hkVhpvSEJaYzZwUm7d2hJYfdQ0kRBnpqio_C3ICIhgyxrleBafAM1jyuyJLLJZIdj9qBo6OQ-5qbjYvHfpRMdXNObu1-RL8UNIBl9aiMnU6LT7Tj9QafbOz7cFp31Og4VvSO1vDy1nizY-pRhLFFXe3kLOeawzym8l0nC0cGI3BEogRCymxokLwDLRzUkezwUMRzr8TtBwyJ9lIcB5Xd7h8CU9Xvk8ixGB974auIN3DYaTN2hNw_Gk7lre10iL7B2PrV2fg0EEYE4xipcbVeiueFbKiYqAAV_bDuFwiwg30IWaKRuANftVRGnS1FnJz_-9Nw2LpQg4gsaER7qM06ZwMr2T2GVpetw-O546I3P2ujCmQ8-usM2GnozCI3vjAefIUjwxx2N3KF9PNRnXvL_BAU9GwV9kirCgGqXGgnnDEMVcA0CcrzoLaItIJjogG8gYOK_NwhKvtmeslRkMtwAxR8589PJ9KKNfNf3J6M2ci8cbxQ4nh0LSRZE6lBD3lRj-edJTRVkUpFoR1Ylvgd4J5kKEqxWDZVHgRbjGMsHkM3huO1BP36PPhKFzqQQ6lqQW3QwEJKYavtd_9YC_Sd4DvySh_hGcvafNY1K6TnO-Hwy8dvoyp3mD31Y0YiDhdlu6qlxZGGxy0GjYAcQQWT2Nfwm32g7KppLdSvn1-ycA9OlmjKhhxsrlV7Y20rj23YbGYmglwRF1IrWUlcqO8imd27bDsdavgOpQAAwCAngcGYQXSWBSgBGxrRKK8utbWrEa8v3xlkI6VkKUxkF1mYzd95GI8_peyNvDlQ2da_c8SUQv_sJSG9WkH6996YpKTuuftw7UwlwyAqnQAeblFUIOueDO8wya6SoICuB2NJ8VogFV6u0Ni6seVyqoI7Omjv9DEJd-HNtnvd2qIqtiiv7IipgNKaq0euESCqixlIyfPT42OmI73kdlB5CtvXy4_e8qMxyXl5PevmxMN1eF7DL49puI8nTrCXwxmb_IlrFurWTJbC3aiDhtxALqpYYV-cfq-tF3UUv6tbIeJKppaiPPgK6wv8--uSDzU-ONDtmkuJ-UJs8hlPnFCp05o7h03e84bNpowbmU8GYuL9MRmJpYrIw3_cOSenGcztTOCkwg9ccLl5gbpxsC-XUvfDGQ3cadDWxFM-90mz9aT7KtBXwzS1uwsqJjZXqlPR8XiZH170toLFGJX32z41KPx6BgeI4J2wdDjMZbQalcnQ63D53TqYQMT1uTt2BC_0fngp4rpNvh6kPlz59f_kFTYvGkzOkHh2PFu8WuBYPrT-DEwnMnSX_wdLeoWju_vUGWelkcZxxGuJt10HDlETq2_nDj6-vVW9L5Jvm2-xLsxvmzpyW8WiAfjkGNXet_K5TneUu5xN9aRhfOqOmhOlrJbxGU_hH0FzS5dIAU1_3eos6fC_MAf5J4HeNg_mBoUhV2qTXC_y3lp6ECuEZ0ee_AnwwfWQKjwCAGBKI0cGZpDfpYav8LxEoxy8v35mfr7oui4vlTrkppa0aRaHvlOc7lJdYaCAbDWgxwJ-tki6aZOBPeY9Cb9A5hEaTwwSY4Ya8mQoRHa63hpf1-pJMSfQ1Eve880fRIjecYAysaYGdduDL7WqqkMqVqutaz_r4gaRxKnh5eN5WwYOS48CDSfwXtNGDPsPZ_eHac3h3Kh4w68N4VDV9c_Mz9tS01uaUWLCY11ZmZKGeK1e-7bK_pCEAlIAW3jKcYo4YYnl7Jgnhm_iYKm2tBxVbpzQjV2l9gKRmMfsb6hTtCg==)
+![Sterschema Fact Constellation](https://kroki.io/plantuml/svg/eNrFWG1v2zYQ_q5fQbRAlwwOkLgN2vVTFVvptPgNfslWFIXASLTNRiIFikrqNfnvO5KSTSmSWw9dl6KJfXcieXfP3T3Uu0xiIfMkdn5BJycnaOB-GC_maDyZ-0N34M_cue8phZPdUpZigRMUU0bkJiWIC7nmliLF4S1ekZncxAQJEkrMVjGxDLI1jvg9ZSu0xHFmaxiPSEZSdHZ6akkFZrdK-ua0sksUqSXeOE6xIXq2yIhAL5CbyzUaYgayhDD5DD2_X1NJ0FcHwQ9IqNwY4-wZwhnK1WNGqX5-RTRCb9Fi4ffRx8nVp60C3N_ZkATTGMxmUsAxLEWKs-yeiyhY42zdZCA4xOUt8lieoCO3P_RHHeT2euPFaO6O5h107Xt_etPj7RMxzmQQ8xVl8NScJgRylaRa_ehUXBqLFWb0bywpZ8Y1LlYHe8ZwQprOnWyCOywDJlqU9Aazp6pQECxJFGDZcHr1W0f_kZ-c8Ad1XOfRSmgf7FmmvEFHszUWJEJ9LPExpHT5kpwvz2s5nQCIWZnW1Hw52H84RGDZXVp27cFpj0xK0pTHZsWasgVDNAvCPJM8IWrBCw54wczWZnmaxrRRCzm4DXAY8pzJhozUAHONZU-VnI4XuFCJVQia7dN74iUgv2DXJyFNcHx03ukeW1pYPRQ0VZBsio7EX4KIhDHUtDIJbvgXMPOZJCsimo7sMhxvJA1d46M5Oi6EPyfXlcBs5TiU9I7UUvJYgfOExhgLdKYcvIX0MljnEp7LBWHoaEDuCLS6EBKbaYQvAeOnNYT7LOQJbOuzO07DInOUhQFldz_We93byzblj67Hfs_roN7U6_vzYDSee3aWS0S2LwcdEdQJluG63Ygar1oqKSqABn_sc3KJ44B8CWPVniwgnnWrSFQlqlJntr-8sg8XClCxJY0IC9UelzHH0vZPYpln23BMvFHfH73voKE77_3u9Tuo788gNBN31PsAQYI_3mDg9e3toW5NK_geiHRtiFxAzyQxzNuVgslVjKE6mEIIebnsLqMWhIxVwHf40PH_sQgpm1S7RcZzEe5QNBm488vxdNhBE28yGQ86yBu6_iBwfTtQgiyJUHmApMrGnmEynklIM4yWPSkX-B4KI81lkGLZMIwxhV6aJFhs1HCC7doz8vIt-p1I9F5wLm84uUVHPS6IrtPf1L9aFv4Az6Epmfh_Fiz-Oa2pUrSuO7oajyfAKLyp-XABEoVVEMyO93a0Wtct3PEYWBRNB1QQtkO9-mwWavesuchbp0jtnHNooJnqxCUBkkpwOLlTvrWfMSYRTKegiFoxrOpG5UzaTeO25XCi9HtgDK0DeDSH0RBruFfbRyUAA320ynA0p20a7duTH8wFQ0jPiuuyKbA2m3nAXQe-e-EP_Dk0wal37Y0WMDK8v6BdzopxUZ_mWUbKGa4-HpypFBoMEG3oFbuUVVq7aRZ3OM4tklJBVgqxpYZ9JJzJdVYjINsJIGRQR2fNnYscQl34c6M_H-xQFVsVVw5FVBDThMpGr1MiKI_qpdTQ9l7BBlSuMK5yFWsIRWfLbnRWa3_jXK54naZw6MP_L00xJORf0o89_KHg-DWW0J-6l1ATM0_d6iau33_CDGrwueRxzO8X6YCvdMCW-vvB8SrdeHrODHZquok1hHLqwcW0702DM1XKxefucTtSzm2kVCnLU2ZLTm-6LZCxeIsCzH_AW75NVqGlMEbibTA0TdmxlpLHHLczxPEU4qWI4dTreTBv4VMBzn5TDC_g2qZuWS_QtGj0piMpkne6fL3EtWAp-xnsqF9wFP0GRD82Ts2juD6tKmMlSXJGQ9x229Ntiwh1M998-3ZaDUVZFHoSHuyovhdnZcQaSqMkJs1zxNxbquxqMR-rC8Bo4Q6aUurmQI7h5Bn8J2gu6Gqlca3udd1lHf1DvcHkPJicaS_NhiHPZNZk1w0mryw7AQXGcqL2N-_vpt5AvbKb6Xd26iXQw8PJCf9avhOxReVUsWXFhdIWFc27LtLlWX_0iVARYPu7yobjaFpcSHTYHcMplejhq6FujiFwj0r0UAzHUmbeGW3PbwiEkoKlWa-YwYWseNoS2o875XgqTmSar6PLqhBp6FmH3Iog6lCNCRQMBkmsMp455fsnsPz4_LX--WQHd5_eRLDNoszFPr1ZoXwzAM7uLCAUMMu2_jbpwCGNNNWTZAFdZ9eO9YZjyMKKTEmk97QBW-76HWbWelO-wfEF8DTLsAS2lZv9hs47uDLnSfwPzlZygA==)
 
 ### PlantUML Broncode
 ```
@@ -12,14 +12,36 @@ An AI-driven, Peppol-native accounting hub for Belgian SMEs. Bridging the gap be
 skinparam linetype ortho
 skinparam packageStyle rectangle
 skinparam shadowing false
-skinparam nodesep 150
-skinparam ranksep 120
+skinparam nodesep 100
+skinparam ranksep 80
 skinparam padding 8
+
+package "User & Auth Management" #white {
+    entity "Users" as user {
+        * id : UUID [PK]
+        --
+        * email : String
+        * password_hash : String
+        * role : Enum (ADMIN, ACCOUNTANT, VIEWER)
+        last_login : Timestamp
+    }
+
+    entity "Organizations" as org {
+        * id : UUID [PK]
+        --
+        * name : String
+        * my_vat_nr : String
+        * my_iban : String
+        created_at : Timestamp
+    }
+    user }o--o| org
+}
 
 package "Dimensions (Shared Data)" #f3e5f5 {
     entity "Partners" as partner {
         * id : UUID [PK]
         --
+        * org_id : UUID [FK]
         * name : String
         * vat_nr : String
         * peppol_id : String
@@ -40,7 +62,8 @@ package "Dimensions (Shared Data)" #f3e5f5 {
     entity "AnalyticAccounts" as analytic {
         * id : UUID [PK]
         --
-        * name : String (bijv. Project X, Auto-1-ABC-123)
+        * org_id : UUID [FK]
+        * name : String
         * code : String
         active : Boolean
     }
@@ -50,6 +73,7 @@ package "Pilaar 1: Inkomende Facturen (Leveranciers)" #fff3e0 {
     entity "IncomingInvoices" as inc_inv {
         * id : UUID [PK]
         --
+        * org_id : UUID [FK]
         * type : Enum (INVOICE, CREDIT_NOTE)
         * supplier_id : UUID [FK]
         * order_match_id : UUID [FK]
@@ -67,6 +91,7 @@ package "Pilaar 2: Inkomende Bestellingen (Klanten)" #e3f2fd {
     entity "IncomingOrders" as inc_order {
         * id : UUID [PK]
         --
+        * org_id : UUID [FK]
         * customer_id : UUID [FK]
         * source : Enum (PLATFORM, PEPPOL, EMAIL_AI)
         * reference_ext : String
@@ -80,6 +105,7 @@ package "Pilaar 3: Het Grootboek (Core)" #f9f9f9 {
     entity "Journals" as jrnl {
         * id : UUID [PK]
         --
+        * org_id : UUID [FK]
         * name : String
         * type : Enum (AANKOOP, VERKOOP, BANK, DIVERS)
         * code : String
@@ -127,20 +153,13 @@ package "Pilaar 3: Het Grootboek (Core)" #f9f9f9 {
         * amount_limit : Decimal
         * period : String
     }
-
-    jrnl ||--o{ entry
-    entry ||--|{ trans
-    trans }|--|| ledger
-    trans }o--o| analytic
-    asset }o--|| entry
-    budget }o--|| ledger
-    budget }o--o| analytic
 }
 
 package "Pilaar 4: Uitgaande Facturen (Klanten)" #d1f2d1 {
     entity "OutgoingInvoices" as out_inv {
         * id : UUID [PK]
         --
+        * org_id : UUID [FK]
         * type : Enum (INVOICE, CREDIT_NOTE)
         * order_id : UUID [FK]
         * invoice_nr : String
@@ -155,14 +174,13 @@ package "Pilaar 4: Uitgaande Facturen (Klanten)" #d1f2d1 {
         * sent_at : Timestamp
         * type : Enum (REMINDER_1, REMINDER_2)
     }
-    
-    out_inv ||--o{ follow
 }
 
 package "Pilaar 5: Uitgaande Bestellingen (Leveranciers)" #ffe0b2 {
     entity "OutgoingOrders" as out_order {
         * id : UUID [PK]
         --
+        * org_id : UUID [FK]
         * supplier_id : UUID [FK]
         * channel : Enum (EMAIL, PEPPOL, PLATFORM)
         * status : Enum (ORDERED, RECEIVED, INVOICED)
@@ -173,6 +191,7 @@ package "Banking & Reconciliation" #e0f7fa {
     entity "BankStatements" as bank {
         * id : UUID [PK]
         --
+        * org_id : UUID [FK]
         * date : Date
         * amount : Decimal
         * communication : String
@@ -180,7 +199,7 @@ package "Banking & Reconciliation" #e0f7fa {
     }
 
     entity "ReconciliationLog" as recon {
-        * id : UUID
+        * id : UUID [PK]
         --
         * bank_statement_id : FK
         * journal_entry_id : FK
@@ -193,8 +212,29 @@ package "Automatisatie Triggers" #fff2f2 {
     entity "Match_P2_P4" as match_revenue
 }
 
-' Relaties
-' Stamdata (Grijs)
+' --- RELATIES ---
+org ||--o{ partner
+org ||--o{ analytic
+org ||--o{ inc_inv
+org ||--o{ out_inv
+org ||--o{ out_order
+org ||--o{ inc_order
+org ||--o{ jrnl
+org ||--o{ bank
+
+jrnl ||--o{ entry
+entry ||--|{ trans
+trans }|--|| ledger
+trans }o--o| analytic
+asset }o--|| entry
+budget }o--|| ledger
+budget }o--o| analytic
+
+out_inv ||--o{ follow
+bank ||--o{ recon
+entry ||--o{ recon
+
+' Stamdata relaties
 partner ||-[#777777]-o{ inc_inv
 partner ||-[#777777]-o{ inc_order
 partner ||-[#777777]-o{ out_inv
@@ -202,21 +242,11 @@ partner ||-[#777777]-o{ out_order
 inc_inv }o-[#777777]-|| vat
 out_inv }o-[#777777]-|| vat
 
-' Inkomend / Kosten (Oranje/Rood)
-inc_inv -[#OrangeRed]down-> trans
-out_order ||-[#OrangeRed]down-o{ match_costs
-inc_inv ||-[#OrangeRed]right-o{ match_costs
-match_costs -[#Crimson]down-> entry
-
-' Uitgaand / Omzet (Blauw)
-out_inv -[#RoyalBlue]down-> trans
-inc_order ||-[#RoyalBlue]down-o{ match_revenue
-out_inv ||-[#RoyalBlue]left-o{ match_revenue
-match_revenue -[#Crimson]down-> entry
-
-' Banking (Groen)
-bank ||-[#DarkGreen]right-o{ recon
-entry ||-[#DarkGreen]left-o{ recon
+' Matching triggers
+out_order ||-[#OrangeRed]-o{ match_costs
+inc_inv ||-[#OrangeRed]-o{ match_costs
+inc_order ||-[#RoyalBlue]-o{ match_revenue
+out_inv ||-[#RoyalBlue]-o{ match_revenue
 
 @enduml
 ```
