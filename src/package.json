@@ -1,0 +1,17 @@
+{
+	"dependencies": {
+		"@nestjs/common": "^11.1.16",
+		"@nestjs/config": "^4.0.3",
+		"@nestjs/core": "^11.1.16",
+		"@nestjs/platform-express": "^11.1.16",
+		"drizzle-orm": "^0.45.1",
+		"postgres": "^3.4.8",
+		"reflect-metadata": "^0.2.2",
+		"rxjs": "^7.8.2"
+	},
+	"devDependencies": {
+		"@types/node": "^25.5.0",
+		"drizzle-kit": "^0.31.9",
+		"typescript": "^5.9.3"
+	}
+}
