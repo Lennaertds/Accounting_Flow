@@ -1,0 +1,1 @@
+// backend/src/accounting/analytic-account.module.ts

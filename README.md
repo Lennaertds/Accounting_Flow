@@ -1,6 +1,20 @@
 # Accounting_Flow
 An AI-driven, Peppol-native accounting hub for Belgian SMEs. Bridging the gap between orders and invoices with automated reconciliation.
 
+## Dependencies
+```
+npm install @nestjs/typeorm typeorm pg @nestjs/config class-validator class-transformer
+npm install --save-dev @types/node
+npm install @nestjs/jwt passport-jwt
+npm install --save-dev @types/passport-jwt
+npm install --save-dev @nestjs/testing jest ts-jest @types/jest supertest @types/supertest
+npm install @nestjs/swagger swagger-ui-express
+npm install nestjs-swagger-dto
+npm install class-validator class-transformer reflect-metadata
+npm install pg typeorm @nestjs/typeorm
+npm install argon2
+```
+
 ## OLTP ERD Schema (Relational model)
 ### 🔍 PlantUML (Sterschema Visualisatie)
 ![Sterschema Fact Constellation](https://kroki.io/plantuml/svg/eNrFWG1v2zYQ_q5fQbRAlwwOkLgN2vVTFVvptPgNfslWFIXASLTNRiIFikrqNfnvO5KSTSmSWw9dl6KJfXcieXfP3T3Uu0xiIfMkdn5BJycnaOB-GC_maDyZ-0N34M_cue8phZPdUpZigRMUU0bkJiWIC7nmliLF4S1ekZncxAQJEkrMVjGxDLI1jvg9ZSu0xHFmaxiPSEZSdHZ6akkFZrdK-ua0sksUqSXeOE6xIXq2yIhAL5CbyzUaYgayhDD5DD2_X1NJ0FcHwQ9IqNwY4-wZwhnK1WNGqX5-RTRCb9Fi4ffRx8nVp60C3N_ZkATTGMxmUsAxLEWKs-yeiyhY42zdZCA4xOUt8lieoCO3P_RHHeT2euPFaO6O5h107Xt_etPj7RMxzmQQ8xVl8NScJgRylaRa_ehUXBqLFWb0bywpZ8Y1LlYHe8ZwQprOnWyCOywDJlqU9Aazp6pQECxJFGDZcHr1W0f_kZ-c8Ad1XOfRSmgf7FmmvEFHszUWJEJ9LPExpHT5kpwvz2s5nQCIWZnW1Hw52H84RGDZXVp27cFpj0xK0pTHZsWasgVDNAvCPJM8IWrBCw54wczWZnmaxrRRCzm4DXAY8pzJhozUAHONZU-VnI4XuFCJVQia7dN74iUgv2DXJyFNcHx03ukeW1pYPRQ0VZBsio7EX4KIhDHUtDIJbvgXMPOZJCsimo7sMhxvJA1d46M5Oi6EPyfXlcBs5TiU9I7UUvJYgfOExhgLdKYcvIX0MljnEp7LBWHoaEDuCLS6EBKbaYQvAeOnNYT7LOQJbOuzO07DInOUhQFldz_We93byzblj67Hfs_roN7U6_vzYDSee3aWS0S2LwcdEdQJluG63Ygar1oqKSqABn_sc3KJ44B8CWPVniwgnnWrSFQlqlJntr-8sg8XClCxJY0IC9UelzHH0vZPYpln23BMvFHfH73voKE77_3u9Tuo788gNBN31PsAQYI_3mDg9e3toW5NK_geiHRtiFxAzyQxzNuVgslVjKE6mEIIebnsLqMWhIxVwHf40PH_sQgpm1S7RcZzEe5QNBm488vxdNhBE28yGQ86yBu6_iBwfTtQgiyJUHmApMrGnmEynklIM4yWPSkX-B4KI81lkGLZMIwxhV6aJFhs1HCC7doz8vIt-p1I9F5wLm84uUVHPS6IrtPf1L9aFv4Az6Epmfh_Fiz-Oa2pUrSuO7oajyfAKLyp-XABEoVVEMyO93a0Wtct3PEYWBRNB1QQtkO9-mwWavesuchbp0jtnHNooJnqxCUBkkpwOLlTvrWfMSYRTKegiFoxrOpG5UzaTeO25XCi9HtgDK0DeDSH0RBruFfbRyUAA320ynA0p20a7duTH8wFQ0jPiuuyKbA2m3nAXQe-e-EP_Dk0wal37Y0WMDK8v6BdzopxUZ_mWUbKGa4-HpypFBoMEG3oFbuUVVq7aRZ3OM4tklJBVgqxpYZ9JJzJdVYjINsJIGRQR2fNnYscQl34c6M_H-xQFVsVVw5FVBDThMpGr1MiKI_qpdTQ9l7BBlSuMK5yFWsIRWfLbnRWa3_jXK54naZw6MP_L00xJORf0o89_KHg-DWW0J-6l1ATM0_d6iau33_CDGrwueRxzO8X6YCvdMCW-vvB8SrdeHrODHZquok1hHLqwcW0702DM1XKxefucTtSzm2kVCnLU2ZLTm-6LZCxeIsCzH_AW75NVqGlMEbibTA0TdmxlpLHHLczxPEU4qWI4dTreTBv4VMBzn5TDC_g2qZuWS_QtGj0piMpkne6fL3EtWAp-xnsqF9wFP0GRD82Ts2juD6tKmMlSXJGQ9x229Ntiwh1M998-3ZaDUVZFHoSHuyovhdnZcQaSqMkJs1zxNxbquxqMR-rC8Bo4Q6aUurmQI7h5Bn8J2gu6Gqlca3udd1lHf1DvcHkPJicaS_NhiHPZNZk1w0mryw7AQXGcqL2N-_vpt5AvbKb6Xd26iXQw8PJCf9avhOxReVUsWXFhdIWFc27LtLlWX_0iVARYPu7yobjaFpcSHTYHcMplejhq6FujiFwj0r0UAzHUmbeGW3PbwiEkoKlWa-YwYWseNoS2o875XgqTmSar6PLqhBp6FmH3Iog6lCNCRQMBkmsMp455fsnsPz4_LX--WQHd5_eRLDNoszFPr1ZoXwzAM7uLCAUMMu2_jbpwCGNNNWTZAFdZ9eO9YZjyMKKTEmk97QBW-76HWbWelO-wfEF8DTLsAS2lZv9hs47uDLnSfwPzlZygA==)
@@ -45,7 +59,10 @@ package "Dimensions (Shared Data)" #f3e5f5 {
         * name : String
         * vat_nr : String
         * peppol_id : String
+        preferred_order_channel: String
+        preferred_invoice_channel: String
         email : String
+        is_peppol_ready : Boolean
         is_customer : Boolean
         is_supplier : Boolean
         bank_account_iban : String
@@ -54,6 +71,7 @@ package "Dimensions (Shared Data)" #f3e5f5 {
     entity "VatCodes" as vat {
         * code : String [PK]
         --
+        * org_id : UUID [FK]
         * rate : Decimal(5,2)
         * description : String
         * tax_declaration_box : Integer
@@ -84,6 +102,7 @@ package "Pilaar 1: Inkomende Facturen (Leveranciers)" #fff3e0 {
         * ocr_confidence : Float
         * status : Enum (PENDING, MATCHED, DISCREPANCY, CANCELLED)
         * is_peppol : Boolean
+        * raw_file_storage_path : String
     }
 }
 
@@ -132,6 +151,7 @@ package "Pilaar 3: Het Grootboek (Core)" #f9f9f9 {
     entity "LedgerAccounts" as ledger {
         * code : Integer [PK]
         --
+        * org_id : UUID [FK]
         * name : String
         * category : Enum (ASSET, LIABILITY, REVENUE, EXPENSE)
     }
@@ -165,6 +185,7 @@ package "Pilaar 4: Uitgaande Facturen (Klanten)" #d1f2d1 {
         * invoice_nr : String
         * vat_code_id : FK
         * peppol_status : Enum (DRAFT, SENT, PAID, CANCELLED)
+        * raw_file_storage_path : String
     }
 
     entity "FollowUpLog" as follow {

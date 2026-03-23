@@ -1,0 +1,1 @@
+// backend/src/accounting/partner.module.ts

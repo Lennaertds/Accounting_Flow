@@ -1,0 +1,1 @@
+// backend/src/accounting/journal-enty.module.ts

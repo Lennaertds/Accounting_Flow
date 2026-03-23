@@ -40,3 +40,22 @@ src/frontend/node_modules/
 src/frontend/dist/
 src/frontend/.next/
 .eslintcache
+
+# --- NestJS & Node Backend ---
+node_modules/
+dist/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage/
+.nest/
+
+# --- Drizzle & Migrations ---
+# De migratie-bestanden zelf wil je vaak WEL in git (om je schema te delen), 
+# maar eventuele snapshots of lokale logs niet.
+drizzle/meta/
+drizzle/snapshots/
+
+# --- TypeScript ---
+*.tsbuildinfo
