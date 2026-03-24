@@ -86,15 +86,16 @@ export class AuthService {
     async register(dto: RegisterUserRequestDto): Promise<{ user: any; token: string }> {
         const passwordHash = await this.hashPassword(dto.password);
         
-        const roles: ('user' | 'admin')[] = (dto.roles as any) || 
-            (dto.email.endsWith('@admin.com') ? ['admin'] : ['user']);
+        const role: string = dto.role || 
+        (dto.email.endsWith('@admin.com') ? Role.ADMIN : Role.VIEWER);
 
         const [newUser] = await this.db.insert(users).values({
+            orgId: dto.orgId, 
             firstName: dto.firstName,
             lastName: dto.lastName,
             email: dto.email,
             passwordHash,
-            roles,
+            role: role, 
         }).returning();
 
         const token = await this.signJwt(newUser);
@@ -103,7 +104,11 @@ export class AuthService {
     }
 
     private async signJwt(user: any): Promise<string> {
-        const payload = { sub: user.userId, email: user.email, roles: user.roles };
+        const payload = { 
+            sub: user.id, 
+            email: user.email, 
+            role: user.role 
+        };
         return this.jwtService.signAsync(payload);
     }
 }

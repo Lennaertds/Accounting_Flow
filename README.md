@@ -13,6 +13,7 @@ npm install nestjs-swagger-dto
 npm install class-validator class-transformer reflect-metadata
 npm install pg typeorm @nestjs/typeorm
 npm install argon2
+npm install --save-dev jest ts-jest supertest @types/jest @types/supertest
 ```
 
 ## OLTP ERD Schema (Relational model)
@@ -149,6 +150,7 @@ package "Pilaar 3: Het Grootboek (Core)" #f9f9f9 {
     }
 
     entity "LedgerAccounts" as ledger {
+        * id : UUID [PK]
         * code : Integer [PK]
         --
         * org_id : UUID [FK]

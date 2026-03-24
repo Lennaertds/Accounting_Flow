@@ -1,0 +1,31 @@
+# docker-compose.test.yml - Alleen de Database Service
+# version: '3.8'
+
+services:
+  # 1. Database Service (PostgreSQL) - De geïsoleerde Test DB
+  postgres:
+    image: postgres:16-alpine
+    container_name: papertrade_db_test
+    # Zorgt ervoor dat de DB stopt na het opschonen
+    restart: "no" 
+    environment:
+      # Gebruikt de DB variabelen uit je .env.test bestand
+      POSTGRES_USER: ${TEST_DB_USERNAME}
+      POSTGRES_PASSWORD: ${TEST_DB_PASSWORD}
+      POSTGRES_DB: ${TEST_DB_NAME}
+    ports:
+      # Map de HOST-poort (5433 uit je .env.test) 
+      # naar de INTERNE CONTAINER-poort (5432)
+      - "5433:5432" 
+    volumes:
+      # Tijdelijke opslag: Data verdwijnt na 'docker-compose down'
+      - /var/lib/postgresql/data
+    
+    # Healthcheck is nog steeds nuttig om te wachten tot de DB klaar is
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+# Geen 'api' service en geen 'volumes' definitie nodig, tenzij je persistente data wilt.

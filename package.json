@@ -1,32 +1,100 @@
 {
+  "name": "accounting_flow",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main",
+    "start": "nest start",
+    "db:generate": "env-cmd -f .env drizzle-kit generate",
+    "db:migrate": "env-cmd -f .env drizzle-kit migrate",
+    "db:migrate:test": "env-cmd -f .env.test drizzle-kit migrate",
+    "seed": "env-cmd -f .env -- ts-node -r tsconfig-paths/register backend/src/drizzle/seed.ts",
+    "db:seed:test": "env-cmd -f .env.test -- ts-node -r tsconfig-paths/register backend/src/drizzle/seed.ts",
+    "db:push": "env-cmd -f .env bash -c 'drizzle-kit push --url \"$DATABASE_URL\" --schema backend/src/drizzle/schema.ts --dialect postgresql'",
+    "db:up": "tsx backend/src/drizzle/migrate.ts",
+    "db:push:test": "env-cmd -f .env.test bash -c 'drizzle-kit push --url \"$DATABASE_URL\" --schema backend/src/drizzle/schema.ts --dialect postgresql'",
+    "test": "NODE_ENV=test env-cmd -f .env.test jest --runInBand",
+    "test:cov": "NODE_ENV=test pnpm test --coverage",
+    "test:watch": "pnpm test --watch",
+    "test:e2e": "pnpm test --config ./jest-e2e.config.ts",
+    "test:e2e:cov": "pnpm test --config ./jest-e2e.config.ts --coverage",
+    "db:test:up": "docker compose -f docker-compose.test.yml --env-file .env.test up -d",
+    "db:test:down": "docker compose -f docker-compose.test.yml --env-file .env.test down -v",
+    "test:e2e:full": "pnpm db:test:up && pnpm test:e2e && pnpm db:test:down"
+  },
   "dependencies": {
-    "@nestjs/config": "^4.0.3",
-    "@nestjs/jwt": "^11.0.2",
-    "@nestjs/swagger": "^11.2.6",
+    "@nestjs/common": "^11.1.9",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.9",
+    "@nestjs/jwt": "^11.0.1",
+    "@nestjs/platform-express": "^11.1.9",
+    "@nestjs/swagger": "^11.2.3",
     "@nestjs/typeorm": "^11.0.0",
     "argon2": "^0.44.0",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.15.1",
+    "class-validator": "^0.14.3",
+    "config": "^4.1.1",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.7",
+    "helmet": "^8.1.0",
     "nestjs-swagger-dto": "^3.8.5",
-    "passport-jwt": "^4.0.1",
-    "pg": "^8.20.0",
-    "reflect-metadata": "^0.2.2",
-    "swagger-ui-express": "^5.0.1",
-    "typeorm": "^0.3.28"
+    "pg": "^8.16.3",
+    "rxjs": "^7.8.2",
+    "typeorm": "^0.3.27"
   },
   "devDependencies": {
-    "@nestjs/testing": "^11.1.17",
-    "@types/bcrypt": "^6.0.0",
-    "@types/express": "^5.0.6",
+    "@nestjs/cli": "^10.4.9",
+    "@nestjs/schematics": "^10.2.3",
+    "@nestjs/testing": "^11.1.9",
+    "@testcontainers/postgresql": "^11.9.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/config": "^3.3.5",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.5.0",
-    "@types/passport-jwt": "^4.0.1",
-    "@types/pg": "^8.20.0",
-    "@types/supertest": "^7.2.0",
-    "drizzle-kit": "^0.31.10",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "dotenv-cli": "^11.0.0",
+    "drizzle-kit": "latest",
+    "env-cmd": "^11.0.0",
     "jest": "^30.3.0",
+    "source-map-support": "^0.5.21",
     "supertest": "^7.2.2",
-    "ts-jest": "^29.4.6"
+    "testcontainers": "^11.9.0",
+    "ts-jest": "^29.4.6",
+    "ts-loader": "^9.5.4",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.x"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
 }
