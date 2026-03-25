@@ -13,7 +13,7 @@ export class CreateMatchP5P1Dto {
     @IsNotEmpty()
     incomingInvoiceId!: string;
 
-    @ApiProperty({ example: 0.95, description: 'AI match confidence score', required: false })
+    @ApiProperty({ example: 0.95, description: 'AI match confidence score' })
     @IsNumber()
     @IsOptional()
     matchConfidence?: number;

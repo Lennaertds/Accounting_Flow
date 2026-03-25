@@ -3,6 +3,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsUUID, IsDateString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateIncomingInvoiceDto {
+    @ApiProperty({ example: 'uuid-van-organisatie' })
+    @IsUUID()
+    @IsNotEmpty()
+    orgId!: string; 
+
     @ApiProperty({ example: 'uuid-van-partner' })
     @IsUUID()
     @IsNotEmpty()
@@ -18,30 +23,40 @@ export class CreateIncomingInvoiceDto {
     @IsNotEmpty()
     date!: string;
 
-    @ApiProperty({ example: '2026-04-24' })
+    @ApiProperty({ example: '2026-04-24', required: false })
     @IsDateString()
-    @IsNotEmpty()
-    dueDate!: string;
+    @IsOptional() 
+    dueDate?: string;
 
     @ApiProperty({ example: 1000.00 })
     @IsNumber()
     @IsNotEmpty()
     totalExclVat!: number; 
 
-    @ApiProperty({ example: 'BTW21', description: 'De code van de BTW-regel' })
+    @ApiProperty({ example: 'BTW21', description: 'De code van de BTW-regel (PK van vat_codes)' })
     @IsString()
     @IsNotEmpty()
     vatCodeId!: string; 
 
-    @ApiProperty({ example: 'uuid-van-organisatie' })
-    @IsUUID()
-    @IsNotEmpty()
-    orgId!: string;
+    @ApiProperty({ example: 'PENDING', default: 'PENDING' })
+    @IsString()
+    @IsOptional() 
+    status?: string;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({ example: false, default: false })
+    @IsBoolean()
+    @IsOptional()
+    isPeppol?: boolean;
+
+    @ApiProperty({ example: 0.98, required: false })
+    @IsNumber()
+    @IsOptional()
+    ocrConfidence?: number;
+
+    @ApiProperty({ example: '/storage/invoices/inv_001.pdf', required: false })
     @IsString()
     @IsOptional()
-    status?: string;
+    rawFileStoragePath?: string;
 }
 
 export class UpdateIncomingInvoiceDto {

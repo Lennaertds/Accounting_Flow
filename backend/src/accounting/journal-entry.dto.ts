@@ -5,26 +5,28 @@ import { IsString, IsNotEmpty, IsUUID, IsDateString, IsOptional } from 'class-va
 export class CreateJournalEntryDto {
     @ApiProperty({ example: 'uuid-van-dagboek' })
     @IsUUID()
+    @IsNotEmpty()
     journalId!: string;
 
-    @ApiProperty({ example: '2023-10-27' })
+    @ApiProperty({ example: '2026-03-25' })
     @IsDateString()
+    @IsNotEmpty()
     date!: string;
 
-    @ApiProperty({ example: 'Aankoop kantoorbenodigdheden', required: false })
+    @ApiProperty({ example: 'Aankoop kantoorbenodigdheden' })
     @IsString()
-    @IsOptional()
-    description?: string;
+    @IsNotEmpty()
+    description!: string;
 }
 
 export class UpdateJournalEntryDto {
     @ApiProperty({ required: false })
-    @IsDateString()
     @IsOptional()
+    @IsDateString()
     date?: string;
 
     @ApiProperty({ required: false })
-    @IsString()
     @IsOptional()
+    @IsString()
     description?: string;
 }

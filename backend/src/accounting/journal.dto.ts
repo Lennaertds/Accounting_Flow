@@ -16,12 +16,19 @@ export class CreateJournalDto {
     @IsNotEmpty()
     name!: string;
 
+    @ApiProperty({ example: 'INK', description: 'Korte code voor het dagboek' })
+    @IsString()
+    @IsNotEmpty()
+    code!: string; 
+
     @ApiProperty({ enum: JournalType, example: 'PURCHASE' })
     @IsEnum(JournalType)
+    @IsNotEmpty()
     type!: JournalType;
 
     @ApiProperty({ example: 'uuid-van-organisatie' })
     @IsUUID()
+    @IsNotEmpty()
     orgId!: string;
 }
 

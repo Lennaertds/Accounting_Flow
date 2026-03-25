@@ -28,8 +28,8 @@ export class CreateLedgerAccountDto {
     @ApiProperty({ enum: LedgerCategory, example: 'REVENUE' })
     @IsEnum(LedgerCategory)
     @IsNotEmpty()
-    category!: string;
-}
+    category!: LedgerCategory; 
+    }
 
 export class UpdateLedgerAccountDto {
     @ApiProperty({ required: false })

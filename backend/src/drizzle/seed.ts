@@ -24,6 +24,28 @@ async function bootstrap() {
         const authService = app.get(AuthService);
         const db: DatabaseProvider = app.get(DrizzleAsyncProvider);
 
+        // // --- START DEBUG BLOK ---
+        // logger.log('🔍 [DEBUG] Verbinding checken...');
+        
+        // // 1. Welke tabellen "ziet" Drizzle in zijn eigen configuratie?
+        // const exportedTables = Object.keys(schema).filter(k => !k.includes('Schema'));
+        // logger.debug(`Gevonden tabellen in schema.ts: ${exportedTables.join(', ')}`);
+
+        // // 2. Bestaan de schema's in de echte database?
+        // // We gebruiken de onderliggende pg-client om de ruwe waarheid te vragen
+        // const rawClient = (db as any).session.client; 
+        // const schemaRes = await rawClient.query(
+        //     "SELECT schema_name FROM information_schema.schemata WHERE schema_name IN ('pepol_app', 'pepol_dwh')"
+        // );
+        // logger.debug(`Bestaande schema's in DB: ${schemaRes.rows.map(r => r.schema_name).join(', ') || 'GEEN'}`);
+
+        // // 3. Bestaan de tabellen in pepol_app?
+        // const tableRes = await rawClient.query(
+        //     "SELECT table_name FROM information_schema.tables WHERE table_schema = 'pepol_app'"
+        // );
+        // logger.debug(`Tabellen in pepol_app: ${tableRes.rows.map(r => r.table_name).join(', ') || 'GEEN'}`);
+        // // --- EINDE DEBUG BLOK ---
+
         // 1. OPRUIMEN (Cascade delete van boven naar beneden)
         logger.log('🧹 1/4: Cleaning existing data...');
         await db.delete(schema.users);
@@ -50,10 +72,12 @@ async function bootstrap() {
             const orgId = orgMap.get(seedUser.orgName);
             if (orgId) {
                 await authService.register({
-                    email: seedUser.email,
-                    password: 'password123',
                     orgId: orgId,
-                    role: seedUser.role as any
+                    email: seedUser.email,
+                    password: 'passwoord123',
+                    firstName: 'Admin',
+                    lastName: 'Alpha', 
+                    role: 'ADMIN',
                 });
             }
         }
@@ -61,11 +85,17 @@ async function bootstrap() {
 
         // 4. SEED VAT CODES (Per organisatie)
         logger.log('🌱 4/4: Seeding VAT codes for each organization...');
-        for (const orgId of orgMap.values()) {
-            await db.insert(schema.vatCodes).values(
-                SEED_VAT_CODES.map(v => ({ ...v, orgId }))
-            );
-        }
+        for (const [orgName, orgId] of orgMap.entries()) {
+            const vatValues = SEED_VAT_CODES.map(v => ({
+                orgId: orgId,
+                code: v.code, 
+                rate: v.rate,
+                description: v.description,
+                taxDeclarationBox: v.taxDeclarationBox
+            }));
+
+    await db.insert(schema.vatCodes).values(vatValues);
+}
 
         logger.log('--- ✨ Seeding Complete! ---');
     } catch (err) {

@@ -24,18 +24,25 @@ export class DrizzleModule implements OnModuleDestroy, OnModuleInit {
     ) { }
 
     async onModuleInit() {
-        const runMigrations = this.configService.get<boolean>('DB_RUN_MIGRATIONS', true);
+        // const runMigrations = this.configService.get<boolean>('DB_RUN_MIGRATIONS', true);
 
-        if (!runMigrations) {
-            this.logger.warn('Skipping automatic migrations based on config (DB_RUN_MIGRATIONS=false).');
-            return;
+        // if (!runMigrations) {
+        //     this.logger.warn('Skipping automatic migrations based on config (DB_RUN_MIGRATIONS=false).');
+        //     return;
+        // }
+
+        // this.logger.log('⏳ Running migrations...');
+        // await migrate(this.db, {
+        //     migrationsFolder: join(process.cwd(), 'backend', 'migrations'),
+        // });
+        // this.logger.log('✅ Migrations completed!');
+
+        if (process.env.NODE_ENV === 'production') {
+            console.log('⏳ Running production migrations...');
+            await migrate(this.db, { migrationsFolder: './backend/migrations' });
+        } else {
+            console.log('🚀 Skipping auto-migration (handled by CLI)');
         }
-
-        this.logger.log('⏳ Running migrations...');
-        await migrate(this.db, {
-            migrationsFolder: join(process.cwd(), 'migrations'),
-        });
-        this.logger.log('✅ Migrations completed!');
     }
 
     async onModuleDestroy() {

@@ -1,0 +1,2452 @@
+{
+  "id": "7fba9ae8-097a-4959-b508-c01cd2c3222e",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "pepol_app.analytic_accounts": {
+      "name": "analytic_accounts",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "analytic_accounts_org_id_organizations_id_fk": {
+          "name": "analytic_accounts_org_id_organizations_id_fk",
+          "tableFrom": "analytic_accounts",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.assets": {
+      "name": "assets",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "purchase_entry_id": {
+          "name": "purchase_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_value": {
+          "name": "total_value",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "depreciation_months": {
+          "name": "depreciation_months",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "startDate": {
+          "name": "startDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "assets_purchase_entry_id_journal_entries_id_fk": {
+          "name": "assets_purchase_entry_id_journal_entries_id_fk",
+          "tableFrom": "assets",
+          "tableTo": "journal_entries",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "purchase_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.bank_statements": {
+      "name": "bank_statements",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "communication": {
+          "name": "communication",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "counterparty_iban": {
+          "name": "counterparty_iban",
+          "type": "varchar(34)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bank_statements_org_id_organizations_id_fk": {
+          "name": "bank_statements_org_id_organizations_id_fk",
+          "tableFrom": "bank_statements",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.budgets": {
+      "name": "budgets",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "ledger_code": {
+          "name": "ledger_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "analytic_account_id": {
+          "name": "analytic_account_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount_limit": {
+          "name": "amount_limit",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "period": {
+          "name": "period",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "budgets_analytic_account_id_analytic_accounts_id_fk": {
+          "name": "budgets_analytic_account_id_analytic_accounts_id_fk",
+          "tableFrom": "budgets",
+          "tableTo": "analytic_accounts",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "analytic_account_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_analytic": {
+      "name": "dim_analytic",
+      "schema": "pepol_dwh",
+      "columns": {
+        "analytic_key": {
+          "name": "analytic_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "analytic_code": {
+          "name": "analytic_code",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "project_name": {
+          "name": "project_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_audit": {
+      "name": "dim_audit",
+      "schema": "pepol_dwh",
+      "columns": {
+        "audit_key": {
+          "name": "audit_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_role": {
+          "name": "user_role",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_system": {
+          "name": "source_system",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_timestamp": {
+          "name": "entry_timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_date": {
+      "name": "dim_date",
+      "schema": "pepol_dwh",
+      "columns": {
+        "date_key": {
+          "name": "date_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "full_date": {
+          "name": "full_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "day": {
+          "name": "day",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "month": {
+          "name": "month",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "year": {
+          "name": "year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quarter": {
+          "name": "quarter",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fiscal_year": {
+          "name": "fiscal_year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fiscal_period": {
+          "name": "fiscal_period",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_period_closed": {
+          "name": "is_period_closed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_document": {
+      "name": "dim_document",
+      "schema": "pepol_dwh",
+      "columns": {
+        "document_key": {
+          "name": "document_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "original_file_name": {
+          "name": "original_file_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "storage_path": {
+          "name": "storage_path",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_type": {
+          "name": "document_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ocr_confidence": {
+          "name": "ocr_confidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_peppol": {
+          "name": "is_peppol",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_ledger_account": {
+      "name": "dim_ledger_account",
+      "schema": "pepol_dwh",
+      "columns": {
+        "ledger_key": {
+          "name": "ledger_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ledger_code": {
+          "name": "ledger_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ledger_name": {
+          "name": "ledger_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_organization": {
+      "name": "dim_organization",
+      "schema": "pepol_dwh",
+      "columns": {
+        "org_key": {
+          "name": "org_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vat_nr": {
+          "name": "vat_nr",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "iban": {
+          "name": "iban",
+          "type": "varchar(34)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_partner": {
+      "name": "dim_partner",
+      "schema": "pepol_dwh",
+      "columns": {
+        "partner_key": {
+          "name": "partner_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "partner_id": {
+          "name": "partner_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vat_nr": {
+          "name": "vat_nr",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "peppol_id": {
+          "name": "peppol_id",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "iban": {
+          "name": "iban",
+          "type": "varchar(34)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_customer": {
+          "name": "is_customer",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_supplier": {
+          "name": "is_supplier",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_time": {
+      "name": "dim_time",
+      "schema": "pepol_dwh",
+      "columns": {
+        "time_key": {
+          "name": "time_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "full_time": {
+          "name": "full_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "hour": {
+          "name": "hour",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "minute": {
+          "name": "minute",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "second": {
+          "name": "second",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_transaction_type": {
+      "name": "dim_transaction_type",
+      "schema": "pepol_dwh",
+      "columns": {
+        "type_key": {
+          "name": "type_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "transaction_type": {
+          "name": "transaction_type",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "journal_source": {
+          "name": "journal_source",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_pillar": {
+          "name": "source_pillar",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "peppol_status": {
+          "name": "peppol_status",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.dim_vat": {
+      "name": "dim_vat",
+      "schema": "pepol_dwh",
+      "columns": {
+        "vat_key": {
+          "name": "vat_key",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vat_code": {
+          "name": "vat_code",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vat_rate": {
+          "name": "vat_rate",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tax_box": {
+          "name": "tax_box",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.fact_budget_performance": {
+      "name": "fact_budget_performance",
+      "schema": "pepol_dwh",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "date_key": {
+          "name": "date_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_key": {
+          "name": "org_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ledger_key": {
+          "name": "ledger_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "analytic_key": {
+          "name": "analytic_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "audit_key": {
+          "name": "audit_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "budget_amount": {
+          "name": "budget_amount",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "actual_amount": {
+          "name": "actual_amount",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "variance": {
+          "name": "variance",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "fact_budget_performance_date_key_dim_date_date_key_fk": {
+          "name": "fact_budget_performance_date_key_dim_date_date_key_fk",
+          "tableFrom": "fact_budget_performance",
+          "tableTo": "dim_date",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "date_key"
+          ],
+          "columnsTo": [
+            "date_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_budget_performance_org_key_dim_organization_org_key_fk": {
+          "name": "fact_budget_performance_org_key_dim_organization_org_key_fk",
+          "tableFrom": "fact_budget_performance",
+          "tableTo": "dim_organization",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "org_key"
+          ],
+          "columnsTo": [
+            "org_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_budget_performance_ledger_key_dim_ledger_account_ledger_key_fk": {
+          "name": "fact_budget_performance_ledger_key_dim_ledger_account_ledger_key_fk",
+          "tableFrom": "fact_budget_performance",
+          "tableTo": "dim_ledger_account",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "ledger_key"
+          ],
+          "columnsTo": [
+            "ledger_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_budget_performance_analytic_key_dim_analytic_analytic_key_fk": {
+          "name": "fact_budget_performance_analytic_key_dim_analytic_analytic_key_fk",
+          "tableFrom": "fact_budget_performance",
+          "tableTo": "dim_analytic",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "analytic_key"
+          ],
+          "columnsTo": [
+            "analytic_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_budget_performance_audit_key_dim_audit_audit_key_fk": {
+          "name": "fact_budget_performance_audit_key_dim_audit_audit_key_fk",
+          "tableFrom": "fact_budget_performance",
+          "tableTo": "dim_audit",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "audit_key"
+          ],
+          "columnsTo": [
+            "audit_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_dwh.fact_financial_transactions": {
+      "name": "fact_financial_transactions",
+      "schema": "pepol_dwh",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "date_key": {
+          "name": "date_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_key": {
+          "name": "org_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time_key": {
+          "name": "time_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type_key": {
+          "name": "type_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "partner_key": {
+          "name": "partner_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ledger_key": {
+          "name": "ledger_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "analytic_key": {
+          "name": "analytic_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vat_key": {
+          "name": "vat_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_key": {
+          "name": "document_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "audit_key": {
+          "name": "audit_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_debet": {
+          "name": "amount_debet",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_credit": {
+          "name": "amount_credit",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "net_amount": {
+          "name": "net_amount",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vat_amount": {
+          "name": "vat_amount",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "due_date_key": {
+          "name": "due_date_key",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_reconciled": {
+          "name": "is_reconciled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pillar_match_id": {
+          "name": "pillar_match_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_matched": {
+          "name": "is_matched",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "match_confidence": {
+          "name": "match_confidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "fact_financial_transactions_date_key_dim_date_date_key_fk": {
+          "name": "fact_financial_transactions_date_key_dim_date_date_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_date",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "date_key"
+          ],
+          "columnsTo": [
+            "date_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_org_key_dim_organization_org_key_fk": {
+          "name": "fact_financial_transactions_org_key_dim_organization_org_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_organization",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "org_key"
+          ],
+          "columnsTo": [
+            "org_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_time_key_dim_time_time_key_fk": {
+          "name": "fact_financial_transactions_time_key_dim_time_time_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_time",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "time_key"
+          ],
+          "columnsTo": [
+            "time_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_type_key_dim_transaction_type_type_key_fk": {
+          "name": "fact_financial_transactions_type_key_dim_transaction_type_type_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_transaction_type",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "type_key"
+          ],
+          "columnsTo": [
+            "type_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_partner_key_dim_partner_partner_key_fk": {
+          "name": "fact_financial_transactions_partner_key_dim_partner_partner_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_partner",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "partner_key"
+          ],
+          "columnsTo": [
+            "partner_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_ledger_key_dim_ledger_account_ledger_key_fk": {
+          "name": "fact_financial_transactions_ledger_key_dim_ledger_account_ledger_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_ledger_account",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "ledger_key"
+          ],
+          "columnsTo": [
+            "ledger_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_analytic_key_dim_analytic_analytic_key_fk": {
+          "name": "fact_financial_transactions_analytic_key_dim_analytic_analytic_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_analytic",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "analytic_key"
+          ],
+          "columnsTo": [
+            "analytic_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_vat_key_dim_vat_vat_key_fk": {
+          "name": "fact_financial_transactions_vat_key_dim_vat_vat_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_vat",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "vat_key"
+          ],
+          "columnsTo": [
+            "vat_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_document_key_dim_document_document_key_fk": {
+          "name": "fact_financial_transactions_document_key_dim_document_document_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_document",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "document_key"
+          ],
+          "columnsTo": [
+            "document_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_audit_key_dim_audit_audit_key_fk": {
+          "name": "fact_financial_transactions_audit_key_dim_audit_audit_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_audit",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "audit_key"
+          ],
+          "columnsTo": [
+            "audit_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fact_financial_transactions_due_date_key_dim_date_date_key_fk": {
+          "name": "fact_financial_transactions_due_date_key_dim_date_date_key_fk",
+          "tableFrom": "fact_financial_transactions",
+          "tableTo": "dim_date",
+          "schemaTo": "pepol_dwh",
+          "columnsFrom": [
+            "due_date_key"
+          ],
+          "columnsTo": [
+            "date_key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.follow_up_logs": {
+      "name": "follow_up_logs",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "match_p5_p1_id": {
+          "name": "match_p5_p1_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "match_p2_p4_id": {
+          "name": "match_p2_p4_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action_taken": {
+          "name": "action_taken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status_after_action": {
+          "name": "status_after_action",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "follow_up_logs_org_id_organizations_id_fk": {
+          "name": "follow_up_logs_org_id_organizations_id_fk",
+          "tableFrom": "follow_up_logs",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "follow_up_logs_match_p5_p1_id_match_p5_p1_id_fk": {
+          "name": "follow_up_logs_match_p5_p1_id_match_p5_p1_id_fk",
+          "tableFrom": "follow_up_logs",
+          "tableTo": "match_p5_p1",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "match_p5_p1_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "follow_up_logs_match_p2_p4_id_match_p2_p4_id_fk": {
+          "name": "follow_up_logs_match_p2_p4_id_match_p2_p4_id_fk",
+          "tableFrom": "follow_up_logs",
+          "tableTo": "match_p2_p4",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "match_p2_p4_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "follow_up_logs_user_id_users_id_fk": {
+          "name": "follow_up_logs_user_id_users_id_fk",
+          "tableFrom": "follow_up_logs",
+          "tableTo": "users",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.incoming_invoices": {
+      "name": "incoming_invoices",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "supplier_id": {
+          "name": "supplier_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_nr": {
+          "name": "invoice_nr",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "due_date": {
+          "name": "due_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_excl_vat": {
+          "name": "total_excl_vat",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vat_code_id": {
+          "name": "vat_code_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "is_peppol": {
+          "name": "is_peppol",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "ocr_confidence": {
+          "name": "ocr_confidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_file_storage_path": {
+          "name": "raw_file_storage_path",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "incoming_invoices_org_id_organizations_id_fk": {
+          "name": "incoming_invoices_org_id_organizations_id_fk",
+          "tableFrom": "incoming_invoices",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "incoming_invoices_supplier_id_partners_id_fk": {
+          "name": "incoming_invoices_supplier_id_partners_id_fk",
+          "tableFrom": "incoming_invoices",
+          "tableTo": "partners",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "supplier_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "incoming_invoices_vat_code_id_vat_codes_id_fk": {
+          "name": "incoming_invoices_vat_code_id_vat_codes_id_fk",
+          "tableFrom": "incoming_invoices",
+          "tableTo": "vat_codes",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "vat_code_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.incoming_orders": {
+      "name": "incoming_orders",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reference_ext": {
+          "name": "reference_ext",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "total_estimated": {
+          "name": "total_estimated",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ai_summary": {
+          "name": "ai_summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "incoming_orders_org_id_organizations_id_fk": {
+          "name": "incoming_orders_org_id_organizations_id_fk",
+          "tableFrom": "incoming_orders",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "incoming_orders_customer_id_partners_id_fk": {
+          "name": "incoming_orders_customer_id_partners_id_fk",
+          "tableFrom": "incoming_orders",
+          "tableTo": "partners",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.journal_entries": {
+      "name": "journal_entries",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "journal_id": {
+          "name": "journal_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "journal_entries_journal_id_journals_id_fk": {
+          "name": "journal_entries_journal_id_journals_id_fk",
+          "tableFrom": "journal_entries",
+          "tableTo": "journals",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "journal_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.journals": {
+      "name": "journals",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "journals_org_id_organizations_id_fk": {
+          "name": "journals_org_id_organizations_id_fk",
+          "tableFrom": "journals",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.ledger_accounts": {
+      "name": "ledger_accounts",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "code": {
+          "name": "code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ledger_accounts_org_id_organizations_id_fk": {
+          "name": "ledger_accounts_org_id_organizations_id_fk",
+          "tableFrom": "ledger_accounts",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.match_p2_p4": {
+      "name": "match_p2_p4",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "incoming_order_id": {
+          "name": "incoming_order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "outgoing_invoice_id": {
+          "name": "outgoing_invoice_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "match_p2_p4_incoming_order_id_incoming_orders_id_fk": {
+          "name": "match_p2_p4_incoming_order_id_incoming_orders_id_fk",
+          "tableFrom": "match_p2_p4",
+          "tableTo": "incoming_orders",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "incoming_order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "match_p2_p4_outgoing_invoice_id_outgoing_invoices_id_fk": {
+          "name": "match_p2_p4_outgoing_invoice_id_outgoing_invoices_id_fk",
+          "tableFrom": "match_p2_p4",
+          "tableTo": "outgoing_invoices",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "outgoing_invoice_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.match_p5_p1": {
+      "name": "match_p5_p1",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "outgoing_order_id": {
+          "name": "outgoing_order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "incoming_invoice_id": {
+          "name": "incoming_invoice_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "match_p5_p1_outgoing_order_id_outgoing_orders_id_fk": {
+          "name": "match_p5_p1_outgoing_order_id_outgoing_orders_id_fk",
+          "tableFrom": "match_p5_p1",
+          "tableTo": "outgoing_orders",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "outgoing_order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "match_p5_p1_incoming_invoice_id_incoming_invoices_id_fk": {
+          "name": "match_p5_p1_incoming_invoice_id_incoming_invoices_id_fk",
+          "tableFrom": "match_p5_p1",
+          "tableTo": "incoming_invoices",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "incoming_invoice_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.organizations": {
+      "name": "organizations",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "my_vat_nr": {
+          "name": "my_vat_nr",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "my_iban": {
+          "name": "my_iban",
+          "type": "varchar(34)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.outgoing_invoices": {
+      "name": "outgoing_invoices",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "invoice_nr": {
+          "name": "invoice_nr",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "due_date": {
+          "name": "due_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vat_code_id": {
+          "name": "vat_code_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "peppol_status": {
+          "name": "peppol_status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'DRAFT'"
+        },
+        "raw_file_storage_path": {
+          "name": "raw_file_storage_path",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "outgoing_invoices_org_id_organizations_id_fk": {
+          "name": "outgoing_invoices_org_id_organizations_id_fk",
+          "tableFrom": "outgoing_invoices",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "outgoing_invoices_customer_id_partners_id_fk": {
+          "name": "outgoing_invoices_customer_id_partners_id_fk",
+          "tableFrom": "outgoing_invoices",
+          "tableTo": "partners",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "outgoing_invoices_vat_code_id_vat_codes_id_fk": {
+          "name": "outgoing_invoices_vat_code_id_vat_codes_id_fk",
+          "tableFrom": "outgoing_invoices",
+          "tableTo": "vat_codes",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "vat_code_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.outgoing_orders": {
+      "name": "outgoing_orders",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "supplier_id": {
+          "name": "supplier_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "channel": {
+          "name": "channel",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'ORDERED'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "outgoing_orders_org_id_organizations_id_fk": {
+          "name": "outgoing_orders_org_id_organizations_id_fk",
+          "tableFrom": "outgoing_orders",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "outgoing_orders_supplier_id_partners_id_fk": {
+          "name": "outgoing_orders_supplier_id_partners_id_fk",
+          "tableFrom": "outgoing_orders",
+          "tableTo": "partners",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "supplier_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.partners": {
+      "name": "partners",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_peppol_ready": {
+          "name": "is_peppol_ready",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "preferred_order_channel": {
+          "name": "preferred_order_channel",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'EMAIL'"
+        },
+        "preferred_invoice_channel": {
+          "name": "preferred_invoice_channel",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PEPPOL'"
+        },
+        "vat_nr": {
+          "name": "vat_nr",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "peppol_id": {
+          "name": "peppol_id",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_customer": {
+          "name": "is_customer",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_supplier": {
+          "name": "is_supplier",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "bank_account_iban": {
+          "name": "bank_account_iban",
+          "type": "varchar(34)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "partners_org_id_organizations_id_fk": {
+          "name": "partners_org_id_organizations_id_fk",
+          "tableFrom": "partners",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.reconciliation_log": {
+      "name": "reconciliation_log",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "bank_statement_id": {
+          "name": "bank_statement_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "journal_entry_id": {
+          "name": "journal_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_id": {
+          "name": "transaction_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "match_type": {
+          "name": "match_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reconciled_at": {
+          "name": "reconciled_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reconciliation_log_bank_statement_id_bank_statements_id_fk": {
+          "name": "reconciliation_log_bank_statement_id_bank_statements_id_fk",
+          "tableFrom": "reconciliation_log",
+          "tableTo": "bank_statements",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "bank_statement_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reconciliation_log_journal_entry_id_journal_entries_id_fk": {
+          "name": "reconciliation_log_journal_entry_id_journal_entries_id_fk",
+          "tableFrom": "reconciliation_log",
+          "tableTo": "journal_entries",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "journal_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "reconciliation_log_transaction_id_transactions_id_fk": {
+          "name": "reconciliation_log_transaction_id_transactions_id_fk",
+          "tableFrom": "reconciliation_log",
+          "tableTo": "transactions",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "transaction_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.transactions": {
+      "name": "transactions",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "entry_id": {
+          "name": "entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ledger_code": {
+          "name": "ledger_code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "analytic_account_id": {
+          "name": "analytic_account_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_reconciled": {
+          "name": "is_reconciled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "transactions_entry_id_journal_entries_id_fk": {
+          "name": "transactions_entry_id_journal_entries_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "journal_entries",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_analytic_account_id_analytic_accounts_id_fk": {
+          "name": "transactions_analytic_account_id_analytic_accounts_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "analytic_accounts",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "analytic_account_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.users": {
+      "name": "users",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'user'"
+        },
+        "last_login": {
+          "name": "last_login",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "users_org_id_organizations_id_fk": {
+          "name": "users_org_id_organizations_id_fk",
+          "tableFrom": "users",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "pepol_app.vat_codes": {
+      "name": "vat_codes",
+      "schema": "pepol_app",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rate": {
+          "name": "rate",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tax_declaration_box": {
+          "name": "tax_declaration_box",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "vat_codes_org_id_organizations_id_fk": {
+          "name": "vat_codes_org_id_organizations_id_fk",
+          "tableFrom": "vat_codes",
+          "tableTo": "organizations",
+          "schemaTo": "pepol_app",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "vat_codes_org_id_code_unique": {
+          "name": "vat_codes_org_id_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "org_id",
+            "code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "pepol_dwh": "pepol_dwh",
+    "pepol_app": "pepol_app"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

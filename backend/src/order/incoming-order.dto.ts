@@ -31,8 +31,8 @@ export class CreateIncomingOrderDto {
 
     @ApiProperty({ example: 450.00 })
     @IsNumber()
-    @IsOptional()
-    totalEstimated?: number;
+    @IsNotEmpty() 
+    totalEstimated!: number;
 
     @ApiProperty({ example: 'Order bevat 5x Product X, levering voor vrijdag.' })
     @IsString()

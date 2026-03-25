@@ -13,6 +13,18 @@ export class IncomingInvoiceService {
         return await this.db.select().from(incomingInvoices).where(eq(incomingInvoices.orgId, orgId));
     }
 
+    async findOne(id: string) {
+        const result = await this.db
+            .select()
+            .from(incomingInvoices)
+            .where(eq(incomingInvoices.id, id));
+        
+        if (!result.length) {
+            throw new NotFoundException(`Inkoopfactuur met ID ${id} niet gevonden`);
+        }
+        return result[0];
+    }
+
     async create(dto: CreateIncomingInvoiceDto) {
         const result = await this.db.insert(incomingInvoices)
             .values({

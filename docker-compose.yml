@@ -4,7 +4,7 @@ services:
   # 1. Database Service (PostgreSQL)
   postgres:
     image: postgres:16-alpine
-    container_name: papertrade_db
+    container_name: boekhoud_db
     restart: always
     environment:
       POSTGRES_USER: ${DB_USERNAME}
@@ -25,8 +25,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      # Gebruik network: host om DNS problemen te voorkomen op arch linux (of toch in mijn geval)
-      # network: host
     container_name: papertrade_api
     restart: always
     ports:

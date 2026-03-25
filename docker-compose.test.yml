@@ -5,7 +5,7 @@ services:
   # 1. Database Service (PostgreSQL) - De geïsoleerde Test DB
   postgres:
     image: postgres:16-alpine
-    container_name: papertrade_db_test
+    container_name: boekhoud_db_test
     # Zorgt ervoor dat de DB stopt na het opschonen
     restart: "no" 
     environment:
@@ -16,7 +16,7 @@ services:
     ports:
       # Map de HOST-poort (5433 uit je .env.test) 
       # naar de INTERNE CONTAINER-poort (5432)
-      - "5433:5432" 
+      - "5444:5432" 
     volumes:
       # Tijdelijke opslag: Data verdwijnt na 'docker-compose down'
       - /var/lib/postgresql/data

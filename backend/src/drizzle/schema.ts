@@ -1,8 +1,5 @@
 // backend/src/drizzle/schema.ts
-import { 
-  pgSchema, uuid, varchar, decimal, boolean, 
-  timestamp, date, integer, text, pgEnum, time 
-} from 'drizzle-orm/pg-core';
+import { pgSchema, uuid, varchar, decimal, boolean, timestamp, date, integer, text, pgEnum, time, unique } from 'drizzle-orm/pg-core';
 
 // --- DEFINIEER DE SCHEMAS ---
 export const oltpSchema = pgSchema('pepol_app');
@@ -49,11 +46,16 @@ export const partners = oltpSchema.table('partners', {
 });
 
 export const vatCodes = oltpSchema.table('vat_codes', {
-  code: varchar('code', { length: 10 }).primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  rate: decimal('rate', { precision: 5, scale: 2 }).notNull(),
-  description: text('description').notNull(),
-  taxDeclarationBox: integer('tax_declaration_box'),
+    id: uuid('id').primaryKey().defaultRandom(), 
+    orgId: uuid('org_id').references(() => organizations.id).notNull(),
+    code: text('code').notNull(),
+    rate: decimal('rate', { precision: 5, scale: 2 }).notNull(), 
+    description: text('description'),
+    taxDeclarationBox: integer('tax_declaration_box').notNull(),
+}, (table) => {
+    return {
+        unq: unique().on(table.orgId, table.code),
+    };
 });
 
 export const analyticAccounts = oltpSchema.table('analytic_accounts', {
@@ -73,7 +75,7 @@ export const incomingInvoices = oltpSchema.table('incoming_invoices', {
   date: date('date').notNull(),
   dueDate: date('due_date'),
   totalExclVat: decimal('total_excl_vat', { precision: 12, scale: 2 }).notNull(),
-  vatCodeId: varchar('vat_code_id').references(() => vatCodes.code).notNull(),
+  vatCodeId: uuid('vat_code_id').references(() => vatCodes.id).notNull(),
   status: varchar('status').default('PENDING').notNull(), // PENDING, MATCHED, DISCREPANCY
   isPeppol: boolean('is_peppol').default(false).notNull(),
   ocrConfidence: decimal('ocr_confidence'),
@@ -87,7 +89,7 @@ export const outgoingInvoices = oltpSchema.table('outgoing_invoices', {
   invoiceNr: varchar('invoice_nr', { length: 100 }).notNull(),
   date: date('date').notNull(),
   dueDate: date('due_date'),
-  vatCodeId: varchar('vat_code_id').references(() => vatCodes.code).notNull(),
+  vatCodeId: uuid('vat_code_id').references(() => vatCodes.id).notNull(),
   peppolStatus: varchar('peppol_status').default('DRAFT').notNull(), // DRAFT, SENT, PAID
   rawFileStoragePath: varchar('raw_file_storage_path', { length: 100 }),
 });

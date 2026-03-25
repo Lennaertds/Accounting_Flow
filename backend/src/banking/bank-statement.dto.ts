@@ -10,12 +10,8 @@ export class CreateBankStatementDto {
 
     @ApiProperty({ example: '2026-03-24' })
     @IsDateString()
-    date!: string;
-
-    @ApiProperty({ example: 'BE12345678901234' })
-    @IsString()
     @IsNotEmpty()
-    iban!: string;
+    date!: string;
 
     @ApiProperty({ example: 125.50 })
     @IsNumber()
@@ -25,7 +21,12 @@ export class CreateBankStatementDto {
     @ApiProperty({ example: 'Mededeling: Betaling Factuur 2024-001', required: false })
     @IsString()
     @IsOptional()
-    reference?: string;
+    communication?: string;
+
+    @ApiProperty({ example: 'BE12345678901234', required: false })
+    @IsString()
+    @IsOptional()
+    counterpartyIban?: string; 
 }
 
 export class UpdateBankStatementDto {
@@ -37,5 +38,10 @@ export class UpdateBankStatementDto {
     @ApiProperty({ required: false })
     @IsString()
     @IsOptional()
-    reference?: string;
+    communication?: string;
+
+    @ApiProperty({ required: false })
+    @IsString()
+    @IsOptional()
+    counterpartyIban?: string;
 }

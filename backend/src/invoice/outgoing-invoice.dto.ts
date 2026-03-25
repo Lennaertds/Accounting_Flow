@@ -24,32 +24,37 @@ export class CreateOutgoingInvoiceDto {
     @IsNotEmpty()
     invoiceNr!: string;
 
-    @ApiProperty({ example: '2026-03-24', description: 'Factuurdatum' })
+    @ApiProperty({ example: '2026-03-24' })
     @IsDateString()
     @IsNotEmpty()
-    date!: string; // Toegevoegd
+    date!: string;
 
-    @ApiProperty({ example: '2026-04-24', description: 'Vervaldatum' })
+    @ApiProperty({ example: '2026-04-24', required: false })
     @IsDateString()
-    @IsNotEmpty()
-    dueDate!: string;
+    @IsOptional()
+    dueDate?: string;
 
     @ApiProperty({ example: 'BTW21' })
     @IsString()
     @IsNotEmpty()
     vatCodeId!: string;
 
-    @ApiProperty({ example: 'DRAFT' })
+    @ApiProperty({ enum: PeppolStatus, example: 'DRAFT', default: 'DRAFT' })
+    @IsEnum(PeppolStatus)
+    @IsOptional()
+    peppolStatus?: PeppolStatus;
+
+    @ApiProperty({ example: '/storage/outvoices/fact_001.pdf', required: false })
     @IsString()
     @IsOptional()
-    peppolStatus?: string;
+    rawFileStoragePath?: string;
 }
 
 export class UpdateOutgoingInvoiceDto {
     @ApiProperty({ enum: PeppolStatus, required: false })
     @IsEnum(PeppolStatus)
     @IsOptional()
-    peppolStatus?: string;
+    peppolStatus?: PeppolStatus;
 
     @ApiProperty({ required: false })
     @IsDateString()

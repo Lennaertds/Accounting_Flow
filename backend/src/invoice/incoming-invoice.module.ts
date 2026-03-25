@@ -2,8 +2,10 @@
 import { Module } from '@nestjs/common';
 import { IncomingInvoiceController } from './incoming-invoice.controller';
 import { IncomingInvoiceService } from './incoming-invoice.service';
+import { DrizzleModule } from '../drizzle/drizzle.module';
 
 @Module({
+    imports: [DrizzleModule],
     controllers: [IncomingInvoiceController],
     providers: [IncomingInvoiceService],
     exports: [IncomingInvoiceService],

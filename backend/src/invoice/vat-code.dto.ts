@@ -6,7 +6,7 @@ export class CreateVatCodeDto {
     @ApiProperty({ example: 'BTW21', description: 'De unieke code, bijv. BTW21 of BTW0' })
     @IsString()
     @IsNotEmpty()
-    code!: string;
+    code!: string; // Prima, dit is de PK in je schema
 
     @ApiProperty({ example: 'uuid-van-organisatie' })
     @IsUUID()
@@ -17,14 +17,15 @@ export class CreateVatCodeDto {
     @IsNumber()
     @Min(0)
     @Max(100)
+    @IsNotEmpty()
     rate!: number;
 
     @ApiProperty({ example: '21% BTW op goederen en diensten' })
     @IsString()
-    @IsOptional()
-    description?: string;
+    @IsNotEmpty() 
+    description!: string;
 
-    @ApiProperty({ example: 1, description: 'Het vakje op de BTW-aangifte' })
+    @ApiProperty({ example: 1, description: 'Het vakje op de BTW-aangifte', required: false })
     @IsNumber()
     @IsOptional()
     taxDeclarationBox?: number;
@@ -45,4 +46,10 @@ export class UpdateVatCodeDto {
     @IsNumber()
     @IsOptional()
     taxDeclarationBox?: number;
+}
+
+export class VatCodeResponseDto extends CreateVatCodeDto {
+    @ApiProperty({ example: 'uuid-van-de-btw-instelling' })
+    @IsUUID()
+    id!: string;
 }

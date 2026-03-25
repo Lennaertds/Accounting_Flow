@@ -15,13 +15,25 @@ export class VatCodeService {
             .where(eq(vatCodes.orgId, orgId));
     }
 
-    async findOne(code: string, orgId: string) {
+    async findById(id: string) {
+        const result = await this.db.select()
+            .from(vatCodes)
+            .where(eq(vatCodes.id, id));
+            
+        if (!result.length) {
+            throw new NotFoundException(`BTW-instelling met ID ${id} niet gevonden`);
+        }
+        return result[0];
+    }
+
+    // Zoeken op code + orgId (Handig voor de Seed en Inports)
+    async findOneByCode(code: string, orgId: string) {
         const result = await this.db.select()
             .from(vatCodes)
             .where(and(eq(vatCodes.code, code), eq(vatCodes.orgId, orgId)));
             
         if (!result.length) {
-            throw new NotFoundException(`BTW-code ${code} niet gevonden`);
+            throw new NotFoundException(`BTW-code ${code} niet gevonden voor deze organisatie`);
         }
         return result[0];
     }
@@ -29,35 +41,38 @@ export class VatCodeService {
     async create(dto: CreateVatCodeDto) {
         const result = await this.db.insert(vatCodes)
             .values({
-                ...dto,
+                orgId: dto.orgId,
+                code: dto.code,
                 rate: dto.rate.toString(),
+                description: dto.description,
+                taxDeclarationBox: dto.taxDeclarationBox ?? 0,
             })
             .returning();
         return result[0];
     }
 
-    async update(code: string, orgId: string, dto: UpdateVatCodeDto) {
+    async update(id: string, dto: UpdateVatCodeDto) {
         const updateData: any = { ...dto };
         if (dto.rate) updateData.rate = dto.rate.toString();
 
         const result = await this.db.update(vatCodes)
             .set(updateData)
-            .where(and(eq(vatCodes.code, code), eq(vatCodes.orgId, orgId)))
+            .where(eq(vatCodes.id, id))
             .returning();
 
         if (!result.length) {
-            throw new NotFoundException(`BTW-code ${code} niet gevonden om bij te werken`);
+            throw new NotFoundException(`BTW-code niet gevonden om bij te werken`);
         }
         return result[0];
     }
 
-    async delete(code: string, orgId: string) {
+    async delete(id: string) {
         const result = await this.db.delete(vatCodes)
-            .where(and(eq(vatCodes.code, code), eq(vatCodes.orgId, orgId)))
+            .where(eq(vatCodes.id, id))
             .returning();
 
         if (!result.length) {
-            throw new NotFoundException(`BTW-code ${code} niet gevonden om te verwijderen`);
+            throw new NotFoundException(`BTW-code niet gevonden om te verwijderen`);
         }
         return result[0];
     }

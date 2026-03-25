@@ -5,10 +5,12 @@ import { IsString, IsNotEmpty, IsUUID, IsOptional, IsNumber, Min, IsBoolean } fr
 export class CreateTransactionDto {
     @ApiProperty({ example: 'uuid-van-entry' })
     @IsUUID()
+    @IsNotEmpty()
     entryId!: string;
 
     @ApiProperty({ example: 7000, description: 'De numerieke grootboekcode' })
     @IsNumber()
+    @IsNotEmpty()
     ledgerCode!: number; 
 
     @ApiProperty({ example: 'uuid-van-analytic-account', required: false })
@@ -18,9 +20,10 @@ export class CreateTransactionDto {
 
     @ApiProperty({ example: 1250.75 })
     @IsNumber()
+    @IsNotEmpty()
     amount!: number;
 
-    @ApiProperty({ example: false })
+    @ApiProperty({ example: false, default: false })
     @IsBoolean()
     @IsOptional()
     isReconciled?: boolean;
