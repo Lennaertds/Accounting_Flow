@@ -21,8 +21,13 @@ export class JournalEntryService {
         return entry[0];
     }
 
-    async create(dto: CreateJournalEntryDto) {
-        const result = await this.db.insert(journalEntries).values(dto).returning();
+    async create(dto: CreateJournalEntryDto, orgId: string) {
+        const result = await this.db.insert(journalEntries)
+            .values({
+                ...dto,
+                orgId: orgId 
+            })
+            .returning();
         return result[0];
     }
 

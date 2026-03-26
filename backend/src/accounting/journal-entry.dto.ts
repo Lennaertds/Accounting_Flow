@@ -1,8 +1,13 @@
 // backend/src/accounting/journal-entry.dto.ts
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsUUID, IsDateString, IsOptional } from 'class-validator';
 
 export class CreateJournalEntryDto {
+    @ApiProperty({ example: 'uuid-van-organisatie' })
+    @IsUUID()
+    @IsNotEmpty()
+    orgId!: string; 
+
     @ApiProperty({ example: 'uuid-van-dagboek' })
     @IsUUID()
     @IsNotEmpty()
@@ -19,14 +24,4 @@ export class CreateJournalEntryDto {
     description!: string;
 }
 
-export class UpdateJournalEntryDto {
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @IsDateString()
-    date?: string;
-
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @IsString()
-    description?: string;
-}
+export class UpdateJournalEntryDto extends PartialType(CreateJournalEntryDto) {}

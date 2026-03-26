@@ -1,11 +1,18 @@
 // backend/src/accounting/journal-entry.controller.ts
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
+import { 
+    Controller, Get, Post, Put, Delete, Body, Param, 
+    Query, UseGuards, Request 
+} from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JournalEntryService } from './journal-entry.service';
 import { CreateJournalEntryDto, UpdateJournalEntryDto } from './journal-entry.dto';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Session } from '../types/auth';
 
 @ApiTags('Accounting - Journal Entries')
 @ApiBearerAuth()
+@UseGuards(AuthGuard, RolesGuard) 
 @Controller('journal-entries')
 export class JournalEntryController {
     constructor(private readonly service: JournalEntryService) {}
@@ -21,8 +28,9 @@ export class JournalEntryController {
     }
 
     @Post()
-    create(@Body() dto: CreateJournalEntryDto) {
-        return this.service.create(dto);
+    async create(@Body() dto: CreateJournalEntryDto, @Request() req: any) {
+        const user = req.user as Session;
+        return this.service.create(dto, user.orgId);
     }
 
     @Put(':id')

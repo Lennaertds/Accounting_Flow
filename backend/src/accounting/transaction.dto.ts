@@ -1,17 +1,21 @@
-// backend/src/accounting/transaction.dto.ts
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsUUID, IsOptional, IsNumber, Min, IsBoolean } from 'class-validator';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsUUID, IsOptional, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateTransactionDto {
+    @ApiProperty()
+    @IsUUID()
+    @IsNotEmpty()
+    orgId!: string; 
+
     @ApiProperty({ example: 'uuid-van-entry' })
     @IsUUID()
     @IsNotEmpty()
     entryId!: string;
 
-    @ApiProperty({ example: 7000, description: 'De numerieke grootboekcode' })
-    @IsNumber()
+    @ApiProperty({ example: 'uuid-van-grootboekrekening' })
+    @IsUUID()
     @IsNotEmpty()
-    ledgerCode!: number; 
+    ledgerId!: string; 
 
     @ApiProperty({ example: 'uuid-van-analytic-account', required: false })
     @IsUUID()
@@ -29,24 +33,4 @@ export class CreateTransactionDto {
     isReconciled?: boolean;
 }
 
-export class UpdateTransactionDto {
-    @ApiProperty({ required: false })
-    @IsNumber()
-    @IsOptional()
-    ledgerCode?: number;
-
-    @ApiProperty({ required: false })
-    @IsUUID()
-    @IsOptional()
-    analyticAccountId?: string;
-
-    @ApiProperty({ required: false })
-    @IsNumber()
-    @IsOptional()
-    amount?: number;
-
-    @ApiProperty({ required: false })
-    @IsBoolean()
-    @IsOptional()
-    isReconciled?: boolean;
-}
+export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {}

@@ -1,5 +1,5 @@
 // backend/src/accounting/incoming-order.dto.ts
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsUUID, IsNumber, IsOptional, IsEnum } from 'class-validator';
 
 export enum OrderSource {
@@ -22,9 +22,9 @@ export class CreateIncomingOrderDto {
     @ApiProperty({ enum: OrderSource, example: 'PEPPOL' })
     @IsEnum(OrderSource)
     @IsNotEmpty()
-    source!: string;
+    source!: OrderSource;
 
-    @ApiProperty({ example: 'PO-998877', description: 'Referentie van de klant' })
+    @ApiProperty({ example: 'PO-998877' })
     @IsString()
     @IsOptional()
     referenceExt?: string;
@@ -34,20 +34,10 @@ export class CreateIncomingOrderDto {
     @IsNotEmpty() 
     totalEstimated!: number;
 
-    @ApiProperty({ example: 'Order bevat 5x Product X, levering voor vrijdag.' })
+    @ApiProperty({ example: 'Order bevat 5x Product X' })
     @IsString()
     @IsOptional()
     aiSummary?: string;
 }
 
-export class UpdateIncomingOrderDto {
-    @ApiProperty({ example: 500.00, required: false })
-    @IsNumber()
-    @IsOptional()
-    totalEstimated?: number;
-
-    @ApiProperty({ required: false })
-    @IsString()
-    @IsOptional()
-    aiSummary?: string;
-}
+export class UpdateIncomingOrderDto extends PartialType(CreateIncomingOrderDto) {}

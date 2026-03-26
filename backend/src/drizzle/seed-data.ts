@@ -81,11 +81,12 @@ export const SEED_LEDGER_ACCOUNTS: SeedLedgerAccount[] = [
     { code: 440000, name: 'Handelscrediteuren', category: 'LIABILITY' }
 ];
 
+// --- Pilaar 3: Journals ---
 export const SEED_JOURNALS: SeedJournal[] = [
-    { name: 'Aankoopdagboek', type: 'AANKOOP', code: 'AK', orgName: 'Alpha Tech BV' },
-    { name: 'Verkoopdagboek', type: 'VERKOOP', code: 'VK', orgName: 'Alpha Tech BV' },
-    { name: 'Bank BNP', type: 'BANK', code: 'BNP', orgName: 'Alpha Tech BV' },
-    { name: 'Diverse Posten', type: 'DIVERS', code: 'DP', orgName: 'Alpha Tech BV' }
+    { name: 'Purchase Journal', type: 'PURCHASE', code: 'PUR',  orgName: 'Alpha Tech BV' },
+    { name: 'Sales Journal',    type: 'SALE',     code: 'SAL',  orgName: 'Alpha Tech BV' },
+    { name: 'KBC Bank',         type: 'BANK',     code: 'BNK1', orgName: 'Alpha Tech BV' },
+    { name: 'General Journal',  type: 'GENERAL',  code: 'GEN',  orgName: 'Alpha Tech BV' }
 ];
 
 export const SEED_ANALYTIC_ACCOUNTS: SeedAnalyticAccount[] = [

@@ -1,5 +1,4 @@
-// backend/src/accounting/outgoing-order.dto.ts
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsUUID, IsOptional, IsEnum } from 'class-validator';
 
 export enum OrderChannel {
@@ -25,20 +24,20 @@ export class CreateOutgoingOrderDto {
     @IsNotEmpty()
     supplierId!: string;
 
+    @ApiProperty({ example: 'ORD-2026-001' })
+    @IsString()
+    @IsNotEmpty()
+    orderNr!: string;
+
     @ApiProperty({ enum: OrderChannel, example: 'PEPPOL' })
     @IsEnum(OrderChannel)
     @IsNotEmpty()
-    channel!: string;
+    channel!: OrderChannel; 
 
     @ApiProperty({ enum: OutgoingOrderStatus, default: OutgoingOrderStatus.ORDERED })
     @IsEnum(OutgoingOrderStatus)
     @IsOptional()
-    status?: string;
+    status?: OutgoingOrderStatus;
 }
 
-export class UpdateOutgoingOrderStatusDto {
-    @ApiProperty({ enum: OutgoingOrderStatus })
-    @IsEnum(OutgoingOrderStatus)
-    @IsNotEmpty()
-    status!: string;
-}
+export class UpdateOutgoingOrderDto extends PartialType(CreateOutgoingOrderDto) {}

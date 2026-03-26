@@ -52,7 +52,7 @@ export interface SeedLedgerAccount {
 
 export interface SeedJournal {
     name: string;
-    type: 'AANKOOP' | 'VERKOOP' | 'BANK' | 'DIVERS';
+    type: 'PURCHASE' | 'SALE' | 'BANK' | 'CASH' | 'GENERAL'; 
     code: string;
     orgName: string;
 }
