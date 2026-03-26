@@ -28,10 +28,10 @@ export interface SeedVatCode {
 
 export interface SeedPartner {
     name: string;
-    orgName: string;
+    orgId: UUID;
     isCustomer: boolean;
     isSupplier: boolean;
-    vatNr?: string;
+    vat?: string;
     peppolId?: string;
     preferredOrderChannel: 'PEPPOL' | 'EMAIL' | 'PLATFORM';
     preferredInvoiceChannel: 'PEPPOL' | 'EMAIL';

@@ -37,7 +37,7 @@ export class CreatePartnerDto {
     @ApiProperty({ example: 'BE0123456789', required: false })
     @IsString()
     @IsOptional()
-    vatNr?: string;
+    vat?: string;
 
     @ApiProperty({ example: '0088:12345678', required: false })
     @IsString()

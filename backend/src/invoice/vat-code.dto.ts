@@ -1,17 +1,17 @@
 // backend/src/accounting/vat-code.dto.ts
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsUUID, IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export class CreateVatCodeDto {
-    @ApiProperty({ example: 'BTW21', description: 'De unieke code, bijv. BTW21 of BTW0' })
-    @IsString()
-    @IsNotEmpty()
-    code!: string; // Prima, dit is de PK in je schema
-
     @ApiProperty({ example: 'uuid-van-organisatie' })
     @IsUUID()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'Elke BTW-code MOET gekoppeld zijn aan een organisatie' })
     orgId!: string;
+
+    @ApiProperty({ example: 'BTW21', description: 'De unieke code binnen de organisatie' })
+    @IsString()
+    @IsNotEmpty()
+    code!: string;
 
     @ApiProperty({ example: 21.00, description: 'Het BTW percentage' })
     @IsNumber()
@@ -25,10 +25,10 @@ export class CreateVatCodeDto {
     @IsNotEmpty() 
     description!: string;
 
-    @ApiProperty({ example: 1, description: 'Het vakje op de BTW-aangifte', required: false })
+    @ApiProperty({ example: 1, description: 'Het verplichte vakje op de BTW-aangifte' })
     @IsNumber()
-    @IsOptional()
-    taxDeclarationBox?: number;
+    @IsNotEmpty() 
+    taxDeclarationBox!: number;
 }
 
 export class UpdateVatCodeDto {
@@ -46,10 +46,4 @@ export class UpdateVatCodeDto {
     @IsNumber()
     @IsOptional()
     taxDeclarationBox?: number;
-}
-
-export class VatCodeResponseDto extends CreateVatCodeDto {
-    @ApiProperty({ example: 'uuid-van-de-btw-instelling' })
-    @IsUUID()
-    id!: string;
 }

@@ -1,28 +1,22 @@
 // test/seeds/partners.ts
 import { DatabaseProvider } from '../../src/drizzle/drizzle.provider';
 import { partners } from '../../src/drizzle/schema';
-import { CommunicationChannel } from '../../src/partner/partner.dto';
+import { SEED_PARTNERS } from '../../src/drizzle/seed-data';
 
-export async function seedPartners(db: DatabaseProvider, orgId: string) {
-    await db.insert(partners).values([
-        {
-            orgId,
-            name: 'ACME Supplies BV',
-            vatNr: 'BE0999888777',
-            peppolId: '0088:999888777',
-            email: 'sales@acme.com',
-            isSupplier: true,
-            isCustomer: false,
-            preferredInvoiceChannel: CommunicationChannel.PEPPOL,
-        },
-        {
-            orgId,
-            name: 'Bol.com Groothandel',
-            vatNr: 'NL123456789B01',
-            email: 'finance@bol.com',
-            isSupplier: true,
-            isCustomer: true,
-            preferredInvoiceChannel: CommunicationChannel.EMAIL,
-        }
-    ]);
+export const seedPartners = async (drizzle: DatabaseProvider, orgId: string) => {
+    const partnersToInsert = SEED_PARTNERS.map(p => ({
+        orgId: orgId,
+        name: p.name,
+        isSupplier: p.isSupplier,
+        isCustomer: p.isCustomer,
+        preferredOrderChannel: p.preferredOrderChannel,
+        preferredInvoiceChannel: p.preferredInvoiceChannel,
+    }));
+
+    await drizzle.insert(partners).values(partnersToInsert).onConflictDoNothing();
 }
+
+export const clearPartners = async (drizzle: DatabaseProvider) => {
+    const { sql } = require('drizzle-orm');
+    await drizzle.execute(sql`TRUNCATE TABLE partners RESTART IDENTITY CASCADE`);
+};

@@ -44,28 +44,28 @@ export const SEED_VAT_CODES: SeedVatCode[] = [
 export const SEED_PARTNERS: SeedPartner[] = [
     { 
         name: 'Proximus', 
-        orgName: 'Alpha Tech BV', 
+        orgId: '550e8400-e29b-41d4-a716-446655440000', 
         isSupplier: true, 
         isCustomer: false, 
-        vatNr: 'BE0441255457',
+        vat: 'BE0441255457',
         peppolId: '0106:BE0441255457',
         preferredOrderChannel: 'PEPPOL',
         preferredInvoiceChannel: 'PEPPOL'
     },
     { 
         name: 'Vlaamse Overheid', 
-        orgName: 'Alpha Tech BV', 
+        orgId: '11111111-1111-1111-1111-111111111111', 
         isSupplier: false, 
-        isCustomer: true, 
+        isCustomer: true,
         preferredOrderChannel: 'EMAIL',
         preferredInvoiceChannel: 'EMAIL'
     },
     {
         name: 'Tech Distri NV',
-        orgName: 'Beta Solutions NV',
+        orgId: '22222222-2222-2222-2222-222222222222',
         isSupplier: true,
         isCustomer: false,
-        vatNr: 'BE0888777666',
+        vat: 'BE0888777666',
         preferredOrderChannel: 'PLATFORM',
         preferredInvoiceChannel: 'PEPPOL'
     }

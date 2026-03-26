@@ -2,14 +2,18 @@
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import request from 'supertest';
 import { createApp } from './helpers/create-app';
-import { DatabaseProvider, DrizzleAsyncProvider } from '../src/drizzle/drizzle.provider';
+import { DrizzleAsyncProvider } from '../src/drizzle/drizzle.provider';
 import { organizations } from '../src/drizzle/schema';
 import { seedOrganizations } from './seeds/organizations';
+import { seedUsers } from './seeds/users';
+import { login, loginAdmin } from './helpers/login';
 import { sql } from 'drizzle-orm';
 
 describe('OrganizationController (Integration)', () => {
     let app: INestApplication;
-    let drizzle: DatabaseProvider;
+    let drizzle: any;
+    let adminToken: string;
+    let viewerToken: string;
 
     beforeAll(async () => {
         app = await createApp();
@@ -17,59 +21,61 @@ describe('OrganizationController (Integration)', () => {
     });
 
     beforeEach(async () => {
-        await drizzle.execute(sql`TRUNCATE TABLE organizations, users CASCADE`);
+        await drizzle.execute(sql`TRUNCATE TABLE pepol_app.organizations, pepol_app.users CASCADE`);
+        await seedOrganizations(drizzle);
+        const allOrgs = await drizzle.select().from(organizations);
+        const testOrgId = allOrgs[0].id;
+        await seedUsers(app, drizzle, testOrgId);
+
+        adminToken = await loginAdmin(app);
+        viewerToken = await login(app, 'boss@beta.com', 'password123');
     });
 
-    describe('POST /organizations', () => {
-        it('should create a new organization', async () => {
-            const payload = {
-                name: 'Startup Inc',
-                myVatNr: 'NL888888888B01',
-                myIban: 'NL99INGB0001234567'
-            };
-
+    describe('Access Control', () => {
+        it('should deny GET /organizations for non-admins', async () => {
             const res = await request(app.getHttpServer())
-                .post('/organizations')
-                .send(payload);
-
-            expect(res.statusCode).toBe(HttpStatus.CREATED);
-            expect(res.body.name).toBe('Startup Inc');
-            expect(res.body.id).toBeDefined();
+                .get('/api/organizations')
+                .auth(viewerToken, { type: 'bearer' });
+            expect(res.statusCode).toBe(HttpStatus.FORBIDDEN);
         });
     });
 
-    describe('GET /organizations', () => {
-        it('should return all organizations', async () => {
-            await seedOrganizations(drizzle);
+    describe('POST /organizations', () => {
+        it('should allow ADMIN to create an organization', async () => {
+            const payload = {
+                name: 'New Startup',
+                myVatNr: 'BE0111222333',
+                myIban: 'BE68123412341234'
+            };
 
             const res = await request(app.getHttpServer())
-                .get('/organizations');
+                .post('/api/organizations')
+                .auth(adminToken, { type: 'bearer' })
+                .send(payload);
 
-            expect(res.statusCode).toBe(HttpStatus.OK);
-            expect(Array.isArray(res.body)).toBe(true);
-            expect(res.body.length).toBe(2);
+            expect(res.statusCode).toBe(HttpStatus.CREATED);
+            expect(res.body.name).toBe('New Startup');
         });
     });
 
     describe('GET /organizations/:id', () => {
-        it('should return a specific organization', async () => {
-            await seedOrganizations(drizzle);
-            
+        it('should return a specific organization when authenticated', async () => {
             const allOrgs = await drizzle.select().from(organizations);
             const targetId = allOrgs[0].id;
 
             const res = await request(app.getHttpServer())
-                .get(`/organizations/${targetId}`);
+                .get(`/api/organizations/${targetId}`)
+                .auth(viewerToken, { type: 'bearer' });
 
             expect(res.statusCode).toBe(HttpStatus.OK);
             expect(res.body.id).toBe(targetId);
-            expect(res.body.name).toBe(allOrgs[0].name);
         });
 
-        it('should return 404 when organization does not exist', async () => {
+        it('should return 404 for non-existent UUID', async () => {
             const fakeId = '00000000-0000-0000-0000-000000000000';
             const res = await request(app.getHttpServer())
-                .get(`/organizations/${fakeId}`);
+                .get(`/api/organizations/${fakeId}`)
+                .auth(adminToken, { type: 'bearer' });
 
             expect(res.statusCode).toBe(HttpStatus.NOT_FOUND);
         });

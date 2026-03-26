@@ -1,12 +1,9 @@
 // test/seeds/users.ts
 import { DatabaseProvider } from '../../src/drizzle/drizzle.provider';
-import { users } from '../../src/drizzle/schema';
-import * as argon2 from 'argon2';
-import { Role } from '../../src/auth/roles';
 import { INestApplication } from '@nestjs/common';
 import { AuthService } from '../../src/auth/auth.service';
+import { users } from '../../src/drizzle/schema';
 import { SEED_USERS } from '../../src/drizzle/seed-data';
-import { SeedUser } from '../../src/drizzle/seed-types';
 
 export const seedUsers = async (app: INestApplication, drizzle: DatabaseProvider, orgId: string) => {
     const authService = app.get(AuthService);

@@ -13,8 +13,8 @@ export const olapSchema = pgSchema('pepol_dwh');
 export const organizations = oltpSchema.table('organizations', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
-  myVatNr: varchar('my_vat_nr', { length: 50 }),
-  myIban: varchar('my_iban', { length: 34 }), 
+  vat: varchar('vat', { length: 50 }),
+  iban: varchar('iban', { length: 34 }), 
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
@@ -37,13 +37,15 @@ export const partners = oltpSchema.table('partners', {
   isPeppolReady: boolean('is_peppol_ready').default(false).notNull(),
   preferredOrderChannel: varchar('preferred_order_channel', { length: 20 }).default('EMAIL').notNull(),
   preferredInvoiceChannel: varchar('preferred_invoice_channel', { length: 20 }).default('PEPPOL').notNull(),
-  vatNr: varchar('vat_nr', { length: 50 }),
+  vat: varchar('vat_nr', { length: 50 }),
   peppolId: varchar('peppol_id', { length: 100 }),
   email: varchar('email', { length: 255 }),
   isCustomer: boolean('is_customer').default(false).notNull(),
   isSupplier: boolean('is_supplier').default(false).notNull(),
   bankAccountIban: varchar('bank_account_iban', { length: 34 }),
-});
+}, (table) => ({
+  unqPartner: unique('partner_org_name_unq').on(table.orgId, table.name),
+}));
 
 export const vatCodes = oltpSchema.table('vat_codes', {
     id: uuid('id').primaryKey().defaultRandom(), 
@@ -64,7 +66,9 @@ export const analyticAccounts = oltpSchema.table('analytic_accounts', {
   name: varchar('name', { length: 100 }).notNull(),
   code: varchar('code', { length: 50 }).notNull(),
   active: boolean('active').default(true).notNull(),
-});
+}, (table) => ({
+  unqAnalyticCode: unique('analytic_org_code_unq').on(table.orgId, table.code),
+}));
 
 // --- PILAAR 1 & 4 (INVOICES) ---
 export const incomingInvoices = oltpSchema.table('incoming_invoices', {
@@ -80,7 +84,9 @@ export const incomingInvoices = oltpSchema.table('incoming_invoices', {
   isPeppol: boolean('is_peppol').default(false).notNull(),
   ocrConfidence: decimal('ocr_confidence'),
   rawFileStoragePath: varchar('raw_file_storage_path', { length: 100 }),
-});
+}, (table) => ({
+  unqIncomingInv: unique('incoming_inv_supplier_nr_unq').on(table.supplierId, table.invoiceNr),
+}));
 
 export const outgoingInvoices = oltpSchema.table('outgoing_invoices', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -92,7 +98,9 @@ export const outgoingInvoices = oltpSchema.table('outgoing_invoices', {
   vatCodeId: uuid('vat_code_id').references(() => vatCodes.id).notNull(),
   peppolStatus: varchar('peppol_status').default('DRAFT').notNull(), // DRAFT, SENT, PAID
   rawFileStoragePath: varchar('raw_file_storage_path', { length: 100 }),
-});
+}, (table) => ({
+  unqOutgoingInvNr: unique('outgoing_inv_nr_org_unq').on(table.orgId, table.invoiceNr),
+}));
 
 // --- PILAAR 2 & 5 (ORDERS) ---
 export const incomingOrders = oltpSchema.table('incoming_orders', {
@@ -100,38 +108,52 @@ export const incomingOrders = oltpSchema.table('incoming_orders', {
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
   customerId: uuid('customer_id').references(() => partners.id).notNull(),
   source: varchar('source').notNull(), // PLATFORM, PEPPOL, EMAIL_AI
-  referenceExt: varchar('reference_ext'),
+  referenceExt: varchar('reference_ext').notNull(),
   totalEstimated: decimal('total_estimated', { precision: 12, scale: 2 }).notNull(),
   aiSummary: text('ai_summary'),
-});
+}, (table) => ({
+  unqIncomingOrder: unique('incoming_order_ref_unq').on(table.customerId, table.referenceExt),
+}));
 
 export const outgoingOrders = oltpSchema.table('outgoing_orders', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
   supplierId: uuid('supplier_id').references(() => partners.id).notNull(),
+  orderNr: varchar('order_nr', { length: 100 }).notNull(),
   channel: varchar('channel').notNull(), // EMAIL, PEPPOL, PLATFORM
   status: varchar('status').default('ORDERED').notNull(), // ORDERED, RECEIVED, INVOICED
-});
+}, (table) => ({
+  unqOutgoingOrderNr: unique('outgoing_order_nr_org_unq').on(table.orgId, table.orderNr),
+}));
 
 // --- PILAAR 3 (LEDGER) ---
 export const journals = oltpSchema.table('journals', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  name: varchar('name').notNull(),
-  type: varchar('type').notNull(), // AANKOOP, VERKOOP, BANK
-  code: varchar('code').notNull(),
+  name: varchar('name').notNull(), // Bijv: "KBC Zichtrekening"
+  type: varchar('type').notNull(), // AANKOOP, VERKOOP, BANK, DIVERSEN
+  code: varchar('code').notNull(), // Bijv: "BANK1"
+}, (table) => {
+  return {
+    unqJournalCodePerOrg: unique('journal_org_code_unq').on(table.orgId, table.code),
+  };
 });
 
 export const ledgerAccounts = oltpSchema.table('ledger_accounts', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  code: integer('code').notNull(), 
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  name: varchar('name').notNull(),
-  category: varchar('category').notNull(), // ASSET, LIABILITY, etc.
+    id: uuid('id').defaultRandom().primaryKey(),
+    code: integer('code').notNull(), 
+    orgId: uuid('org_id').references(() => organizations.id).notNull(),
+    name: varchar('name').notNull(),
+    category: varchar('category').notNull(), // ASSET, LIABILITY, etc.
+}, (table) => {
+    return {
+        unqCodePerOrg: unique('ledger_org_code_unq').on(table.orgId, table.code),
+    };
 });
 
 export const journalEntries = oltpSchema.table('journal_entries', {
   id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
   journalId: uuid('journal_id').references(() => journals.id).notNull(),
   date: date('date').notNull(),
   description: text('description').notNull(),
@@ -139,8 +161,9 @@ export const journalEntries = oltpSchema.table('journal_entries', {
 
 export const transactions = oltpSchema.table('transactions', {
   id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
   entryId: uuid('entry_id').references(() => journalEntries.id).notNull(),
-  ledgerCode: integer('ledger_code').notNull(),
+  ledgerId: uuid('ledger_id').references(() => ledgerAccounts.id).notNull(),
   analyticAccountId: uuid('analytic_account_id').references(() => analyticAccounts.id),
   amount: decimal('amount', { precision: 12, scale: 2 }).notNull(),
   isReconciled: boolean('is_reconciled').default(false).notNull(),
@@ -148,6 +171,7 @@ export const transactions = oltpSchema.table('transactions', {
 
 export const assets = oltpSchema.table('assets', {
   id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
   purchaseEntryId: uuid('purchase_entry_id').references(() => journalEntries.id).notNull(),
   totalValue: decimal('total_value', { precision: 12, scale: 2 }).notNull(),
   depreciationMonths: integer('depreciation_months').notNull(),
@@ -156,6 +180,7 @@ export const assets = oltpSchema.table('assets', {
 
 export const budgets = oltpSchema.table('budgets', {
   id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
   ledgerCode: integer('ledger_code').notNull(),
   analyticAccountId: uuid('analytic_account_id').references(() => analyticAccounts.id),
   amountLimit: decimal('amount_limit', { precision: 12, scale: 2 }).notNull(),
@@ -170,7 +195,10 @@ export const bankStatements = oltpSchema.table('bank_statements', {
   amount: decimal('amount', { precision: 12, scale: 2 }).notNull(),
   communication: text('communication'),
   counterpartyIban: varchar('counterparty_iban', { length: 34 }),
-});
+  bankReference: varchar('bank_reference', { length: 255 }), // Uniek ID van de bank
+}, (table) => ({
+  unqBankRef: unique('bank_ref_org_unq').on(table.orgId, table.bankReference),
+}));
 
 export const reconciliationLogs = oltpSchema.table('reconciliation_log', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -213,7 +241,7 @@ export const dimOrganization = olapSchema.table('dim_organization', {
   orgKey: integer('org_key').primaryKey(),
   orgId: uuid('org_id').notNull(), // Link naar OLTP
   name: varchar('name', { length: 255 }).notNull(),
-  vatNr: varchar('vat_nr', { length: 50 }),
+  vatNr: varchar('vat', { length: 50 }),
   iban: varchar('iban', { length: 34 }),
 });
 

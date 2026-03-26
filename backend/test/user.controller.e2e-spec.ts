@@ -25,7 +25,7 @@ describe('UserController (Integration)', () => {
 
     beforeEach(async () => {
         await drizzle.execute(sql`TRUNCATE TABLE pepol_app.organizations, pepol_app.users CASCADE`);
-        await seedOrganizations(app, drizzle);
+        await seedOrganizations(drizzle);
         const allOrgs = await drizzle.select().from(organizations);
         testOrgId = allOrgs[0].id;
         await seedUsers(app, drizzle, testOrgId);

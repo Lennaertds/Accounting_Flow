@@ -36,8 +36,8 @@ async function bootstrap() {
         for (const orgData of SEED_ORGANIZATIONS) {
             const [insertedOrg] = await db.insert(schema.organizations).values({
                 name: orgData.name,
-                myVatNr: orgData.vat,
-                myIban: orgData.iban
+                vat: orgData.vat,
+                iban: orgData.iban
             }).returning();
             orgMap.set(insertedOrg.name, insertedOrg.id);
         }

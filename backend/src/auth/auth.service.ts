@@ -105,9 +105,11 @@ export class AuthService {
 
     private async signJwt(user: any): Promise<string> {
         const payload = { 
-            sub: user.id, 
+            sub: user.id,
+            userId: user.is,
             email: user.email, 
-            role: user.role 
+            role: user.role,
+            orgId: user.orgId,
         };
         return this.jwtService.signAsync(payload);
     }
