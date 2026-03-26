@@ -20,14 +20,18 @@ export class CheckUserAccessGuard implements CanActivate {
             throw new UnauthorizedException('You need to be signed in');
         }
 
-        const authenticatedUserId = user.userId; 
-        const targetId = request.params.id; 
+        const authenticatedUserId = String(user.userId); 
+        const targetId = String(request.params.id); 
 
-        if (
-            targetId !== 'me' &&
-            targetId !== String(authenticatedUserId) &&
-            !user.roles.includes(Role.ADMIN)
-        ) {
+        // 1. Iedereen mag bij zijn eigen data via 'me'
+        if (targetId === 'me') return true;
+
+        // 2. Iedereen mag bij zijn eigen data via zijn eigen UUID
+        if (targetId === authenticatedUserId) return true;
+
+        // 3. Alleen ADMIN mag bij anderen
+        const isAdmin = user.role === Role.ADMIN;
+        if (!isAdmin) {
             throw new ForbiddenException('You do not have permission to access this profile');
         }
 

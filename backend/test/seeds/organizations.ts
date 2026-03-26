@@ -1,8 +1,9 @@
 // test/seeds/organizations.ts
+import { INestApplication } from '@nestjs/common';
 import { DatabaseProvider } from '../../src/drizzle/drizzle.provider';
 import { organizations } from '../../src/drizzle/schema';
 
-export async function seedOrganizations(db: DatabaseProvider) {
+export async function seedOrganizations(app: INestApplication, db: DatabaseProvider) {
   await db.insert(organizations).values([
     {
       name: 'Test ERP B.V.',

@@ -23,29 +23,6 @@ async function bootstrap() {
     try {
         const authService = app.get(AuthService);
         const db: DatabaseProvider = app.get(DrizzleAsyncProvider);
-
-        // // --- START DEBUG BLOK ---
-        // logger.log('🔍 [DEBUG] Verbinding checken...');
-        
-        // // 1. Welke tabellen "ziet" Drizzle in zijn eigen configuratie?
-        // const exportedTables = Object.keys(schema).filter(k => !k.includes('Schema'));
-        // logger.debug(`Gevonden tabellen in schema.ts: ${exportedTables.join(', ')}`);
-
-        // // 2. Bestaan de schema's in de echte database?
-        // // We gebruiken de onderliggende pg-client om de ruwe waarheid te vragen
-        // const rawClient = (db as any).session.client; 
-        // const schemaRes = await rawClient.query(
-        //     "SELECT schema_name FROM information_schema.schemata WHERE schema_name IN ('pepol_app', 'pepol_dwh')"
-        // );
-        // logger.debug(`Bestaande schema's in DB: ${schemaRes.rows.map(r => r.schema_name).join(', ') || 'GEEN'}`);
-
-        // // 3. Bestaan de tabellen in pepol_app?
-        // const tableRes = await rawClient.query(
-        //     "SELECT table_name FROM information_schema.tables WHERE table_schema = 'pepol_app'"
-        // );
-        // logger.debug(`Tabellen in pepol_app: ${tableRes.rows.map(r => r.table_name).join(', ') || 'GEEN'}`);
-        // // --- EINDE DEBUG BLOK ---
-
         // 1. OPRUIMEN (Cascade delete van boven naar beneden)
         logger.log('🧹 1/4: Cleaning existing data...');
         await db.delete(schema.users);
@@ -69,15 +46,15 @@ async function bootstrap() {
         // 3. SEED USERS (Via AuthService voor hashing!)
         logger.log('🌱 3/4: Seeding users via AuthService...');
         for (const seedUser of SEED_USERS) {
-            const orgId = orgMap.get(seedUser.orgName);
+            const orgId = orgMap.get(seedUser.orgId);
             if (orgId) {
                 await authService.register({
-                    orgId: orgId,
+                    orgId: seedUser.orgId,
                     email: seedUser.email,
                     password: 'passwoord123',
-                    firstName: 'Admin',
-                    lastName: 'Alpha', 
-                    role: 'ADMIN',
+                    firstName: seedUser.firstName,
+                    lastName: seedUser.lastName,
+                    role: seedUser.role as any,
                 });
             }
         }

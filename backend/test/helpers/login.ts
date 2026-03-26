@@ -4,7 +4,7 @@ import { AuthService } from '../../src/auth/auth.service';
 
 const logger = new Logger('LoginHelper');
 
-export const login = async (app: INestApplication, email = "test@example.com", password = 'password123'): Promise<string> => {
+export const login = async (app: INestApplication, email = "accountant@alpha.com", password = 'password123'): Promise<string> => {
     const authService = app.get(AuthService);
     const token = await authService.login({ email, password });
 

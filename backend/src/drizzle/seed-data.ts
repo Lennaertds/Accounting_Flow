@@ -1,4 +1,5 @@
 // backend/src/drizzle/seed-data.ts
+import { Role } from '../auth/roles';
 import { 
     SeedOrganization, SeedUser, SeedVatCode, SeedPartner, 
     SeedLedgerAccount, SeedJournal, SeedAnalyticAccount 
@@ -10,9 +11,27 @@ export const SEED_ORGANIZATIONS: SeedOrganization[] = [
 ];
 
 export const SEED_USERS: SeedUser[] = [
-    { email: 'admin@alpha.be', orgName: 'Alpha Tech BV', role: 'ADMIN' },
-    { email: 'accountant@alpha.be', orgName: 'Alpha Tech BV', role: 'ACCOUNTANT' },
-    { email: 'boss@beta.be', orgName: 'Beta Solutions NV', role: 'ADMIN' }
+  {
+    orgId: "550e8400-e29b-41d4-a716-446655440000",
+    firstName: "admin",
+    lastName: "test",
+    email: "admin@test.com",
+    role: Role.ADMIN,
+  },
+  {
+    orgId: "11111111-1111-1111-1111-111111111111",
+    firstName: "accountant",
+    lastName: "alpha",
+    email: "accountant@alpha.com",
+    role: Role.ACCOUNTANT,
+  },
+  {
+    orgId: "22222222-2222-2222-2222-222222222222",
+    firstName: "viewer",
+    lastName: "alpha",
+    email: "boss@beta.com",
+    role: Role.VIEWER,
+  },
 ];
 
 export const SEED_VAT_CODES: SeedVatCode[] = [

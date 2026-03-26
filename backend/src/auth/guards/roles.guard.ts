@@ -15,16 +15,23 @@ export class RolesGuard implements CanActivate {
             context.getClass(),   
         ]);
 
-        if (!requiredRoles) {
+        if (!requiredRoles || requiredRoles.length === 0) {
             return true;
         }
 
         const request = context.switchToHttp().getRequest();
         const user = request.user as JwtPayload;
 
-        const hasRequiredRole = requiredRoles.some((role) => user.roles?.includes(role));
+        if (!user || !user.role) {
+            throw new ForbiddenException('No roles found for this user.');
+        }
+
+        const userRoles = Array.isArray(user.role) ? user.role : [user.role];
+
+        const hasRequiredRole = requiredRoles.some((role) => userRoles.includes(role));
 
         if (!hasRequiredRole) {
+            console.log(`User roles: ${userRoles}, Required: ${requiredRoles}`);
             throw new ForbiddenException('You do not have the required permissions to access this resource.');
         }
 

@@ -1,4 +1,7 @@
 // backend/src/drizzle/seed-types.ts
+
+import { UUID } from "crypto";
+
 // --- Basis Management ---
 export interface SeedOrganization {
     name: string;
@@ -7,10 +10,12 @@ export interface SeedOrganization {
 }
 
 export interface SeedUser {
+    orgId: UUID;
+    firstName: string;
+    lastName: string;
     email: string;
     password?: string; 
-    orgName: string; 
-    role: 'ADMIN' | 'ACCOUNTANT' | 'VIEWER';
+    role: string;
 }
 
 // --- Stamdata (Dimensions) ---
