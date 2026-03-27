@@ -57,6 +57,21 @@ export interface SeedJournal {
     orgName: string;
 }
 
+export interface SeedJournalEntry {
+    orgId?: string;       
+    journalId?: string;  
+    date: string;
+    description: string;
+}
+
+export interface SeedTransaction {
+    entryDescription: string; 
+    ledgerCode: number;      
+    analyticCode?: string;  
+    amount: string;        
+    isReconciled?: boolean;
+}
+
 // --- Pilaren 1, 2, 4, 5: Documenten ---
 export interface SeedInvoice {
     orgName: string;

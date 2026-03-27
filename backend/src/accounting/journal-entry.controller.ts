@@ -1,9 +1,9 @@
 // backend/src/accounting/journal-entry.controller.ts
 import { 
     Controller, Get, Post, Put, Delete, Body, Param, 
-    Query, UseGuards, Request 
+    Query, UseGuards, Request, HttpStatus, HttpCode 
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JournalEntryService } from './journal-entry.service';
 import { CreateJournalEntryDto, UpdateJournalEntryDto } from './journal-entry.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
@@ -18,28 +18,45 @@ export class JournalEntryController {
     constructor(private readonly service: JournalEntryService) {}
 
     @Get()
-    findAll(@Query('journalId') journalId: string) {
-        return this.service.findAllByJournal(journalId);
+    @ApiOperation({ summary: 'Haal alle boekingen op (optioneel gefilterd per dagboek)' })
+    async findAll(@Query('journalId') journalId: string, @Request() req: any) {
+        const user = req.user as Session;
+        // We voegen orgId toe om te voorkomen dat je entries van andere orgs ziet
+        return this.service.findAllByJournal(journalId, user.orgId);
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.service.findOne(id);
+    @ApiOperation({ summary: 'Haal een specifieke boeking op' })
+    async findOne(@Param('id') id: string, @Request() req: any) {
+        const user = req.user as Session;
+        return this.service.findOne(id, user.orgId);
     }
 
     @Post()
+    @HttpCode(HttpStatus.CREATED)
+    @ApiOperation({ summary: 'Maak een nieuwe boeking' })
     async create(@Body() dto: CreateJournalEntryDto, @Request() req: any) {
         const user = req.user as Session;
         return this.service.create(dto, user.orgId);
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() dto: UpdateJournalEntryDto) {
-        return this.service.update(id, dto);
+    @ApiOperation({ summary: 'Wijzig een boeking' })
+    update(
+        @Param('id') id: string, 
+        @Body() dto: UpdateJournalEntryDto, 
+        @Request() req: any
+    ) {
+        const user = req.user as Session;
+        // Cruciaal: geef orgId mee voor veiligheid
+        return this.service.update(id, user.orgId, dto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.service.delete(id);
+    @ApiOperation({ summary: 'Verwijder een boeking' })
+    remove(@Param('id') id: string, @Request() req: any) {
+        const user = req.user as Session;
+        // Cruciaal: geef orgId mee voor veiligheid
+        return this.service.delete(id, user.orgId);
     }
 }

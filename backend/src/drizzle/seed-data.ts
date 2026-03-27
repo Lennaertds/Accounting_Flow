@@ -2,7 +2,8 @@
 import { Role } from '../auth/roles';
 import { 
     SeedOrganization, SeedUser, SeedVatCode, SeedPartner, 
-    SeedLedgerAccount, SeedJournal, SeedAnalyticAccount 
+    SeedLedgerAccount, SeedJournal, SeedAnalyticAccount, SeedJournalEntry, 
+    SeedTransaction
 } from './seed-types';
 
 export const SEED_ORGANIZATIONS: SeedOrganization[] = [
@@ -89,8 +90,21 @@ export const SEED_JOURNALS: SeedJournal[] = [
     { name: 'General Journal',  type: 'GENERAL',  code: 'GEN',  orgName: 'Alpha Tech BV' }
 ];
 
+export const SEED_JOURNAL_ENTRIES: SeedJournalEntry[] = [
+    { date: '2026-01-15', description: 'Beginbalans 2026' },
+    { date: '2026-02-10', description: 'Kantoorbenodigdheden ACME' },
+    { date: '2026-03-01', description: 'Huur betaling Maart' }
+];
+
 export const SEED_ANALYTIC_ACCOUNTS: SeedAnalyticAccount[] = [
     { name: 'Project AI Tool', code: 'PRJ-AI-01', orgName: 'Alpha Tech BV' },
     { name: 'Marketing Q1', code: 'MKT-2026-Q1', orgName: 'Alpha Tech BV' },
     { name: 'R&D Cloud', code: 'RD-CLD', orgName: 'Beta Solutions NV' }
+];
+
+export const SEED_TRANSACTIONS: SeedTransaction[] = [
+    { entryDescription: 'Kantoorbenodigdheden ACME', ledgerCode: 604000, amount: '100.00', analyticCode: 'PRJ-AI-01' },
+    { entryDescription: 'Kantoorbenodigdheden ACME', ledgerCode: 440000, amount: '-100.00' },
+    { entryDescription: 'Huur betaling Maart', ledgerCode: 610000, amount: '1200.00' },
+    { entryDescription: 'Huur betaling Maart', ledgerCode: 550000, amount: '-1200.00' }
 ];

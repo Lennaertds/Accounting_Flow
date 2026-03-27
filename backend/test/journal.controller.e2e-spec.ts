@@ -42,7 +42,7 @@ describe('JournalController (Integration)', () => {
             };
 
             const res = await request(app.getHttpServer())
-                .post('/journals')
+                .post('/api/journals')
                 .auth(adminToken, { type: 'bearer' })
                 .send(createDto);
 
@@ -60,12 +60,12 @@ describe('JournalController (Integration)', () => {
             };
 
             const res = await request(app.getHttpServer())
-                .post('/journals')
+                .post('/api/journals')
                 .auth(adminToken, { type: 'bearer' })
                 .send(duplicateDto);
 
             expect(res.statusCode).toBe(HttpStatus.CONFLICT);
-            expect(res.body.message).toContain('is al in gebruik');
+            expect(res.body.message).toContain('already exists');
         });
     });
 
@@ -76,7 +76,7 @@ describe('JournalController (Integration)', () => {
             await seedJournals(drizzle, otherOrgId);
 
             const res = await request(app.getHttpServer())
-                .get('/journals')
+                .get('/api/journals')
                 .auth(adminToken, { type: 'bearer' });
 
             expect(res.statusCode).toBe(HttpStatus.OK);
@@ -96,7 +96,7 @@ describe('JournalController (Integration)', () => {
             const targetId = otherJournals[0].id;
 
             const res = await request(app.getHttpServer())
-                .get(`/journals/${targetId}`)
+                .get(`/api/journals/${targetId}`)
                 .auth(adminToken, { type: 'bearer' });
 
             expect(res.statusCode).toBe(HttpStatus.NOT_FOUND);
@@ -110,12 +110,13 @@ describe('JournalController (Integration)', () => {
 
             const updateDto = {
                 name: 'Updated Journal Name',
-                code: 'HACK',
-                orgId: 'some-other-uuid' 
+                code: target.code, 
+                type: target.type,
+                orgId: testOrgId  
             };
 
             const res = await request(app.getHttpServer())
-                .put(`/journals/${target.id}`)
+                .put(`/api/journals/${target.id}`)
                 .auth(adminToken, { type: 'bearer' })
                 .send(updateDto);
 

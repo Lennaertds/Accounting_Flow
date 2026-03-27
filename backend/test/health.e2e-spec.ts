@@ -1,13 +1,13 @@
 // test/health.e2e.spec.ts
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { createTestApp } from './helpers/create-app';
+import { createApp } from './helpers/create-app';
 
 describe('HealthController (E2E)', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
-        app = await createTestApp();
+        app = await createApp();
     });
 
     describe('GET /api/health/ping', () => {

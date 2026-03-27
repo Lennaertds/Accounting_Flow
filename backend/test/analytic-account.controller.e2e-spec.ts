@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { createApp } from './helpers/create-app';
 import { DatabaseProvider } from '../src/drizzle/drizzle.provider';
-import { seedOrganization } from './seeds/organizations';
+import { seedOrganizations } from './seeds/organizations';
 import { organizations, analyticAccounts } from '../src/drizzle/schema';
 import { eq } from 'drizzle-orm';
 
@@ -16,13 +16,11 @@ describe('AnalyticAccountController (e2e)', () => {
     app = await createApp();
     db = app.get<DatabaseProvider>('DRIZZLE_CONNECTION');
     
-    // We hebben een organisatie nodig als basis
-    const org = await seedOrganization(db);
+    const org = await seedOrganizations(db);
     testOrgId = org.id;
   });
 
   afterAll(async () => {
-    // Clean up
     await db.delete(analyticAccounts).where(eq(analyticAccounts.orgId, testOrgId));
     await db.delete(organizations).where(eq(organizations.id, testOrgId));
     await app.close();
