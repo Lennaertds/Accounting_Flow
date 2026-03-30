@@ -95,36 +95,71 @@ export const outgoingInvoices = oltpSchema.table('outgoing_invoices', {
   invoiceNr: varchar('invoice_nr', { length: 100 }).notNull(),
   date: date('date').notNull(),
   dueDate: date('due_date'),
+  totalExclVat: decimal('total_excl_vat', { precision: 12, scale: 2 }).notNull(), 
   vatCodeId: uuid('vat_code_id').references(() => vatCodes.id).notNull(),
-  peppolStatus: varchar('peppol_status').default('DRAFT').notNull(), // DRAFT, SENT, PAID
+  peppolStatus: varchar('peppol_status', { length: 20 }).default('DRAFT').notNull(),
   rawFileStoragePath: varchar('raw_file_storage_path', { length: 100 }),
 }, (table) => ({
   unqOutgoingInvNr: unique('outgoing_inv_nr_org_unq').on(table.orgId, table.invoiceNr),
 }));
 
-// --- PILAAR 2 & 5 (ORDERS) ---
+// --- PILAAR 2 (INCOMING ORDERS) ---
 export const incomingOrders = oltpSchema.table('incoming_orders', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
   customerId: uuid('customer_id').references(() => partners.id).notNull(),
-  source: varchar('source').notNull(), // PLATFORM, PEPPOL, EMAIL_AI
+  orderNr: varchar('order_nr', { length: 100 }),
+  date: date('date').notNull(), 
+  source: varchar('source').notNull(), 
   referenceExt: varchar('reference_ext').notNull(),
   totalEstimated: decimal('total_estimated', { precision: 12, scale: 2 }).notNull(),
+  status: varchar('status').default('RECEIVED').notNull(),
   aiSummary: text('ai_summary'),
 }, (table) => ({
   unqIncomingOrder: unique('incoming_order_ref_unq').on(table.customerId, table.referenceExt),
 }));
 
+// --- PILAAR 5 (OUTGOING ORDERS) ---
 export const outgoingOrders = oltpSchema.table('outgoing_orders', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
   supplierId: uuid('supplier_id').references(() => partners.id).notNull(),
   orderNr: varchar('order_nr', { length: 100 }).notNull(),
-  channel: varchar('channel').notNull(), // EMAIL, PEPPOL, PLATFORM
-  status: varchar('status').default('ORDERED').notNull(), // ORDERED, RECEIVED, INVOICED
+  date: date('date').notNull(), 
+  totalEstimated: decimal('total_estimated', { precision: 12, scale: 2 }), 
+  channel: varchar('channel').notNull(), 
+  status: varchar('status').default('ORDERED').notNull(), 
 }, (table) => ({
   unqOutgoingOrderNr: unique('outgoing_order_nr_org_unq').on(table.orgId, table.orderNr),
 }));
+
+// --- MATCHING LOGIC (TRIGGERS) ---
+export const followUpLogs = oltpSchema.table('follow_up_logs', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  matchP5P1Id: uuid('match_p5_p1_id').references(() => matchP5P1.id),
+  matchP2P4Id: uuid('match_p2_p4_id').references(() => matchP2P4.id),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+  actionTaken: text('action_taken').notNull(),
+  statusAfterAction: varchar('status_after_action', { length: 50 }).notNull(), 
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const matchP5P1 = oltpSchema.table('match_p5_p1', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  outgoingOrderId: uuid('outgoing_order_id').references(() => outgoingOrders.id).notNull(),
+  incomingInvoiceId: uuid('incoming_invoice_id').references(() => incomingInvoices.id).notNull(),
+  matchConfidence: decimal('match_confidence', { precision: 3, scale: 2 }),
+});
+
+export const matchP2P4 = oltpSchema.table('match_p2_p4', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  incomingOrderId: uuid('incoming_order_id').references(() => incomingOrders.id).notNull(),
+  outgoingInvoiceId: uuid('outgoing_invoice_id').references(() => outgoingInvoices.id).notNull(),
+  matchConfidence: decimal('match_confidence', { precision: 3, scale: 2 }),
+});
 
 // --- PILAAR 3 (LEDGER) ---
 export const journals = oltpSchema.table('journals', {
@@ -202,44 +237,23 @@ export const bankStatements = oltpSchema.table('bank_statements', {
 
 export const reconciliationLogs = oltpSchema.table('reconciliation_log', {
   id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
   bankStatementId: uuid('bank_statement_id').references(() => bankStatements.id).notNull(),
   journalEntryId: uuid('journal_entry_id').references(() => journalEntries.id).notNull(),
   transactionId: uuid('transaction_id').references(() => transactions.id).notNull(),
-  matchType: varchar('match_type', { length: 20 }).notNull(), // AUTO, MANUAL
+  matchType: varchar('match_type', { length: 20 }).notNull().default('MANUAL'), // AUTO, MANUAL
   reconciledAt: timestamp('reconciled_at').defaultNow().notNull(),
-});
-
-// --- MATCHING LOGIC (TRIGGERS) ---
-export const followUpLogs = oltpSchema.table('follow_up_logs', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  matchP5P1Id: uuid('match_p5_p1_id').references(() => matchP5P1.id),
-  matchP2P4Id: uuid('match_p2_p4_id').references(() => matchP2P4.id),
-  userId: uuid('user_id').references(() => users.id).notNull(),
-  actionTaken: text('action_taken').notNull(), // bijv. "Gemaild naar supplier", "Handmatig goedgekeurd"
-  statusAfterAction: varchar('status_after_action', { length: 50 }).notNull(), 
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-});
-
-export const matchP5P1 = oltpSchema.table('match_p5_p1', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  outgoingOrderId: uuid('outgoing_order_id').references(() => outgoingOrders.id).notNull(),
-  incomingInvoiceId: uuid('incoming_invoice_id').references(() => incomingInvoices.id).notNull(),
-});
-
-export const matchP2P4 = oltpSchema.table('match_p2_p4', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  incomingOrderId: uuid('incoming_order_id').references(() => incomingOrders.id).notNull(),
-  outgoingInvoiceId: uuid('outgoing_invoice_id').references(() => outgoingInvoices.id).notNull(),
 });
 
 // ==========================================
 // 2. OLAP SCHEMA (Data Warehouse - Sterschema)
 // ==========================================
 
+// --- DIMENSIES ---
+
 export const dimOrganization = olapSchema.table('dim_organization', {
-  orgKey: integer('org_key').primaryKey(),
-  orgId: uuid('org_id').notNull(), // Link naar OLTP
+  orgKey: integer('org_key').primaryKey(), // Surrogate Key (bijv. YYYYMM + sequence)
+  orgId: uuid('org_id').notNull(),         // Link naar OLTP organizations.id
   name: varchar('name', { length: 255 }).notNull(),
   vatNr: varchar('vat', { length: 50 }),
   iban: varchar('iban', { length: 34 }),
@@ -253,7 +267,7 @@ export const dimDate = olapSchema.table('dim_date', {
   year: integer('year').notNull(),
   quarter: integer('quarter').notNull(),
   fiscalYear: integer('fiscal_year').notNull(),
-  fiscalPeriod: varchar('fiscal_period', { length: 10 }).notNull(),
+  fiscalPeriod: varchar('fiscal_period', { length: 10 }).notNull(), // bijv. "2026-Q1"
   isPeriodClosed: boolean('is_period_closed').default(false).notNull(),
 });
 
@@ -265,24 +279,9 @@ export const dimTime = olapSchema.table('dim_time', {
   second: integer('second').notNull(),
 });
 
-export const dimVat = olapSchema.table('dim_vat', {
-  vatKey: integer('vat_key').primaryKey(),
-  vatCode: varchar('vat_code', { length: 10 }).notNull(),
-  vatRate: decimal('vat_rate', { precision: 5, scale: 2 }).notNull(),
-  taxBox: integer('tax_box'),
-});
-
-export const dimTransactionType = olapSchema.table('dim_transaction_type', {
-  typeKey: integer('type_key').primaryKey(),
-  transactionType: varchar('transaction_type', { length: 50 }).notNull(), // INVOICE, CREDIT_NOTE
-  journalSource: varchar('journal_source', { length: 50 }).notNull(), // AANKOOP, BANK
-  sourcePillar: varchar('source_pillar', { length: 20 }).notNull(), // P1, P2...
-  peppolStatus: varchar('peppol_status', { length: 50 }),
-});
-
 export const dimPartner = olapSchema.table('dim_partner', {
   partnerKey: integer('partner_key').primaryKey(),
-  partnerId: uuid('partner_id').notNull(),
+  partnerId: uuid('partner_id').notNull(), // Link naar OLTP partners.id
   name: varchar('name', { length: 255 }).notNull(),
   vatNr: varchar('vat_nr', { length: 50 }),
   peppolId: varchar('peppol_id', { length: 100 }),
@@ -290,74 +289,91 @@ export const dimPartner = olapSchema.table('dim_partner', {
   iban: varchar('iban', { length: 34 }),
   isCustomer: boolean('is_customer').notNull(),
   isSupplier: boolean('is_supplier').notNull(),
+  isPeppolReady: boolean('is_peppol_ready').notNull(),
+});
+
+export const dimVat = olapSchema.table('dim_vat', {
+  vatKey: integer('vat_key').primaryKey(),
+  vatCode: varchar('vat_code', { length: 50 }).notNull(),
+  vatRate: decimal('vat_rate', { precision: 5, scale: 2 }).notNull(),
+  taxBox: integer('tax_box'),
 });
 
 export const dimLedgerAccount = olapSchema.table('dim_ledger_account', {
   ledgerKey: integer('ledger_key').primaryKey(),
   ledgerCode: integer('ledger_code').notNull(),
   ledgerName: varchar('ledger_name', { length: 100 }).notNull(),
-  category: varchar('category', { length: 50 }).notNull(),
+  category: varchar('category', { length: 50 }).notNull(), // ASSET, LIABILITY, REVENUE, EXPENSE
 });
 
 export const dimAnalytic = olapSchema.table('dim_analytic', {
   analyticKey: integer('analytic_key').primaryKey(),
   analyticCode: varchar('analytic_code', { length: 50 }).notNull(),
-  projectName: varchar('project_name', { length: 100 }).notNull(),
+  analyticName: varchar('analytic_name', { length: 100 }).notNull(),
 });
 
+/**
+ * Uitgebreide dimensie voor documenten & bronnen (P1, P2, P4, P5)
+ */
 export const dimDocument = olapSchema.table('dim_document', {
   documentKey: integer('document_key').primaryKey(),
-  originalFileName: varchar('original_file_name', { length: 255 }).notNull(),
-  storagePath: varchar('storage_path', { length: 512 }).notNull(),
-  documentType: varchar('document_type', { length: 50 }).notNull(),
-  ocrConfidence: decimal('ocr_confidence'),
+  documentType: varchar('document_type', { length: 50 }).notNull(), // INVOICE, ORDER
+  sourcePillar: varchar('source_pillar', { length: 20 }).notNull(), // P1, P2, P4, P5
+  orderSource: varchar('order_source', { length: 50 }),             // PEPPOL, EMAIL_AI, PLATFORM
+  referenceExt: varchar('reference_ext', { length: 100 }),
   isPeppol: boolean('is_peppol').notNull(),
+  ocrConfidence: decimal('ocr_confidence', { precision: 3, scale: 2 }),
+  storagePath: varchar('storage_path', { length: 512 }),
 });
 
 export const dimAudit = olapSchema.table('dim_audit', {
   auditKey: integer('audit_key').primaryKey(),
   userId: uuid('user_id').notNull(),
   userRole: varchar('user_role', { length: 50 }).notNull(),
-  sourceSystem: varchar('source_system', { length: 50 }).notNull(),
   entryTimestamp: timestamp('entry_timestamp').notNull(),
 });
 
 // --- FEITEN TABELLEN ---
 
+/**
+ * Fact: Alle financiële transacties (Pilaar 3 Ledger + Invoices)
+ */
 export const factFinancialTransactions = olapSchema.table('fact_financial_transactions', {
   id: integer('id').primaryKey(),
-  dateKey: integer('date_key').references(() => dimDate.dateKey).notNull(),
   orgKey: integer('org_key').references(() => dimOrganization.orgKey).notNull(),
+  dateKey: integer('date_key').references(() => dimDate.dateKey).notNull(),
   timeKey: integer('time_key').references(() => dimTime.timeKey).notNull(),
-  typeKey: integer('type_key').references(() => dimTransactionType.typeKey).notNull(),
   partnerKey: integer('partner_key').references(() => dimPartner.partnerKey).notNull(),
   ledgerKey: integer('ledger_key').references(() => dimLedgerAccount.ledgerKey).notNull(),
-  analyticKey: integer('analytic_key').references(() => dimAnalytic.analyticKey),
   vatKey: integer('vat_key').references(() => dimVat.vatKey).notNull(),
+  analyticKey: integer('analytic_key').references(() => dimAnalytic.analyticKey),
   documentKey: integer('document_key').references(() => dimDocument.documentKey),
   auditKey: integer('audit_key').references(() => dimAudit.auditKey).notNull(),
   
-  amountDebet: decimal('amount_debet', { precision: 12, scale: 2 }).notNull(),
-  amountCredit: decimal('amount_credit', { precision: 12, scale: 2 }).notNull(),
-  netAmount: decimal('net_amount', { precision: 12, scale: 2 }).notNull(),
-  vatAmount: decimal('vat_amount', { precision: 12, scale: 2 }).notNull(),
-  dueDateKey: integer('due_date_key').references(() => dimDate.dateKey),
-  isReconciled: boolean('is_reconciled').notNull(),
+  // Bedragen
+  amountDebet: decimal('amount_debet', { precision: 12, scale: 2 }).notNull().default('0.00'),
+  amountCredit: decimal('amount_credit', { precision: 12, scale: 2 }).notNull().default('0.00'),
+  netAmount: decimal('net_amount', { precision: 12, scale: 2 }).notNull(), // amountDebet - amountCredit
+  vatAmount: decimal('vat_amount', { precision: 12, scale: 2 }).notNull().default('0.00'),
   
-  pillarMatchId: uuid('pillar_match_id'),
-  isMatched: boolean('is_matched').notNull(),
-  matchConfidence: decimal('match_confidence'),
+  // Status & Matching
+  isReconciled: boolean('is_reconciled').notNull().default(false),
+  isMatched: boolean('is_matched').notNull().default(false),
+  matchConfidence: decimal('match_confidence', { precision: 3, scale: 2 }),
+  matchId: uuid('match_id'), // Verwijst naar matchP5P1 of matchP2P4 id uit OLTP
 });
 
+/**
+ * Fact: Budget vs Realisatie
+ */
 export const factBudgetPerformance = olapSchema.table('fact_budget_performance', {
   id: integer('id').primaryKey(),
-  dateKey: integer('date_key').references(() => dimDate.dateKey).notNull(),
   orgKey: integer('org_key').references(() => dimOrganization.orgKey).notNull(),
+  dateKey: integer('date_key').references(() => dimDate.dateKey).notNull(),
   ledgerKey: integer('ledger_key').references(() => dimLedgerAccount.ledgerKey).notNull(),
   analyticKey: integer('analytic_key').references(() => dimAnalytic.analyticKey),
-  auditKey: integer('audit_key').references(() => dimAudit.auditKey).notNull(),
   
   budgetAmount: decimal('budget_amount', { precision: 12, scale: 2 }).notNull(),
   actualAmount: decimal('actual_amount', { precision: 12, scale: 2 }).notNull(),
-  variance: decimal('variance', { precision: 12, scale: 2 }).notNull(),
+  variance: decimal('variance', { precision: 12, scale: 2 }).notNull(), // budget - actual
 });

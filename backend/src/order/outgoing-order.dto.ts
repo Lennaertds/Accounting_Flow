@@ -1,5 +1,6 @@
+// backend/src/order/outgoing-order.dto.ts
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsUUID, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, IsUUID, IsOptional, IsEnum, IsDateString, IsNumber } from 'class-validator';
 
 export enum OrderChannel {
     EMAIL = 'EMAIL',
@@ -14,11 +15,6 @@ export enum OutgoingOrderStatus {
 }
 
 export class CreateOutgoingOrderDto {
-    @ApiProperty({ example: 'uuid-van-organisatie' })
-    @IsUUID()
-    @IsNotEmpty()
-    orgId!: string;
-
     @ApiProperty({ example: 'uuid-van-leverancier' })
     @IsUUID()
     @IsNotEmpty()
@@ -28,6 +24,16 @@ export class CreateOutgoingOrderDto {
     @IsString()
     @IsNotEmpty()
     orderNr!: string;
+
+    @ApiProperty({ example: '2026-03-29' })
+    @IsDateString()
+    @IsNotEmpty()
+    date!: string; // <--- TOEGEVOEGD
+
+    @ApiProperty({ example: 1500.00 })
+    @IsNumber()
+    @IsNotEmpty()
+    totalEstimated!: number; // <--- TOEGEVOEGD
 
     @ApiProperty({ enum: OrderChannel, example: 'PEPPOL' })
     @IsEnum(OrderChannel)

@@ -1,5 +1,5 @@
 // backend/src/accounting/analytic-account.service.ts
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectDrizzle, DatabaseProvider } from '../drizzle/drizzle.provider';
 import { analyticAccounts } from '../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
@@ -10,28 +10,78 @@ export class AnalyticAccountService {
     constructor(@InjectDrizzle() private readonly db: DatabaseProvider) {}
 
     async findAll(orgId: string) {
-        return await this.db.select().from(analyticAccounts).where(eq(analyticAccounts.orgId, orgId));
+        return await this.db
+            .select()
+            .from(analyticAccounts)
+            .where(eq(analyticAccounts.orgId, orgId));
     }
 
-    async create(dto: CreateAnalyticAccountDto) {
-        const result = await this.db.insert(analyticAccounts).values({
-            name: dto.name,
-            orgId: dto.orgId,
-            code: (dto as any).code || 'DEFAULT', 
-            active: true,
-            }).returning();
+    async findOne(id: string, orgId: string) {
+        const result = await this.db
+            .select()
+            .from(analyticAccounts)
+            .where(
+                and(
+                    eq(analyticAccounts.id, id), 
+                    eq(analyticAccounts.orgId, orgId)
+                )
+            );
+
+        if (!result.length) {
+            throw new NotFoundException(`Kostenplaats met ID ${id} niet gevonden`);
+        }
         return result[0];
     }
 
-    async update(id: string, dto: UpdateAnalyticAccountDto) {
-        const result = await this.db.update(analyticAccounts)
-            .set(dto)
-            .where(eq(analyticAccounts.id, id))
+    async create(dto: CreateAnalyticAccountDto, orgId: string) {
+        try {
+            const result = await this.db.insert(analyticAccounts)
+                .values({
+                    ...dto,
+                    orgId: orgId, // Forceer de orgId uit de sessie
+                })
+                .returning();
+            return result[0];
+        } catch (error) {
+            console.error('Analytic Account Create Error:', error);
+            throw new BadRequestException('Kon kostenplaats niet aanmaken. Mogelijk bestaat de code al.');
+        }
+    }
+
+    async update(id: string, orgId: string, dto: UpdateAnalyticAccountDto) {
+        const { orgId: _, ...updateData } = dto;
+
+        const result = await this.db
+            .update(analyticAccounts)
+            .set(updateData)
+            .where(
+                and(
+                    eq(analyticAccounts.id, id), 
+                    eq(analyticAccounts.orgId, orgId)
+                )
+            )
             .returning();
+
+        if (!result.length) {
+            throw new NotFoundException(`Kostenplaats niet gevonden of geen wijzigingsrechten`);
+        }
         return result[0];
     }
 
-    async delete(id: string) {
-        return await this.db.delete(analyticAccounts).where(eq(analyticAccounts.id, id));
+    async delete(id: string, orgId: string) {
+        const result = await this.db
+            .delete(analyticAccounts)
+            .where(
+                and(
+                    eq(analyticAccounts.id, id), 
+                    eq(analyticAccounts.orgId, orgId)
+                )
+            )
+            .returning();
+
+        if (!result.length) {
+            throw new NotFoundException(`Kostenplaats niet gevonden of geen verwijderrechten`);
+        }
+        return result[0];
     }
 }

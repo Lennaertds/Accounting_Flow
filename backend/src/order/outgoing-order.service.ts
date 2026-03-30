@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDrizzle, DatabaseProvider } from '../drizzle/drizzle.provider';
 import { outgoingOrders } from '../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
-import { CreateOutgoingOrderDto, UpdateOutgoingOrderDto } from './outgoing-order.dto';
+import { CreateOutgoingOrderDto, UpdateOutgoingOrderDto, OutgoingOrderStatus } from './outgoing-order.dto';
 
 @Injectable()
 export class OutgoingOrderService {
@@ -18,16 +18,9 @@ export class OutgoingOrderService {
     async findOne(id: string, orgId: string) {
         const result = await this.db.select()
             .from(outgoingOrders)
-            .where(
-                and(
-                    eq(outgoingOrders.id, id), 
-                    eq(outgoingOrders.orgId, orgId)
-                )
-            );
+            .where(and(eq(outgoingOrders.id, id), eq(outgoingOrders.orgId, orgId)));
 
-        if (!result.length) {
-            throw new NotFoundException(`Uitgaande order niet gevonden`);
-        }
+        if (!result.length) throw new NotFoundException('Uitgaande order niet gevonden');
         return result[0];
     }
 
@@ -37,8 +30,10 @@ export class OutgoingOrderService {
                 orgId: orgId,
                 supplierId: dto.supplierId,
                 orderNr: dto.orderNr,
+                date: dto.date,
+                totalEstimated: dto.totalEstimated.toString(),
                 channel: dto.channel,
-                status: dto.status || 'ORDERED',
+                status: dto.status || OutgoingOrderStatus.ORDERED,
             })
             .returning();
         return result[0];
@@ -47,30 +42,18 @@ export class OutgoingOrderService {
     async updateStatus(id: string, orgId: string, dto: UpdateOutgoingOrderDto) {
         const result = await this.db.update(outgoingOrders)
             .set({ status: dto.status })
-            .where(
-                and(
-                    eq(outgoingOrders.id, id), 
-                    eq(outgoingOrders.orgId, orgId)
-                )
-            )
+            .where(and(eq(outgoingOrders.id, id), eq(outgoingOrders.orgId, orgId)))
             .returning();
 
-        if (!result.length) {
-            throw new NotFoundException(`Uitgaande order niet gevonden`);
-        }
+        if (!result.length) throw new NotFoundException('Order niet gevonden of geen rechten');
         return result[0];
     }
 
     async delete(id: string, orgId: string) {
         const result = await this.db.delete(outgoingOrders)
-            .where(
-                and(
-                    eq(outgoingOrders.id, id), 
-                    eq(outgoingOrders.orgId, orgId)
-                )
-            )
+            .where(and(eq(outgoingOrders.id, id), eq(outgoingOrders.orgId, orgId)))
             .returning();
-            
+
         if (!result.length) throw new NotFoundException('Order niet gevonden');
         return result[0];
     }

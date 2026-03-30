@@ -9,6 +9,7 @@ import { seedUsers } from './seeds/users';
 import { sql } from 'drizzle-orm';
 import { login, loginAdmin } from './helpers/login';
 import { Role } from '../src/auth/roles'
+import { SEED_USERS } from '../src/drizzle/seed-data';
 
 describe('UserController (Integration)', () => {
     let app: INestApplication;
@@ -17,6 +18,7 @@ describe('UserController (Integration)', () => {
     let adminToken: string;
     let accountantToken: string;
     let viewerToken: string;
+    let adminSeed: any;
 
     beforeAll(async () => {
         app = await createApp();
@@ -25,17 +27,23 @@ describe('UserController (Integration)', () => {
 
     beforeEach(async () => {
         await drizzle.execute(sql`TRUNCATE TABLE pepol_app.organizations, pepol_app.users CASCADE`);
-        await seedOrganizations(drizzle);
-        const allOrgs = await drizzle.select().from(organizations);
-        testOrgId = allOrgs[0].id;
-        await seedUsers(app, drizzle, testOrgId);
+        
+        const seededOrgs = await seedOrganizations(drizzle);
+        
+        const alphaOrgId = seededOrgs[0].id;
+        const betaOrgId = seededOrgs[1].id;
+        
+        testOrgId = alphaOrgId; 
 
-        accountantToken = await login(app, 'accountant@alpha.com', 'password123');
-        adminToken = await loginAdmin(app);
-        viewerToken = await login(app, 'boss@beta.com', 'password123');
-        // console.log(`[TEST-DEBUG] AccountantToken gegenereerd: ${accountantToken?.substring(0, 20)}...`);
-        // console.log(`[TEST-DEBUG] AdminToken gegenereerd: ${adminToken?.substring(0, 20)}...`);
-        // console.log(`[TEST-DEBUG] ViewerToken gegenereerd: ${viewerToken?.substring(0, 20)}...`);
+        await seedUsers(app, drizzle, alphaOrgId, betaOrgId);
+
+        const adminData = SEED_USERS.find(u => u.orgSeedKey === 'ALPHA' && u.role === 'ADMIN');
+        const viewerData = SEED_USERS.find(u => u.orgSeedKey === 'BETA' && u.role === 'VIEWER');
+        const accountantData = SEED_USERS.find(u => u.orgSeedKey === 'ALPHA' && u.role === 'ACCOUNTANT');
+
+        adminToken = await login(app, adminData.email, adminData.password);
+        accountantToken = await login(app, accountantData.email, accountantData.password);
+        viewerToken = await login(app, viewerData.email, viewerData.password);
     });
 
     describe('GET /api/users', () => {
@@ -60,20 +68,24 @@ describe('UserController (Integration)', () => {
 
     describe('GET /api/users/me', () => {
     const testCases = [
-        { role: 'ACCOUNTANT', token: () => accountantToken, expectedEmail: 'accountant@alpha.com' },
-        { role: 'VIEWER', token: () => viewerToken, expectedEmail: 'boss@beta.com' },
-        { role: 'ADMIN', token: () => adminToken, expectedEmail: 'admin@test.com' },
+        { role: 'ACCOUNTANT', token: () => accountantToken, email: 'accountant@alpha.com' },
+        { role: 'VIEWER', token: () => viewerToken, email: 'ceo@beta.com' },
+        { 
+            role: 'ADMIN', 
+            token: () => adminToken, 
+            email: adminSeed?.email || process.env.ADMIN_EMAIL || 'admin@alpha.com' 
+        },
     ];
 
     it.each(testCases)(
         'should allow $role to fetch their own profile', 
-        async ({ token, expectedEmail }) => {
+        async ({ token, email }) => {
             const res = await request(app.getHttpServer())
                 .get('/api/users/me')
                 .auth(token(), { type: 'bearer' });
 
             expect(res.statusCode).toBe(HttpStatus.OK);
-            expect(res.body.email).toBe(expectedEmail);
+            expect(res.body.email).toBe(email);
         }
     );
 });

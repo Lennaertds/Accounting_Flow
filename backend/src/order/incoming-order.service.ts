@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDrizzle, DatabaseProvider } from '../drizzle/drizzle.provider';
 import { incomingOrders } from '../drizzle/schema';
 import { eq, and } from 'drizzle-orm';
-import { CreateIncomingOrderDto, UpdateIncomingOrderDto } from './incoming-order.dto';
+import { CreateIncomingOrderDto, UpdateIncomingOrderDto, IncomingOrderStatus } from './incoming-order.dto';
 
 @Injectable()
 export class IncomingOrderService {
@@ -31,9 +31,11 @@ export class IncomingOrderService {
             .values({
                 orgId: orgId, 
                 customerId: dto.customerId,
+                date: dto.date,
                 source: dto.source,
                 referenceExt: dto.referenceExt,
                 totalEstimated: dto.totalEstimated.toString(),
+                status: dto.status || IncomingOrderStatus.RECEIVED,
                 aiSummary: dto.aiSummary,
             })
             .returning();
@@ -41,11 +43,10 @@ export class IncomingOrderService {
     }
 
     async update(id: string, orgId: string, dto: UpdateIncomingOrderDto) {
-        const updateData: any = { ...dto };
+        const { ...updateData }: any = dto;
+        
         if (dto.totalEstimated) updateData.totalEstimated = dto.totalEstimated.toString();
         
-        delete updateData.orgId;
-
         const result = await this.db.update(incomingOrders)
             .set(updateData)
             .where(and(eq(incomingOrders.id, id), eq(incomingOrders.orgId, orgId)))

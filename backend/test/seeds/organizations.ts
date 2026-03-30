@@ -12,10 +12,15 @@ export const seedOrganizations = async (drizzle: DatabaseProvider) => {
       iban: o.iban,
   }));
 
-  await drizzle.insert(organizations).values(organizationsToInsert).onConflictDoNothing();
+  const results = await drizzle
+    .insert(organizations)
+    .values(organizationsToInsert)
+    .returning();
+
+  return results;
 };
 
 export const clearOrganizations = async (drizzle: DatabaseProvider) => {
     const { sql } = require('drizzle-orm');
-    await drizzle.execute(sql`TRUNCATE TABLE organizations RESTART IDENTITY CASCADE`);
+    await drizzle.execute(sql`TRUNCATE TABLE pepol_app.organizations RESTART IDENTITY CASCADE`);
 };

@@ -10,7 +10,7 @@ import { Session } from '../types/auth';
 
 @ApiTags('Orders - Outgoing (P5)')
 @ApiBearerAuth()
-@UseGuards(AuthGuard) // Cruciaal: zorgt dat req.user gevuld is
+@UseGuards(AuthGuard)
 @Controller('outgoing-orders')
 export class OutgoingOrderController {
     constructor(private readonly service: OutgoingOrderService) {}

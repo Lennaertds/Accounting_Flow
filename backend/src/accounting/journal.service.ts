@@ -15,7 +15,6 @@ export class JournalService {
             .where(eq(journals.orgId, orgId));
     }
 
-   
     async findOne(id: string, orgId: string) {
         const result = await this.db
             .select()
