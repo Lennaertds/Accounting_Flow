@@ -84,8 +84,52 @@ export const analyticAccounts = oltpSchema.table('analytic_accounts', {
 }));
 
 // ==========================================
-// THEMA 2: INKOOP & VOORRAAD (Pilaar 1, 3 & 5)
+// THEMA 2: BANKING & RECONCILIATION
 // ==========================================
+
+export const bankStatements = oltpSchema.table('bank_statements', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  date: date('date').notNull(),
+  amount: decimal('amount', { precision: 12, scale: 2 }).notNull(),
+  communication: text('communication'),
+  counterpartyIban: varchar('counterparty_iban', { length: 34 }),
+  bankReference: varchar('bank_reference', { length: 255 }), 
+}, (table) => ({
+  unqBankRef: unique('bank_ref_org_unq').on(table.orgId, table.bankReference),
+}));
+
+export const sepaExports = oltpSchema.table('sepa_exports', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  createdBy: uuid('created_by').references(() => users.id).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  filename: varchar('filename', { length: 255 }).notNull(), // Bijv: SEPA_20260331_001.xml
+  fileStoragePath: varchar('file_storage_path', { length: 512 }), 
+  totalAmount: decimal('total_amount', { precision: 12, scale: 2 }).notNull(),
+  transactionCount: integer('transaction_count').notNull(),
+  executionDate: date('execution_date').notNull(), // De gewenste datum van uitvoering bij de bank
+  status: varchar('status', { length: 30 }).default('GENERATED').notNull(), // GENERATED, UPLOADED, PROCESSED, REJECTED
+  bankBatchReference: varchar('bank_batch_reference', { length: 100 }), // Referentie vanuit de bankafschriften
+});
+
+// ==========================================
+// THEMA 3: INKOOP & VOORRAAD (Pilaar 1, 3 & 5)
+// ==========================================
+
+export const quotations = oltpSchema.table('quotations', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  partnerId: uuid('partner_id').references(() => partners.id).notNull(),
+  quotationNr: varchar('quotation_nr', { length: 100 }).notNull(),
+  version: integer('version').default(1).notNull(),
+  status: varchar('status', { length: 30 }).default('DRAFT'), // SENT, SIGNED, EXPIRED, CONVERTED
+  totalAmount: decimal('total_amount', { precision: 12, scale: 2 }).notNull(),
+  expiresAt: date('expires_at'),
+  signatureData: text('signature_data'), // Voor e-signature metadata
+}, (table) => ({
+  unqQuot: unique('quotation_org_nr_ver_unq').on(table.orgId, table.quotationNr, table.version),
+}));
 
 export const outgoingOrders = oltpSchema.table('outgoing_orders', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -100,6 +144,33 @@ export const outgoingOrders = oltpSchema.table('outgoing_orders', {
 }, (table) => ({
   unqOutgoingOrderNr: unique('outgoing_order_nr_org_unq').on(table.orgId, table.orderNr),
 }));
+
+export const outgoingOrderLines = oltpSchema.table('outgoing_order_lines', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orderId: uuid('order_id').references(() => outgoingOrders.id).notNull(),
+  productId: uuid('product_id').references(() => products.id),
+  description: text('description').notNull(),
+  quantity: decimal('quantity', { precision: 12, scale: 2 }).notNull(),
+  unitPrice: decimal('unit_price', { precision: 12, scale: 2 }).notNull(),
+  vatCodeId: uuid('vat_code_id').references(() => vatCodes.id).notNull(),
+});
+
+export const goodsReceipts = oltpSchema.table('goods_receipts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  outgoingOrderId: uuid('outgoing_order_id').references(() => outgoingOrders.id).notNull(),
+  receivedDate: timestamp('received_date').defaultNow().notNull(),
+  receivedBy: uuid('received_by').references(() => users.id),
+  deliveryNoteRef: varchar('delivery_note_ref', { length: 100 }), // De leverbon van de transporteur
+});
+
+export const goodsReceiptLines = oltpSchema.table('goods_receipt_lines', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  receiptId: uuid('receipt_id').references(() => goodsReceipts.id).notNull(),
+  productId: uuid('product_id').references(() => products.id).notNull(),
+  quantityReceived: decimal('quantity_received', { precision: 12, scale: 2 }).notNull(),
+  condition: varchar('condition', { length: 50 }).default('GOOD'), // DAMAGED, MISSING, GOOD
+});
 
 export const incomingInvoices = oltpSchema.table('incoming_invoices', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -116,7 +187,7 @@ export const incomingInvoices = oltpSchema.table('incoming_invoices', {
   ocrConfidence: decimal('ocr_confidence'),
   rawFileStoragePath: varchar('raw_file_storage_path', { length: 255 }),
   fileHash: text('file_hash'),
-  sepaExportId: uuid('sepa_export_id'),
+  sepaExportId: uuid('sepa_export_id').references(() => sepaExports.id),
 }, (table) => ({
   unqIncomingInv: unique('incoming_inv_supplier_nr_unq').on(table.supplierId, table.invoiceNr),
 }));
@@ -137,14 +208,14 @@ export const inventoryMutations = oltpSchema.table('inventory_mutations', {
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
   productId: uuid('product_id').references(() => products.id).notNull(),
   change: decimal('change', { precision: 12, scale: 2 }).notNull(), 
-  valuation: decimal('valuation', { precision: 12, scale: 2 }).notNull(), 
+  valuation: decimal('valuation', { precision: 12, scale: 2 }).notNull(), // FIFO, LIFO OF GIP
   sourceType: varchar('source_type', { length: 50 }).notNull(), // "GOODS_RECEIPT" of "PURCHASE_INVOICE"
   sourceId: uuid('source_id').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 // ==========================================
-// THEMA 3: VERKOOP (Pilaar 2 & 4)
+// THEMA 4: VERKOOP (Pilaar 2 & 4)
 // ==========================================
 
 export const incomingOrders = oltpSchema.table('incoming_orders', {
@@ -162,6 +233,16 @@ export const incomingOrders = oltpSchema.table('incoming_orders', {
 }, (table) => ({
   unqIncomingOrder: unique('incoming_order_ref_unq').on(table.customerId, table.referenceExt),
 }));
+
+export const incomingOrderLines = oltpSchema.table('incoming_order_lines', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orderId: uuid('order_id').references(() => incomingOrders.id).notNull(),
+  productId: uuid('product_id').references(() => products.id),
+  description: text('description').notNull(),
+  quantity: decimal('quantity', { precision: 12, scale: 2 }).notNull(),
+  unitPrice: decimal('unit_price', { precision: 12, scale: 2 }).notNull(),
+  vatCodeId: uuid('vat_code_id').references(() => vatCodes.id).notNull(),
+});
 
 export const outgoingInvoices = oltpSchema.table('outgoing_invoices', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -181,60 +262,20 @@ export const outgoingInvoices = oltpSchema.table('outgoing_invoices', {
   unqOutgoingInvNr: unique('outgoing_inv_nr_org_unq').on(table.orgId, table.invoiceNr),
 }));
 
-// ==========================================
-// THEMA 4: SMART MATCHING & LOGS
-// ==========================================
-
-export const matchP5P1 = oltpSchema.table('match_p5_p1', {
+export const outgoingInvoiceLines = oltpSchema.table('outgoing_invoice_lines', {
   id: uuid('id').defaultRandom().primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  outgoingOrderId: uuid('outgoing_order_id').references(() => outgoingOrders.id).notNull(),
-  incomingInvoiceId: uuid('incoming_invoice_id').references(() => incomingInvoices.id).notNull(),
-  matchConfidence: decimal('match_confidence', { precision: 3, scale: 2 }),
-});
-
-export const matchP2P4 = oltpSchema.table('match_p2_p4', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  incomingOrderId: uuid('incoming_order_id').references(() => incomingOrders.id).notNull(),
-  outgoingInvoiceId: uuid('outgoing_invoice_id').references(() => outgoingInvoices.id).notNull(),
-  matchConfidence: decimal('match_confidence', { precision: 3, scale: 2 }),
-});
-
-export const followUpLogs = oltpSchema.table('follow_up_logs', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  matchP5P1Id: uuid('match_p5_p1_id').references(() => matchP5P1.id),
-  matchP2P4Id: uuid('match_p2_p4_id').references(() => matchP2P4.id),
-  userId: uuid('user_id').references(() => users.id).notNull(),
-  actionTaken: text('action_taken').notNull(),
-  statusAfterAction: varchar('status_after_action', { length: 50 }).notNull(), 
-  createdAt: timestamp('created_at').defaultNow().notNull(),
+  invoiceId: uuid('invoice_id').references(() => outgoingInvoices.id).notNull(),
+  productId: uuid('product_id').references(() => products.id),
+  description: text('description').notNull(),
+  quantity: decimal('quantity', { precision: 12, scale: 2 }).notNull(),
+  unitPrice: decimal('unit_price', { precision: 12, scale: 2 }).notNull(),
+  vatCodeId: uuid('vat_code_id').references(() => vatCodes.id).notNull(),
+  ledgerAccountId: uuid('ledger_account_id').references(() => ledgerAccounts.id),
 });
 
 // ==========================================
-// THEMA 5: ACCOUNTING (Journals, Ledger & Assets)
+// THEMA 5: ACCOUNTING & MATCHING
 // ==========================================
-
-export const journals = oltpSchema.table('journals', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  name: varchar('name').notNull(), 
-  type: varchar('type').notNull(), // AANKOOP, VERKOOP, BANK, DIVERSEN
-  code: varchar('code').notNull(), 
-}, (table) => ({
-  unqJournalCodePerOrg: unique('journal_org_code_unq').on(table.orgId, table.code),
-}));
-
-export const ledgerAccounts = oltpSchema.table('ledger_accounts', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  code: integer('code').notNull(), 
-  name: varchar('name').notNull(),
-  category: varchar('category').notNull(), // ASSET, LIABILITY, REVENUE, EXPENSE
-}, (table) => ({
-  unqLedgerCodePerOrg: unique('ledger_org_code_unq').on(table.orgId, table.code),
-}));
 
 export const journalEntries = oltpSchema.table('journal_entries', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -256,39 +297,23 @@ export const transactions = oltpSchema.table('transactions', {
   isReconciled: boolean('is_reconciled').default(false).notNull(),
 });
 
-export const assets = oltpSchema.table('assets', {
+export const matchP5P1 = oltpSchema.table('match_p5_p1', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  purchaseEntryId: uuid('purchase_entry_id').references(() => journalEntries.id).notNull(),
-  totalValue: decimal('total_value', { precision: 12, scale: 2 }).notNull(),
-  depreciationMonths: integer('depreciation_months').notNull(),
-  startDate: date('start_date').notNull(),
+  outgoingOrderId: uuid('outgoing_order_id').references(() => outgoingOrders.id).notNull(),
+  incomingInvoiceId: uuid('incoming_invoice_id').references(() => incomingInvoices.id).notNull(),
+  journalEntryId: uuid('journalEntryId').references(() => journalEntries.id),
+  matchConfidence: decimal('match_confidence', { precision: 3, scale: 2 }),
 });
 
-export const budgets = oltpSchema.table('budgets', {
+export const matchP2P4 = oltpSchema.table('match_p2_p4', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  ledgerCode: integer('ledger_code').notNull(),
-  analyticAccountId: uuid('analytic_account_id').references(() => analyticAccounts.id),
-  amountLimit: decimal('amount_limit', { precision: 12, scale: 2 }).notNull(),
-  period: varchar('period', { length: 20 }).notNull(), 
+  incomingOrderId: uuid('incoming_order_id').references(() => incomingOrders.id).notNull(),
+  outgoingInvoiceId: uuid('outgoing_invoice_id').references(() => outgoingInvoices.id).notNull(),
+  journalEntryId: uuid('journalEntryId').references(() => journalEntries.id),
+  matchConfidence: decimal('match_confidence', { precision: 3, scale: 2 }),
 });
-
-// ==========================================
-// THEMA 6: BANKING & RECONCILIATION
-// ==========================================
-
-export const bankStatements = oltpSchema.table('bank_statements', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  date: date('date').notNull(),
-  amount: decimal('amount', { precision: 12, scale: 2 }).notNull(),
-  communication: text('communication'),
-  counterpartyIban: varchar('counterparty_iban', { length: 34 }),
-  bankReference: varchar('bank_reference', { length: 255 }), 
-}, (table) => ({
-  unqBankRef: unique('bank_ref_org_unq').on(table.orgId, table.bankReference),
-}));
 
 export const reconciliationLogs = oltpSchema.table('reconciliation_log', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -300,15 +325,58 @@ export const reconciliationLogs = oltpSchema.table('reconciliation_log', {
   reconciledAt: timestamp('reconciled_at').defaultNow().notNull(),
 });
 
+export const journals = oltpSchema.table('journals', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  name: varchar('name').notNull(), 
+  type: varchar('type').notNull(), // AANKOOP, VERKOOP, BANK, DIVERSEN
+  code: varchar('code').notNull(), 
+}, (table) => ({
+  unqJournalCodePerOrg: unique('journal_org_code_unq').on(table.orgId, table.code),
+}));
+
+export const ledgerAccounts = oltpSchema.table('ledger_accounts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  code: integer('code').notNull(), 
+  name: varchar('name').notNull(),
+  category: varchar('category').notNull(), // ASSET, LIABILITY, REVENUE, EXPENSE
+}, (table) => ({
+  unqLedgerCodePerOrg: unique('ledger_org_code_unq').on(table.orgId, table.code),
+}));
+
+export const assets = oltpSchema.table('assets', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  purchaseEntryId: uuid('purchase_entry_id').references(() => journalEntries.id).notNull(),
+  ledgerAccountId: uuid('ledger_account_id').references(() => ledgerAccounts.id),
+  totalValue: decimal('total_value', { precision: 12, scale: 2 }).notNull(),
+  depreciationMonths: integer('depreciation_months').notNull(),
+  startDate: date('start_date').notNull(),
+});
+
+export const budgets = oltpSchema.table('budgets', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  ledgerCode: integer('ledger_code').notNull().references(() => ledgerAccounts.id),
+  analyticAccountId: uuid('analytic_account_id').references(() => analyticAccounts.id),
+  amountLimit: decimal('amount_limit', { precision: 12, scale: 2 }).notNull(),
+  period: varchar('period', { length: 20 }).notNull(), 
+});
+
 // ==========================================
-// THEMA 7: GOVERNANCE (Dashboard, Audit & Periods)
+// THEMA 6: GOVERNANCE & LOGS
 // ==========================================
 
-export const userDashboardConfigs = oltpSchema.table('user_dashboard_configs', {
+export const accountingPeriods = oltpSchema.table('accounting_periods', {
   id: uuid('id').defaultRandom().primaryKey(),
-  userId: uuid('user_id').references(() => users.id).notNull(),
-  layout: jsonb('layout').notNull(), 
-  theme: varchar('theme', { length: 20 }).default('glassmorphism'),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  name: varchar('name', { length: 20 }).notNull(), 
+  startDate: date('start_date').notNull(),
+  endDate: date('end_date').notNull(),
+  isLocked: boolean('is_locked').default(false).notNull(),
+  lockedBy: uuid('locked_by').references(() => users.id),
+  lockedAt: timestamp('locked_at'),
 });
 
 export const auditLogs = oltpSchema.table('audit_logs', {
@@ -322,18 +390,44 @@ export const auditLogs = oltpSchema.table('audit_logs', {
   timestamp: timestamp('timestamp').defaultNow().notNull(),
 });
 
-export const accountingPeriods = oltpSchema.table('accounting_periods', {
+export const followUpLogs = oltpSchema.table('follow_up_logs', {
   id: uuid('id').defaultRandom().primaryKey(),
   orgId: uuid('org_id').references(() => organizations.id).notNull(),
-  name: varchar('name', { length: 20 }).notNull(), 
-  startDate: date('start_date').notNull(),
-  endDate: date('end_date').notNull(),
-  isLocked: boolean('is_locked').default(false).notNull(),
-  lockedBy: uuid('locked_by').references(() => users.id),
-  lockedAt: timestamp('locked_at'),
+  matchP5P1Id: uuid('match_p5_p1_id').references(() => matchP5P1.id),
+  matchP2P4Id: uuid('match_p2_p4_id').references(() => matchP2P4.id),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+  actionTaken: text('action_taken').notNull(),
+  statusAfterAction: varchar('status_after_action', { length: 50 }).notNull(), 
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
-// backend/src/drizzle/schema.ts (OLAP Sectie)
+export const interactionLogs = oltpSchema.table('interaction_logs', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  orgId: uuid('org_id').references(() => organizations.id).notNull(),
+  partnerId: uuid('partner_id').references(() => partners.id).notNull(),
+  entityType: varchar('entity_type', { length: 50 }), // 'INVOICE', 'ORDER', 'QUOTATION'
+  entityId: uuid('entity_id'),
+  type: varchar('type', { length: 20 }).notNull(), // EMAIL, PHONE, SYSTEM_ALERT
+  message: text('message').notNull(),
+  userId: uuid('user_id').references(() => users.id),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const invoiceDisputes = oltpSchema.table('invoice_disputes', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  incomingInvoiceId: uuid('incoming_invoice_id').references(() => incomingInvoices.id),
+  outgoingInvoiceId: uuid('outgoing_invoice_id').references(() => outgoingInvoices.id),
+  reason: text('reason').notNull(),
+  status: varchar('status', { length: 20 }).default('OPEN'), // RESOLVED, CANCELLED
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const userDashboardConfigs = oltpSchema.table('user_dashboard_configs', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+  layout: jsonb('layout').notNull(), 
+  theme: varchar('theme', { length: 20 }).default('glassmorphism'),
+});
 
 // ==========================================
 // 2. OLAP SCHEMA (Data Warehouse / Reporting)

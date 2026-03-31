@@ -53,6 +53,8 @@ Een gestapelde lijst van acties en triggers, visueel vergelijkbaar met iOS-notif
 * **Quotations (Offertes):** * Opstellen van offertes met productregels, kortingen en btw-berekeningen.
     * Digitaal ondertekenen (e-signature) met automatische statuswijziging naar 'Goedgekeurd'.
     * Revisiebeheer: Historie bijhouden van verschillende offerteversies.
+* **Revisiebeheer & Versies:** Elke wijziging aan een offerte creëert een nieuw versienummer (v1, v2, ...). De historie blijft bewaard voor juridische bewijslast bij latere facturatie-discussies.
+    * **Status-transitie:** Automatische workflow van 'Concept' naar 'Verzonden', naar 'Getekend' (na e-signature) of 'Vervallen'.
 * **Incoming Orders (Pilaar 2):** * Centraal dashboard voor bestellingen uit 3 kanalen: Peppol (UBL/XML), E-mail (AI-extractie van PDF) en het Platform (API).
     * **AI-Check:** Automatische validatie of de bestelde producten en prijzen overeenkomen met de actuele stamgegevens/offertes.
 * **Invoicing (Pilaar 4):** * Omzetten van goedgekeurde orders naar facturen (één-op-één of verzamelfacturatie).
@@ -71,6 +73,8 @@ Een gestapelde lijst van acties en triggers, visueel vergelijkbaar met iOS-notif
     * **Fiscale Logica:** Automatische berekening van wettelijke rente en administratieve incassokosten per stap.
 * **Dispuutbeheer & "Pauze"-knop:** * Mogelijkheid om een factuur op 'In Dispuut' te zetten (bijv. bij een klacht over levering). 
     * Dit bevriest de automatische herinneringen en haalt de factuur uit de actieve incassolijst.
+* **Intelligent Interaction Log (Het CRM-geheugen):** * Elke interactie (automatische mail, handmatige notitie van een telefoontje, of een chatbericht uit de Customer Portal) wordt gelogd op de tijdlijn van de partner én de specifieke factuur.
+    * Dit logboek is onwijzigbaar (Audit-trail) zodat er nooit discussie ontstaat over "wie wat wanneer" heeft toegezegd.
 * **Communicatie-logboek:** * Onwijzigbare tijdlijn per factuur: wanneer is de mail verzonden, wanneer is deze geopend, en welke acties zijn ondernomen?
 
 ### 2.3 Customer Portal (Self-Service)
@@ -89,16 +93,18 @@ Een gestapelde lijst van acties en triggers, visueel vergelijkbaar met iOS-notif
     * Aanmaken van uitgaande bestellingen naar leveranciers (bijv. Dell, Staples).
     * Verzending via het Peppol-netwerk (UBL) of automatisch gegenereerde e-mail naar de leverancier.
     * Koppeling aan budgetten: Waarschuwing als een bestelling het afdelingsbudget overschrijdt.
-* **Goods Receipt (Ontvangstregistratie):**
-    * Het 'afvinken' van binnengekomen goederen tegen de openstaande bestelling (P5).
-    * Registratie van deelleveringen, manco's (missende items) of beschadigde goederen.
-    * Genereren van een interne ontvangstbon voor de administratieve audit-trail.
+* **Goods Receipt (Ontvangstregistratie & Voorraad-trigger):**
+    * Het digitaal 'afvinken' van binnengekomen goederen tegen de openstaande bestelling (Pilaar 5).
+    * **Manco-registratie:** Vastleggen van beschadigingen of ontbrekende items (bijv. 10 besteld, 8 geleverd). 
+    * **Status-blokkade:** Een ontvangstregistratie die afwijkt van de bestelling triggert direct een "Matching Alert" op het dashboard, waardoor de latere inkoopfactuur (Pilaar 1) niet automatisch betaald kan worden zonder menselijke check.
 * **Bill Digitization (Pilaar 1):**
     * **Multi-channel import:** Automatisch ophalen van facturen uit e-mailbijlagen, Peppol-hub of handmatige upload.
     * **Wettelijk Digitaal Archief:** * Elke geüploade of ontvangen factuur (P1/P4) krijgt een unieke 'Hash' (digitale vingerafdruk) om de onwijzigbaarheid te garanderen.
         * Voldoe aan de fiscale bewaarplicht (7-10 jaar) door documenten in een doorzoekbaar, beveiligd archief op te slaan, direct gekoppeld aan de boekingsregel.
     * **OCR & AI Extraction:** Automatische herkenning van leverancier, IBAN, BTW-nummer, factuurdatum en alle individuele regels (prijzen/aantallen).
     * Archivering: Elke gedigitaliseerde factuur wordt onwijzigbaar opgeslagen (fiscale bewaarplicht).
+* **Human-in-the-loop Interface:** Een split-screen weergave waarbij de gebruiker de originele PDF links ziet en de door AI herkende velden rechts, om correcties door te voeren voordat de boeking definitief wordt.
+
 
 ### 3.2 Control, Approval & Payment (Pilaar 3)
 * **Three-Way Matching (De Ultieme Controle):**
@@ -193,7 +199,7 @@ Een gestapelde lijst van acties en triggers, visueel vergelijkbaar met iOS-notif
 
 ---
 
-## 6. Configuration & Personalization (Het Fundament)
+## 6. Configuration & Personalization & Governance (Het Fundament)
 
 ### 6.1 Dashboard Control Centre (Apple-Style Modulariteit)
 * **Widget-gebaseerd Dashboard:** * Elke grafiek, lijst of saldo-overzicht is een losse 'Smart Widget'.
@@ -222,3 +228,13 @@ Een gestapelde lijst van acties en triggers, visueel vergelijkbaar met iOS-notif
 * **Multi-Tenancy (Intercompany):** * **Entity Switcher:** Snel wisselen tussen verschillende juridische entiteiten (bijv. ALPHA BV naar BETA Holding) via een zijpaneel, zonder opnieuw in te loggen.
     * Ondersteuning voor inter-company facturatie: Een verkoop in entiteit A creëert automatisch een inkoopvoorstel in entiteit B.
 * **API & Integratie Hub:** * Beheer van externe koppelingen: Banken (P3/Ponto/Codabox), Webshops (Shopify/WooCommerce), en fiscale software (Silverfin/Caseware).
+* **Audit-Log Visualisatie:** Een tijdlijn per document die toont: "Geüpload door AI" -> "Goedgekeurd door Jan" -> "Betaald via KBC". Dit is cruciaal voor de gemoedsrust van de accountant.
+
+---
+
+## 8. Future Roadmap: Intelligent Production (MRP)
+
+* **Bill of Materials (Stuklijsten):** Definiëren van 'recepten' voor producten (bijv. 1 Tafel = 1 Blad + 4 Poten + 8 Schroeven).
+* **Work Orders (Productieorders):** Plannen van productie-runs waarbij grondstoffen automatisch worden gereserveerd in Pilaar 5.
+* **Costing & Value Added:** Automatische herberekening van de voorraadwaarde op de balans (Pilaar 4) wanneer grondstoffen worden omgezet in afgewerkte producten.
+* **Smart Replenishment:** AI-voorspelling die op basis van de productieplanning aangeeft wanneer nieuwe grondstoffen via Pilaar 1 besteld moeten worden.
