@@ -1,502 +1,76 @@
-# Accounting_Flow
-An AI-driven, Peppol-native accounting hub for Belgian SMEs. Bridging the gap between orders and invoices with automated reconciliation.
+# 🏛️ Accounting Flow | The Zero-Touch ERP
+
+**Accounting Flow** is a next-generation business ecosystem designed to eliminate administrative friction. Inspired by the simplicity and fluidity of Apple’s design philosophy, Accounting Flow moves away from the bloated, manual ERP systems of the past toward a "Zero-Touch" future.
+
+---
+
+## ✨ The Vision: Zero-Touch Operations
+Most ERP systems are just digital filing cabinets that require constant manual input. **Accounting Flow is an automation engine.** We believe business owners should focus on growth, not data entry. Our goal is a system where humans only provide the final "OK," while the engine handles the rest.
+
+* **Integrated Intelligence:** Procurement, inventory, and accounting are not separate modules—they are one single, continuous thread.
+* **Contextual Awareness:** A purchase order "knows" when it’s received, automatically updates stock, and prepares the financial entry for matching.
+* **Proactive Governance:** The system doesn't just store data; it acts on it—sending payment reminders and flagging discrepancies before they become problems.
+
+---
+
+## 🚀 Unique Selling Points (USP)
+
+### 📨 Peppol-First Procurement (The "Email-Killer")
+Traditional ERPs rely on messy PDF attachments and lost emails. Accounting Flow is built natively for the **Peppol Network**. 
+* **Direct Exchange:** Orders and invoices move directly from system to system.
+* **Instant Verification:** No more manual re-typing of invoices. Data is 100% accurate, secure, and instant.
+
+### 🎛️ Apple-Inspired "Command Center"
+Accounting software shouldn't be ugly or rigid. We’ve built an interface that feels like a premium consumer app.
+* **Customizable Widgets:** Like the macOS/iOS Control Center, you can configure your own dashboard. Drag and drop cash flow charts, To-Do lists, and pending approvals to create your personal workspace.
+* **Intuitive Flow:** Every action is designed to be smooth and fast, reducing the learning curve to zero.
+
+### 🔄 Unified Commerce Flow
+In Accounting Flow, everything is connected:
+* **Procurement & Inventory:** Buying products automatically handles stock intake and documentation storage.
+* **Automated Payment Reminders:** Maintain a healthy cash flow with a system that intelligently follows up on overdue invoices, so you don't have to.
+* **Zero-Touch Matching:** Bank statements are automatically reconciled with open invoices using smart matching logic.
+
+---
+
+## 🛠️ The Architecture behind the Experience
+While the user enjoys a simple interface, the backend is built for enterprise-grade reliability:
+* **Multi-Tenant Isolation:** Secure data separation for multiple organizations.
+* **Hybrid Data Engine:** An optimized structure that ensures real-time operations (OLTP) never slow down your analytical dashboards (OLAP).
+* **Audit-Ready:** Every single movement—from an email interaction to a stock mutation—is logged for total transparency.
+
+---
+
+## 📈 Project Status: Work In Progress
+This repository is a showcase of how modern architecture can redefine enterprise software.
+
+---
+*Built with the ambition to make managing a business as effortless as using an iPhone.*
 
 ## Dependencies
+### Core & Dependencies
 ```
-npm install @nestjs/typeorm typeorm pg @nestjs/config class-validator class-transformer
-npm install --save-dev @types/node
-npm install @nestjs/jwt passport-jwt
-npm install --save-dev @types/passport-jwt
-npm install --save-dev @nestjs/testing jest ts-jest @types/jest supertest @types/supertest
-npm install @nestjs/swagger swagger-ui-express
-npm install nestjs-swagger-dto
-npm install class-validator class-transformer reflect-metadata
-npm install pg typeorm @nestjs/typeorm
-npm install argon2
-npm install --save-dev jest ts-jest supertest @types/jest @types/supertest
+npm install @nestjs/typeorm typeorm pg @nestjs/config @nestjs/jwt passport-jwt @nestjs/swagger swagger-ui-express nestjs-swagger-dto class-validator class-transformer reflect-metadata argon2
+```
+### Development Dependencies
+```
+npm install --save-dev @types/node @types/passport-jwt @nestjs/testing jest ts-jest supertest @types/jest @types/supertest
 ```
 
 ## OLTP ERD Schema (Relational model)
-### 🔍 PlantUML (Sterschema Visualisatie)
-![Sterschema Fact Constellation](https://kroki.io/plantuml/svg/eNq9Gttu2zb03V9BdEDXFk2RSz10xjDMS-0sWBpniVNgGAaBlmhbiyxqFJXGa_rvO7zIIilKjlI3eYl4Dk2d-436JeeY8WKV9L5He3t76Gz45-R6iiYX09MPw7PTq-H0dCQQvfwmTjPM8AolcUr4OiOIMr6kBiLD4Q1ekCu-TghiJOQ4XSTE2JAvcUQ_xekCzXGSm5iURiQnGTrY3zegDKc3Avpu33pLFIkj3vV6-oXo2XRJVhjtD9CYFmmEeUxT9BwNC758hr77tIw5QZ97CP5IymO-Rs8oW-A0_k_uzJ8hnAMzC71H_L1CcYQGqCjg318Xv_-9QYAkqj0pXhHYdYtZuMTsxWG__3KDvcXcQPX3K0w8w6mBOnr70jgyZARzEgXy1zxeEdDPKpMbvvQsFoqcMEW6eOpMO_AbGPvGxr5XaB6znAdt7L1CCd66BZQSJw4a_XX9h_mqDOf5J8qiYInzpeCZ3HEDzWhivcCQoyQgoYs49YjqS806DgboPWxKc6Xy7-ZHpD_vO3YBJsbTUq56sVvRtksszoOMZBlNArCDaA0bZxQkgFNTYozMCWNgJCA2wgI4J01J0iAlc3-c3tI4JFt-AZYbpKzBeDV1kr0SD05bbfDp3GYwLHJOV4R5mQN8XmRZEnvx4Dk3AQ5D8HIeNPiR4yYZo1ERcq1RWOxSnflN0SSHdk0XacwbxI9DHt8Sh3mHKaGiUIRMyZUINTu1UXG0dkXXXRlEJ0BFJIxXOHnRf31YUQ70hCzOZPStOTLHdwH8KoEYLjYEM3oHm-KUkwVhPh5xipM1j8NS34rXEvpNndJRpBaH4Q6uVBp0Vg9ChwP0K9iwyF_P0SUJaRrGSSwlAiFpdDDuj0eaNUsY0vAhvnECEUyLolp2FEaLKCKtXvhXGeRKiN9Q-sGhqfWQrlZgziH26V1qjjARSddBS-KT_Mk4RdLQ9Rr000_Xf_z8s89IoDrAAbnLoBTRQgHA7sRRZuPZuhXtSdbibx4npC0ICDwolTIwkCDDfGka2YEhYk45ToIteuBQLeXCEMG5Qr3TdC8ptjsSFnKHT9HCoIrc1NC-kP3J6Hx0OZyO3r9580ZrYaOyGebh0qu4jQ_53OBogE7TG0oz8IKPlDKGcSTs_924P_oR1Gfp-N8C2K8KNbHcnYZ1jm9Cb95tZcQqVUKpoKzelbQrS5_x0oIvKIQClcd1GVpwsdwdg2U2bcKrGsLLXXceAtEbWIwESWdWomZidTJv1hZWZG18xEq4QcbikDhIh58FpVEOBh0SSGSKE73oyoctmAaK5dm3zREmIgmg2TpIKSfCz9q1YVFvKGMD6chE-buvU0dQctku-jiFVCIkpstURTpABaAj4dusvqyE_XZfJZVGr3qAa7j8GPrQTHXWR3nS4_SRkAhCVFU_13fVOLiFRwrmtyrMECxIB0hH4rdQl9OCAWtysuDRicJuflvlYOhlFnWnruectwP0kTCRdCDTjMfjo9G-m2k2GjMCslDVTgNy2f48PCDb9ag3c0vpNLRsm-wciHq-ubSqKg2oY0CUvOawTUVCVSrG0L2tVpit3UJQ1jpui_-lTfyOuzx1LmlpZh6TZsrGWvQSD_C8TfawYqHIqd1j4VfYoi9MSmt07cZnlFFBvGVmWDBhjmvThtxal9yFSaBGaF2kuNVA9fiidc9DTNXVj1P4PH1sf2JzfWg6qYfh_gAN1S9UE_xBdBDwKILy0ag_7rtB-R-IbdD0K-GKxe7M327OKhP0pyB7DNDSlNqCUYQr2A49VxGj2w7XHRsYgx6dLChbt9ctWuABrFmsjVo_d6S_PKnDsKHBjh0SjV5X0ScBHakTPK23GHejt81iX2wKGYm8iFhW5XLaI7Nqy2xvJVvqrB9kB5I1ub4ohLpy8k2akFqh2rDPNAxXcOgFzXgVQxUTwPA8jvRgoKXy1ywfBtnbiuUrnHQ2OKeCaKqw3OD91Pwya_An7jDKLg2svhvH9mDwMZx4B0gNWxSbnvjozm7znJQDW_nYtVXQ5h48xEdbElBVUNzipPAluYhkIHatiBVN-TJvH0vPCnip5k0_d2ROk60jeJ1gNeeDimLlDSUZYTGNavKvZ9ofBuiE3hJQvDDI5-iMLsS91-h4NB4fuFkWb3JyoF6gL0zU87dKudbFh7yJ9laMJI28cIiqCQ1vahFVSlkifHMV11YLCNnCB7W9iuXu-BV3s0045WuNF2lqdmI7m9XY6R1NPbEw5H9yms4qVyhH1Nvuluc0SeinoMgquSjQ7gRjpLktW0RaeLx4A45vSK0mVg1AgOdcBhBHD_39l_7-FHbrUzdyKYFPNpL-CrtwfmM6HxhDjhektTtXyTKK86zgui4sF4_N01sy8EMzNSM4pw1K9jDs-ZIC4ku-nFHMIpXFtXYFtCNvbSaZ4DWwVPdLiNfESydQqr7LuRydiU9xrgbow_XZ9HQ6Oh-eH_8pPnK5nv4mP9ARH7Dc3-_t0c-SBHOtLcoCQTtprqHZM5flNasJE0WEuVZ5zDpUZQvrIBFOTUDpLyasusm0oCTDdfZPz3-fTC7EvdFkcnk5HL5HLy7iBENDdvAaHb1G_ZdSGuW3G_oscY_jwvQNhQvWs9ler7yKsbcHSU9-RVCDimlFDegeogfqPfnJjgMr7xlssPO-CtorJ-M23c7-CmrQVwF1W1qDy2tUCb2vBGKfK0fAdf18HF1KBZVaOXyN3npVood6Pq3It5WDV3u7h72a-Ctgr5yY2Yd7dFiTUQW0ZVTBa6wPj48n1-fT0_MTMdcYTo9_E4-CdTm20AfoVrpXttQaLKtv510KZhClAJtvICwokFPOUsQneje5bXv3diNpW4-LtGhzkbZm7o1uzRa3hfGdqDBAt_gkwvkaomd83VCZPsAdsSmgav8tEBw7VK3Hc_SrqtNdIlRrYsncC_xcFvo1yZfwmimcTMAPRIgeicJ7cnIlzcD0epFZLICKlCZElVwWaBM9TWAZdnv2qMA-xeipbUTdL_UrHAspU72r5A289wvU6cUq-R8NFTvz)
+### 🔍 PlantUML
+![](https://kroki.io/plantuml/svg/eNq9Gttu2zb03V9BdEDXFk2RSz10xjDMS-0sWBpniVNgGAaBlmhbiyxqFJXGa_rvO7zIIilKjlI3eYl4Dk2d-436JeeY8WKV9L5He3t76Gz45-R6iiYX09MPw7PTq-H0dCQQvfwmTjPM8AolcUr4OiOIMr6kBiLD4Q1ekCu-TghiJOQ4XSTE2JAvcUQ_xekCzXGSm5iURiQnGTrY3zegDKc3Avpu33pLFIkj3vV6-oXo2XRJVhjtD9CYFmmEeUxT9BwNC758hr77tIw5QZ97CP5IymO-Rs8oW-A0_k_uzJ8hnAMzC71H_L1CcYQGqCjg318Xv_-9QYAkqj0pXhHYdYtZuMTsxWG__3KDvcXcQPX3K0w8w6mBOnr70jgyZARzEgXy1zxeEdDPKpMbvvQsFoqcMEW6eOpMO_AbGPvGxr5XaB6znAdt7L1CCd66BZQSJw4a_XX9h_mqDOf5J8qiYInzpeCZ3HEDzWhivcCQoyQgoYs49YjqS806DgboPWxKc6Xy7-ZHpD_vO3YBJsbTUq56sVvRtksszoOMZBlNArCDaA0bZxQkgFNTYozMCWNgJCA2wgI4J01J0iAlc3-c3tI4JFt-AZYbpKzBeDV1kr0SD05bbfDp3GYwLHJOV4R5mQN8XmRZEnvx4Dk3AQ5D8HIeNPiR4yYZo1ERcq1RWOxSnflN0SSHdk0XacwbxI9DHt8Sh3mHKaGiUIRMyZUINTu1UXG0dkXXXRlEJ0BFJIxXOHnRf31YUQ70hCzOZPStOTLHdwH8KoEYLjYEM3oHm-KUkwVhPh5xipM1j8NS34rXEvpNndJRpBaH4Q6uVBp0Vg9ChwP0K9iwyF_P0SUJaRrGSSwlAiFpdDDuj0eaNUsY0vAhvnECEUyLolp2FEaLKCKtXvhXGeRKiN9Q-sGhqfWQrlZgziH26V1qjjARSddBS-KT_Mk4RdLQ9Rr000_Xf_z8s89IoDrAAbnLoBTRQgHA7sRRZuPZuhXtSdbibx4npC0ICDwolTIwkCDDfGka2YEhYk45ToIteuBQLeXCEMG5Qr3TdC8ptjsSFnKHT9HCoIrc1NC-kP3J6Hx0OZyO3r9580ZrYaOyGebh0qu4jQ_53OBogE7TG0oz8IKPlDKGcSTs_924P_oR1Gfp-N8C2K8KNbHcnYZ1jm9Cb95tZcQqVUKpoKzelbQrS5_x0oIvKIQClcd1GVpwsdwdg2U2bcKrGsLLXXceAtEbWIwESWdWomZidTJv1hZWZG18xEq4QcbikDhIh58FpVEOBh0SSGSKE73oyoctmAaK5dm3zREmIgmg2TpIKSfCz9q1YVFvKGMD6chE-buvU0dQctku-jiFVCIkpstURTpABaAj4dusvqyE_XZfJZVGr3qAa7j8GPrQTHXWR3nS4_SRkAhCVFU_13fVOLiFRwrmtyrMECxIB0hH4rdQl9OCAWtysuDRicJuflvlYOhlFnWnruectwP0kTCRdCDTjMfjo9G-m2k2GjMCslDVTgNy2f48PCDb9ag3c0vpNLRsm-wciHq-ubSqKg2oY0CUvOawTUVCVSrG0L2tVpit3UJQ1jpui_-lTfyOuzx1LmlpZh6TZsrGWvQSD_C8TfawYqHIqd1j4VfYoi9MSmt07cZnlFFBvGVmWDBhjmvThtxal9yFSaBGaF2kuNVA9fiidc9DTNXVj1P4PH1sf2JzfWg6qYfh_gAN1S9UE_xBdBDwKILy0ag_7rtB-R-IbdD0K-GKxe7M327OKhP0pyB7DNDSlNqCUYQr2A49VxGj2w7XHRsYgx6dLChbt9ctWuABrFmsjVo_d6S_PKnDsKHBjh0SjV5X0ScBHakTPK23GHejt81iX2wKGYm8iFhW5XLaI7Nqy2xvJVvqrB9kB5I1ub4ohLpy8k2akFqh2rDPNAxXcOgFzXgVQxUTwPA8jvRgoKXy1ywfBtnbiuUrnHQ2OKeCaKqw3OD91Pwya_An7jDKLg2svhvH9mDwMZx4B0gNWxSbnvjozm7znJQDW_nYtVXQ5h48xEdbElBVUNzipPAluYhkIHatiBVN-TJvH0vPCnip5k0_d2ROk60jeJ1gNeeDimLlDSUZYTGNavKvZ9ofBuiE3hJQvDDI5-iMLsS91-h4NB4fuFkWb3JyoF6gL0zU87dKudbFh7yJ9laMJI28cIiqCQ1vahFVSlkifHMV11YLCNnCB7W9iuXu-BV3s0045WuNF2lqdmI7m9XY6R1NPbEw5H9yms4qVyhH1Nvuluc0SeinoMgquSjQ7gRjpLktW0RaeLx4A45vSK0mVg1AgOdcBhBHD_39l_7-FHbrUzdyKYFPNpL-CrtwfmM6HxhDjhektTtXyTKK86zgui4sF4_N01sy8EMzNSM4pw1K9jDs-ZIC4ku-nFHMIpXFtXYFtCNvbSaZ4DWwVPdLiNfESydQqr7LuRydiU9xrgbow_XZ9HQ6Oh-eH_8pPnK5nv4mP9ARH7Dc3-_t0c-SBHOtLcoCQTtprqHZM5flNasJE0WEuVZ5zDpUZQvrIBFOTUDpLyasusm0oCTDdfZPz3-fTC7EvdFkcnk5HL5HLy7iBENDdvAaHb1G_ZdSGuW3G_oscY_jwvQNhQvWs9ler7yKsbcHSU9-RVCDimlFDegeogfqPfnJjgMr7xlssPO-CtorJ-M23c7-CmrQVwF1W1qDy2tUCb2vBGKfK0fAdf18HF1KBZVaOXyN3npVood6Pq3It5WDV3u7h72a-Ctgr5yY2Yd7dFiTUQW0ZVTBa6wPj48n1-fT0_MTMdcYTo9_E4-CdTm20AfoVrpXttQaLKtv510KZhClAJtvICwokFPOUsQneje5bXv3diNpW4-LtGhzkbZm7o1uzRa3hfGdqDBAt_gkwvkaomd83VCZPsAdsSmgav8tEBw7VK3Hc_SrqtNdIlRrYsncC_xcFvo1yZfwmimcTMAPRIgeicJ7cnIlzcD0epFZLICKlCZElVwWaBM9TWAZdnv2qMA-xeipbUTdL_UrHAspU72r5A289wvU6cUq-R8NFTvz)
 
-### PlantUML Broncode
-```
-@startuml
-' --- LAYOUT OPTIMALISATIE ---
-skinparam linetype ortho
-skinparam packageStyle rectangle
-skinparam shadowing false
-skinparam nodesep 100
-skinparam ranksep 80
-skinparam padding 8
+## OLAP ERD Schema (Dimensional model)
+### 🔍 PlantUML
+#### Foundation
+![](https://kroki.io/plantuml/svg/eNq1VlFv2jAQfs-vODFpa6shQSX2gKqqqICKaDsGtNI0TchNbmDVsaPY6cSm_fedEwecQCkPWx4Qvu-Mv-_y3ZkrbVhqslgEKx4hhDwNBQb6mcuEpSwGwSWadYKQKLG2Cw-TKkKNCXxqecGUyWcbbJ-3gsBwIxBmdATMwhXGrAsTLhgt29CEocpkxAxXEt5DnxkGN8iEWQUBStq5hkafxxTHBjANEY8XlI3wOwA4s_k4xjV0gUsDFxeT8eUlAc0mfQwzISxOoN1BkT5zmfT9Tkmz2qy-IrEpF18yKgaW6z8VInMeb4kYWjgiNn6IiMUJtDsocqOy7XF3XGY5S3dawsJntkRotPzaoIReRoyJA0rNUTfg3aA97AwHOQMAj-TndMkk_5VvLMguVLp0efY5A0rZ0v02GX_fYDnl4qGkUZ9ysoxHm-A9y5W8sDRcsfTkvNM5zTFiXqPxoDF1x2f0tXK-xd4mYLN2GQx5qs1rNOxzyw7jg5hxcZyGCVlBbmQkxaqixGW8LcYlHl9R-zwyc596YKe1xUb6OtNGxblVn5QSyKQHzrIkEXwH3KMxVVEWmlIjraoCC_gIgUXirsDZ-MGT0G55Gl53k98Jd_RCSUg-HYYsNNb8P1fcjYGtGItZz_RCw18okkv6sWC2cXxJJV5oeuLLQ7LqzTL00naMXAWr46kGVkdGBfROv1VE7prmgNkMDFdU1Jr6u5-leZ_PMFQy0l5S7UXb2jgL0ii2Jcxr4yy90DZWKZLd8A8KtNsfR9fIO2OkJ5jQ7TNFFq332P2G6UcmeET9ctjvVpWboUoWN42rhJ3oqzzwP8pwnMy5Mky4iunaCy-wosfqWFGcXqQS64Wpu_Uw5DETJ52P515TfaDzmjAd3Pbmo8EMTrx7Ga6VlBjan9CnNs1mW4NvGgamKMhuqAPXVc3mpbtduk5-FckHf7fskgpW3uTdsjZ11BR3pusTy8VVBnID-1yqLt5Lal9KOc-7nkv3p-6SJTqFfXbZeE7aS6WO7_nxK5QR_R_7C9tbvzM=)
 
-package "Thema 0: Foundation & Auth" #white {
-    entity "organizations" as org {
-        * id : uuid [PK]
-        --
-        * name : varchar(255)
-        vat : varchar(50)
-        iban : varchar(34)
-        * created_at : timestamp
-    }
+#### Operations and logistics
+![](https://kroki.io/plantuml/svg/eNq9V21v2zYQ_q5fQaRAHAcNlhTYPhRF0CS2N8Nx7MZJsGEYDFY6O1xkUuWLEa_of99Rot7pqO2KGUhg3vOQvufueCe9V5pKbTZx8MgiICGTYQyBemI8oZJuSMw46F0CJBHxzi4qGBcRKEjIL6cVo6T8yRrP3pwGAXDN9I4cDNhmQDUcEKpIxDbLCBfkc0DIMbH2CezIW8K4Ju_ezSfn5wicnOC_kYljiyNod6BlQB0Tv08F14_F6g-gslh8MCgKyvWIqZDGNUpmmoNkIkLjlsrwkcqjs9M-gmOVAVexUGDhj0LEQHnwpabpjm1KTRoXTpO1v6TJ4gjaHWj5TZjSrSnjJhWcLRcQCh65Jf54QsMnugZy8IaM-ZMQCTkkD0JISWlE0CPgioE6-BzgXkIqrn4wQlPNBM_8XX7Cdept9jkmBaF0_M_55K-CkTqffQrqeIBMY1hEji6l4Lgr6hesmVwXeGGcY144yDZQnHkjy2wU6ANIhVjmF6yhRBa4y6jGli8t-TOj14Lx9UxGIF0IhNFLIaNaFGq87kiktG-PwsIkScx8YUgP9Ibge4Re432ti13G--Vadrdky-pQHPmUzaWITKh9maeZ-3jJIWQbGhfQPWd6LlkIDawt-1chInULIbBEO8UyW9X0VmndUh3x2_NbC2sbTs_dQnS5ayIDiBGQuxuh4RZWndmu6qkk20lvJLtJ_gG5bkbo67Odx6Azs2Meig3Gcsy3AivBKWQ8xL9tTV-D2S3PEV9UuP-qut3-ywoJHT4nQnoi8JUXuaGmkl2nvZFdD_8HJLgZou4EX0OE_fkiDIXhDdgncosrIXdTU5tOVt7G6IbABrdbXs58UeJeJQucyyHc2YcfT4ZTsL3p6pHydbtfVZ4bRjTUc2NPUzBLQKYeqlT4apk4wCk_JjnT7soEf2Trmmant1eMfzIRSYKNBP3g5Gg0UX13FvaqSsxGbn_zEawCuGldx8hRfifyc10EvUfsG6glY_-1LTlZUXmgQvwUqDISFDFMk3LYHZLitgTFcIJoz8xx6L6x4zzctzuHLza29IfPYfxAdYPTIxerNcRgn7Un83GQFSDueqCSUV79SXKUukO2itjkG4Pxbtwga78Wa6Y0C-0T60rIjT3EFVOcQ0U1FeTOcvqeavlPZbBnNJeEe9WuxHKS9l8oh3IcHpalEVSnkUt8I1kds6pnM9hTNeriEXv-isZxszZU-i7jxrv_hcLmpNXk8sZQ74jHRWv7fxPpj6_zLcimmwifsia455r0yBW-uMGzJltG8YkHu5RtgpD3L9Qc7Gu_LuOJfp3fttfkIvrbKI1bdT_wdWaMcA8dPyHD3--GtzfDn65mN6PZ7XQ4IIPxdHizGA8X2NPu7i8XfcurvuBh6Chn_1RHk5Br8mp4Nvp5NKwyXat0pCRbeYlZcHMirnwsW-yOYpT_oNqgddw4tRVsJ_x2eH1xZ1VadWjzTyB8mIvxG6igMoZOTs4zzS2je4tvk512D4BaPWdnF7INuMbdBjKRuRBf_6tKKZtgVUvDWopp0p3TrVMKr5uIazYexCYy97p9z6s-uwu1XCGz5nYbKD33bEqdD94Dj8wm_hcraWWR)
 
-    entity "users" as user {
-        * id : uuid [PK]
-        --
-        * org_id : uuid [FK]
-        * first_name : varchar(255)
-        * last_name : varchar(255)
-        * email : varchar(255) [UQ]
-        * password_hash : text
-        * role : varchar(20)
-        last_login : timestamp
-    }
-}
+#### Sales
+![](https://kroki.io/plantuml/svg/eNrNWNtu3DYQfddXEH5wEgMGnFsfisDIei_NNk6ytd0ARVEsaIles5bIBUUZ2Qb59w4vknjTrreNi_rBWM4cijNnhsMh39YSC9lUZXZLC4JyKvKSZPUdZWsscIVKyojcrAla83KjBo6O8YLUZI1-OHGEArM7JXz-4iTLCJNUbtDBhFYTLMkBwjUqaLUsYIC-ZggdISV_TzboR0SZRG_eLN6fnoLi-Bj-zZqyVHpQqhkgmWCLhN8fOJO33eg3gkU3-KUBp0g_ntE6x6UHMaIFEZQXILzHIr_F4unzk2egnNdGMS55TZT6mvOSYJZ983y6olXvk4SB9UnJt_mk9KBUM0Dyjje9WR8oa7TDZnhJcs4KO4TF1zi_wyuCDl6iz0Tccb5GYAdhNSX1wdcMZiDkGDhnOa8oW30SBRHG0iVl-ZKLQptq_o6Qh-st_33x_o8Opa03fxo2nwCqaWiBnp4JzmBG8cxBrDp9Jxw3teSVM9P_4EfhxeGk_5qfA-bvEljLiTPjtTPhgtwQQVhOpl-kA3nx-nWPueISl9MaggCfVRQXJIffZb-CxLKpnekvnRVG9LKpKiwUVZJ8kZ1iRkvyDte3rvzb9sCcw7byg7Msh8Oj0LtDpFA7IlSkIrEQvGhyGSsmpM4FXUvKWegy7DbjWczhr4zKhaA6UKHuM5ZjqCD-UjFVnxq54uD8nN1z-JAlijcSyLr3aAqQu0mywO-ZyfaT--XypCEp8bgRKok3bgqG-fslL4HHh7K7M60XZA2FfivkYQkexMJJcRu5IMUT-O-Q5GGA_zdprq0nxYqIUZ7zhslwF7i1_hWyIOAHHaIPWOa36ue2yv8zlEeGS8v5n-qIcem26t0UW-D-W-Qjrpzq3Get6iVisWIoEMc55RFmPSu1zPPNwB6QPRr3Dza_sRU-TWD-LofHsKNXXGx2emeZnjIpNtY5on57vmntbtc0bKtnYVy316f0poh9uILur8a5AloXpJJ4LjiY3Y444K3u-A4Phdhx6JqmiuZYkCKpmNcXqhPLofa57WCaBb1BF40Kdt1WvUrJluvnHhUecDcZGr5_vraldeDEb5uLwVrpJmas1UaNObuB6wOLCuAAOZe4hKrlMfMqZkajHo0Wr6kaZu0_oqVNL4pVrp_zlWVHKLlHjY98QJnjq_3JOYNbnOoCCJwwcl_fU5vWJyZxCsSUjOqatGUeq98eDVq723sN29__dlNurSvJo7trzT7jskn1AxOyhqCa6OkrbB0cJjETZw0s11JxrQceF0a_mwyD258N4266ixlBHmwkzQfJGFVKfk6rZGENL-B9-_MELD_ubrmH6FP1F7g9g7yqlaa7hyuJrhR6I5uqcrOslURdpUBkuTpCPUxNMnxd05VHmaXrSDHhMDqz6vDBwlEssJDMazwcnek3k7qhy3ePgBYyIbeW6mkDvWl3vVWdss5KB-C8ZXQc2mrns0it0OfRQh-DSXsf2pvl4Qtgj4m6w4BOO7cYYFQRaTI6vnp1STujDEOJBrYP0WjeN-zp5P2JgD-4NIZZ4ldlR7aRPwbN8SXgATTFPWivSbd2AcG69zIUBtya7iup-khieZC_LctQUW64qCAAxJKpO4yOT417DDqHurkAEXY1AT3bG4d5PWok15ihd0nlmin0MRPe2dGeG4_BxZb0iQ6rgACjT50Xo1w2uLxck21poA9894y1rusOoi9hGvYvPA_bj4cXGH3mlxvXxFRqm0pyMT0fXc2nl2gxvUCz0fgKXY3Ozqe6hgBE5xIUmbZsZ8HBd3x8ql5cxCqpsA_x6UlrU2cHlHCcpTX2ATOtvMcyy6JTJTbSV4VmBhNDQ0O1a2q4pnmKGlKbt4UhrXbmifs0846AKZku3q5P7bD3owOodxl33K3YSfQTgCvQF2q9sHOwODs9a-uda4Ij6a1wYe31NC1-pdYz-1Jlm859lWumnCxvYBt5y0XyftF4SudzrDISlTJm98YrxXItSWrsQtlbwoqmKv8GkUDWyg==)
 
-package "Thema 1: Dimensions" #f3e5f5 {
-    entity "partners" as partner {
-        * id : uuid [PK]
-        --
-        * org_id : uuid [FK]
-        * name : varchar(255)
-        * is_peppol_ready : boolean
-        * preferred_order_channel : varchar(20)
-        * preferred_invoice_channel : varchar(20)
-        vat_nr : varchar(50)
-        peppol_id : varchar(100)
-        email : varchar(255)
-        * is_customer : boolean
-        * is_supplier : boolean
-        bank_account_iban : varchar(34)
-    }
-
-    entity "products" as prod {
-        * id : uuid [PK]
-        --
-        * org_id : uuid [FK]
-        sku : varchar(100)
-        * name : varchar(255)
-        unit : varchar(20)
-        active : boolean
-    }
-
-    entity "vat_codes" as vat {
-        * id : uuid [PK]
-        --
-        * org_id : uuid [FK]
-        * code : text [UQ]
-        * rate : decimal(5,2)
-        description : text
-        * tax_declaration_box : integer
-    }
-
-    entity "analytic_accounts" as analytic {
-        * id : uuid [PK]
-        --
-        * org_id : uuid [FK]
-        * name : varchar(100)
-        * code : varchar(50) [UQ]
-        * active : boolean
-    }
-}
-
-package "Thema 2: Banking & Reconciliation" #E1F5FE {
-    
-    entity "bank_statements" as statements {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        date : date
-        amount : decimal(12,2)
-        communication : text
-        counterparty_iban : varchar(34)
-        bank_reference : varchar(255) <<UQ>>
-    }
-
-    entity "sepa_exports" as sepa {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        created_by : uuid [FK]
-        created_at : timestamp
-        filename : varchar(255)
-        file_storage_path : varchar(512)
-        total_amount : decimal(12,2)
-        transaction_count : integer
-        execution_date : date
-        status : varchar(30) <<GENERATED...>>
-        bank_batch_reference : varchar(100)
-    }
-}
-
-package "Thema 3: Inkoop & Voorraad" #E8F5E9 {
-
-    entity "quotations" as quot {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        partner_id : uuid [FK]
-        quotation_nr : varchar
-        version : integer
-        status : varchar
-    }
-
-    entity "outgoing_orders" as out_ord {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        supplier_id : uuid [FK]
-        order_nr : varchar
-        status : varchar
-    }
-
-    entity "outgoing_order_lines" as out_ord_l {
-        * id : uuid [PK]
-        --
-        order_id : uuid [FK]
-        product_id : uuid [FK]
-        quantity : decimal
-        unit_price : decimal
-    }
-
-    entity "goods_receipts" as receipt {
-        * id : uuid [PK]
-        --
-        outgoing_order_id : uuid [FK]
-        received_by : uuid [FK]
-        delivery_note_ref : varchar
-    }
-
-    entity "goods_receipt_lines" as receipt_l {
-        * id : uuid [PK]
-        --
-        receipt_id : uuid [FK]
-        product_id : uuid [FK]
-        quantity_received : decimal
-    }
-
-    entity "incoming_invoices" as inc_inv {
-        * id : uuid [PK]
-        --
-        supplier_id : uuid [FK]
-        invoice_nr : varchar
-        sepa_export_id : uuid [FK]
-        status : varchar
-    }
-
-    entity "incoming_invoice_lines" as inc_inv_l {
-        * id : uuid [PK]
-        --
-        invoice_id : uuid [FK]
-        product_id : uuid [FK]
-        ledger_account_id : uuid [FK]
-    }
-
-    entity "inventory_mutations" as inv_mut {
-        * id : uuid [PK]
-        --
-        product_id : uuid [FK]
-        source_type : varchar
-        source_id : uuid
-        change : decimal
-    }
-}
-
-package "Thema 4: Verkoop" #FFF3E0 {
-
-    entity "incoming_orders" as inc_ord {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        customer_id : uuid [FK]
-        order_nr : varchar(100)
-        date : date
-        source : varchar(50)
-        reference_ext : varchar(255) <<UQ>>
-        total_estimated : decimal
-        status : varchar(30)
-        ai_summary : text
-        file_hash : text
-    }
-
-    entity "incoming_order_lines" as inc_ord_l {
-        * id : uuid [PK]
-        --
-        order_id : uuid [FK]
-        product_id : uuid [FK]
-        description : text
-        quantity : decimal
-        unit_price : decimal
-        vat_code_id : uuid [FK]
-    }
-
-    entity "outgoing_invoices" as out_inv {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        customer_id : uuid [FK]
-        invoice_nr : varchar(100) <<UQ>>
-        date : date
-        due_date : date
-        currency : varchar(3)
-        total_excl_vat : decimal
-        vat_code_id : uuid [FK]
-        status : varchar(30)
-        peppol_status : varchar(30)
-        file_hash : text
-    }
-
-    entity "outgoing_invoice_lines" as out_inv_l {
-        * id : uuid [PK]
-        --
-        invoice_id : uuid [FK]
-        product_id : uuid [FK]
-        description : text
-        quantity : decimal
-        unit_price : decimal
-        vat_code_id : uuid [FK]
-        ledger_account_id : uuid [FK]
-    }
-}
-
-package "Thema 5: Accounting & Matching" #F3E5F5 {
-
-    entity "journals" as jour {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        name : varchar
-        type : varchar
-        code : varchar <<UQ>>
-    }
-
-    entity "ledger_accounts" as ledger {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        code : integer <<UQ>>
-        name : varchar
-        category : varchar
-    }
-
-    entity "journal_entries" as entries {
-        * id : uuid [PK]
-        --
-        journal_id : uuid [FK]
-        date : date
-        description : text
-    }
-
-    entity "transactions" as trans {
-        * id : uuid [PK]
-        --
-        entry_id : uuid [FK]
-        ledger_id : uuid [FK]
-        debit : decimal
-        credit : decimal
-        is_reconciled : boolean
-    }
-
-    entity "match_p5_p1" as matchPurchase {
-        * id : uuid [PK]
-        --
-        outgoing_order_id : uuid [FK]
-        incoming_invoice_id : uuid [FK]
-        journal_entry_id : uuid [FK] (opt)
-        match_confidence : decimal
-    }
-
-    entity "match_p2_p4" as matchSales {
-        * id : uuid [PK]
-        --
-        incoming_order_id : uuid [FK]
-        outgoing_invoice_id : uuid [FK]
-        journal_entry_id : uuid [FK] (opt)
-        match_confidence : decimal
-    }
-
-    entity "reconciliation_log" as recon {
-        * id : uuid [PK]
-        --
-        bank_statement_id : uuid [FK]
-        journal_entry_id : uuid [FK]
-        transaction_id : uuid [FK]
-        match_type : varchar
-    }
-
-    entity "assets" as assets {
-        * id : uuid [PK]
-        --
-        purchase_entry_id : uuid [FK]
-        ledger_account_id : uuid [FK]
-        total_value : decimal
-        depreciation_months : integer
-    }
-
-    entity "budgets" as budgets {
-        * id : uuid [PK]
-        --
-        ledger_code : uuid [FK]
-        amount_limit : decimal
-        period : varchar
-    }
-}
-
-package "Thema 6: Governance & Logs" #ECEFF1 {
-
-    entity "accounting_periods" as periods {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        name : varchar(20)
-        start_date : date
-        end_date : date
-        is_locked : boolean
-        locked_by : uuid [FK]
-    }
-
-    entity "audit_logs" as audit {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        user_id : uuid [FK]
-        action : varchar(100)
-        entity_type : varchar(50)
-        entity_id : uuid
-        changes : jsonb
-        timestamp : timestamp
-    }
-
-    entity "follow_up_logs" as follow {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        match_p5_p1_id : uuid [FK]
-        match_p2_p4_id : uuid [FK]
-        user_id : uuid [FK]
-        action_taken : text
-        status_after_action : varchar(50)
-    }
-
-    entity "interaction_logs" as interact {
-        * id : uuid [PK]
-        --
-        org_id : uuid [FK]
-        partner_id : uuid [FK]
-        entity_type : varchar(50)
-        entity_id : uuid
-        type : varchar(20)
-        message : text
-    }
-
-    entity "invoice_disputes" as disputes {
-        * id : uuid [PK]
-        --
-        incoming_invoice_id : uuid [FK]
-        outgoing_invoice_id : uuid [FK]
-        reason : text
-        status : varchar(20)
-    }
-
-    entity "user_dashboard_configs" as dash {
-        * id : uuid [PK]
-        --
-        user_id : uuid [FK]
-        layout : jsonb
-        theme : varchar(20)
-    }
-}
-
-' --- RELATIES: MULTITENANCY & AUTH ---
-org ||--o{ user
-org ||--o{ partner
-org ||--o{ prod
-org ||--o{ vat
-org ||--o{ analytic
-org ||--o{ jour
-org ||--o{ ledger
-org ||--o{ periods
-org ||--o{ audit
-org ||--o{ interact
-org ||--o{ statements
-org ||--o{ sepa
-
-' --- RELATIES: INKOOP & VOORRAAD (Pilaar 1, 3, 5) ---
-partner ||--o{ quot
-partner ||--o{ out_ord
-partner ||--o{ inc_inv
-
-out_ord ||--o{ out_ord_l
-prod ||--o{ out_ord_l
-vat ||--o{ out_ord_l
-
-out_ord ||--o{ receipt
-user ||--o{ receipt
-receipt ||--o{ receipt_l
-prod ||--o{ receipt_l
-
-inc_inv ||--o{ inc_inv_l
-prod ||--o{ inc_inv_l
-vat ||--o{ inc_inv_l
-ledger ||--o{ inc_inv_l
-sepa ||--o| inc_inv
-
-prod ||--o{ inv_mut
-
-' --- RELATIES: VERKOOP (Pilaar 2, 4) ---
-partner ||--o{ inc_ord
-partner ||--o{ out_inv
-
-inc_ord ||--o{ inc_ord_l
-prod ||--o{ inc_ord_l
-vat ||--o{ inc_ord_l
-
-out_inv ||--o{ out_inv_l
-prod ||--o{ out_inv_l
-vat ||--o{ out_inv_l
-ledger ||--o{ out_inv_l
-
-' --- RELATIES: ACCOUNTING & MATCHING ---
-jour ||--o{ entries
-entries ||--o{ trans
-ledger ||--o{ trans
-vat ||--o{ trans
-analytic ||--o{ trans
-
-' Matching links
-out_ord ||--o| matchPurchase
-inc_inv ||--o| matchPurchase
-entries ||--o| matchPurchase
-
-inc_ord ||--o| matchSales
-out_inv ||--o| matchSales
-entries ||--o| matchSales
-
-' Bank Reconciliation
-statements ||--o{ recon
-entries ||--o{ recon
-trans ||--o{ recon
-
-' Assets & Budgets
-entries ||--o| assets
-ledger ||--o| assets
-ledger ||--o{ budgets
-analytic ||--o{ budgets
-
-' --- RELATIES: GOVERNANCE & LOGS ---
-user ||--o{ dash
-user ||--o{ audit
-user ||--o{ follow
-user ||--o{ interact
-user ||--o{ periods
-
-matchPurchase ||--o{ follow
-matchSales ||--o{ follow
-
-partner ||--o{ interact
-inc_inv ||--o| disputes
-out_inv ||--o| disputes
-
-@enduml
-```
+#### Banking
+![](https://kroki.io/plantuml/svg/eNq9WFtv2zYUftevIPLQJEWDOVmzh6Eo6utm1G692B0wDINBS7TNRSIFkkpjFP3vO7xIoiTaQba1fgiicw4Peb5z4Se9kwoLVWRptKcJQTEVcUoieU9ZjgXOUEoZUYecoJynB_3g6RhPiCQ5-qnnCQVm91p4fdOLIsIUVQd0NqLZCCtyhrBECc3WCTygLxFCL5GWvycH9DOiTKE3bxbv374FxdUV_JkUaar1oNQrQDLCzhL-n3Om9tXTHwSL6uG3AoIi9fOEyhinDRMrWhBBeQLCByziPRYX171LUE6lVQxTLolWbzhPCWbR10ZMK5rVMSl4cDFp-amYtB6UegVIfuVFfaw5ZYUJ2D4uScxZ4h5h8xzH93hH0Nk1GgDQlO3QC3SnjWKaUqwoZwgORpikRJ59icAFQt6J9aKlAizBRNmjrzcgMwe3v5eoYVTH8efi_V-VlYnF_s7RisR7Bnju0Q-oXyRUVbrKzXQEXoqCJuhiIDgDj8llZfVR7Cq957avlKAbgINVwmY12F8_4wUcD6QkphlOL65vXt3Uzoc8ywpGYwsOoE4elaeEpURA6arDFIDwKuHH17UPjcgd2RJBWEw8m5vbW2v0tYP0kuR4_JhzUcIMTYEbMGuL_4gueHg-sENBAL5kcDii6CtXmzAasvx0PiY0JQxnQUxK_VJxATW7wKZbS7Pbay9HK65w-kQeVzBZJI51FofOEHAjOyIqk_EjiQttECoTXYqF9BPcayZ4gFW8D2X5utcrs-y34C36hT8QwbC2foFmfCdP9l4_jvW5oWftcHF1kdsR5FeG1T9dG9bu-RXwoZUxD4ilvg5C8I1ZEhJP5YzH940ZWaqsollm3T4xFQ3YOTSwfmyAYQyexgJcPB-IT5KIrrQfu1HRKQALhD77St-JXjV3DAJ9t8dsR3QF_i0529SFXbZap-26aE14mvLPn_IasK2RNBArjb4RaHPdJ4vbxfUx1c3i9fOgXuF70hnNtl_7WxjPnYTc9o6N3ake53ZK1BhRJ2yg5Fl-I6AW0EosFPW_LqHWEr9x50RKPZY8FEPoPHAakxGVeVHSsXVinxrgOIungXGGJ8GZsphnMPbc7t2wPhZqx08Z3BEs-ZEKCeDRDVxX3wjL_YZjkQw529KyNhKQNkMvzZ4O3jo6GXu47Gf4wAvVnQR7EhzMX33eOYGa1deVdx9KE8vWMLm10nIXkeVynqWNaUN3jbBcSOcwOQShO4bATCKGgS5XF5rzB4Xu4TJxDto03lMcI5O1RZMtV4rqUHNIfiFgcBZwM5gQZenPnqpyf4JBnKMB3OswZuAlJyPAY_T_6IFzgTDD6UHR2DoD6s8lVfSBDKEQtnq2Nq-2qTRTzr_yysQLTcTXKd_p16b7y3bWNF1b4IM5uMuYJoXr3MmqpHmG3zFh6KLBny6jIE2tPejSbnuouOXliRyaoInhxvaUhv4Z-nUig2H-5_wDE9pykRkq5tIb2feFgxwQ9ZkQZo4Gi_ssqeKsX6z8PJWJH2GaHpYM53LPlUtYDLq1BFmdLGdwMlPPbhy3zhxhylwZdkExehifRw0-EOXVcVPfCtsQrbkGLy7L07Cx9ba-Oh0d0-b_b7yhcorCBLAFUT9YElO51G2g-7hiD4GXeBP3dEJIsgFaP-M8LyOn662TVqGXZt81-gCZawEwx6zA6ZALGD8hKMy4-ghvKqJIj33M0CF5hOh3nhbu08a2Yk_NOvCsvwUejjsFdWHm1kbF8qFuXYwflX5pS_V3geNgOF7jzRWHhmNLsomGM__eSHRpWnt-WIMuCndE8vSh895mxGY0zghO9M2sJ2g9Js_B8RW6G8_6q-l4iRbjOzTpD1do1R_MxlqnTeovU-XoiRrc5OrqLRAvLnYBsfs4GNaYD2YBV1oQRe3b1N8moKl3Ci3TsiOqAlpV71ZfBf5OLWm5C8BSfy14ZWcaANSfonLMRI1x67tsi-uTdxaYswXkRqAP7c-1xh5tubdJZ0m5S0dhX0Z1sF6PSojT1aGM2uPEP0NAU58itCy3rXFEW8p02M2u9TcNaOpNQ8vqTUNaJ4uid0A1iyz9B6hp5uQ=)
