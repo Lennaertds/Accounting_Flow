@@ -1,5 +1,7 @@
 # 🏛️ Accounting Flow | The Zero-Touch ERP
 
+> Dit was een tijd geleden een project. Het is doodgelopen en ik heb er geen verdere doelen meer mee.
+
 **Accounting Flow** is a next-generation business ecosystem designed to eliminate administrative friction. Inspired by the simplicity and fluidity of Apple’s design philosophy, Accounting Flow moves away from the bloated, manual ERP systems of the past toward a "Zero-Touch" future.
 
 ---
@@ -41,8 +43,8 @@ While the user enjoys a simple interface, the backend is built for enterprise-gr
 
 ---
 
-## 📈 Project Status: Work In Progress
-This repository is a showcase of how modern architecture can redefine enterprise software.
+## 📈 Project Status
+Dit was een tijd geleden een project. Het is doodgelopen en ik heb er geen verdere doelen meer mee.
 
 ---
 *Built with the ambition to make managing a business as effortless as using an iPhone.*
